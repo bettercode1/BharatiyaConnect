@@ -1,0 +1,185 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(24, 9.8%, 10%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(24, 9.8%, 10%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(24, 9.8%, 10%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(45, 93%, 47%);
+  --primary-foreground: hsl(26, 83%, 14%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(24, 9.8%, 10%);
+  --radius: 0.5rem;
+
+  /* Custom BJP theme colors */
+  --saffron: hsl(45, 93%, 47%);
+  --soil-brown: hsl(25, 83%, 14%);
+  --deep-orange: hsl(33, 100%, 50%);
+  --gradient-start: hsl(45, 93%, 47%);
+  --gradient-middle: hsl(39, 100%, 50%);
+  --gradient-end: hsl(25, 83%, 14%);
+}
+
+.dark {
+  --background: hsl(240, 10%, 3.9%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(45, 93%, 47%);
+  --primary-foreground: hsl(26, 83%, 14%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+    font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+  }
+
+  /* Custom gradient backgrounds */
+  .gradient-bg {
+    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-middle) 50%, var(--gradient-end) 100%);
+  }
+
+  .gradient-orange-amber {
+    background: linear-gradient(135deg, hsl(33, 100%, 50%) 0%, hsl(45, 93%, 47%) 50%, hsl(45, 100%, 51%) 100%);
+  }
+
+  .gradient-saffron-brown {
+    background: linear-gradient(135deg, hsl(45, 93%, 47%) 0%, hsl(39, 100%, 50%) 50%, hsl(25, 83%, 14%) 100%);
+  }
+
+  /* Custom hover and transition effects */
+  .card-hover {
+    transition: all 0.3s ease;
+  }
+
+  .card-hover:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 25px -5px hsl(45, 93%, 47%, 0.1), 0 10px 10px -5px hsl(45, 93%, 47%, 0.04);
+  }
+
+  /* Loading shimmer effect */
+  .loading-shimmer {
+    background: linear-gradient(90deg, hsl(0, 0%, 94%) 25%, hsl(0, 0%, 88%) 50%, hsl(0, 0%, 94%) 75%);
+    background-size: 200% 100%;
+    animation: shimmer 1.5s infinite;
+  }
+
+  @keyframes shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+  }
+
+  /* Typography improvements */
+  .font-marathi {
+    font-family: 'Noto Sans Devanagari', 'Poppins', sans-serif;
+  }
+
+  .font-english {
+    font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+  }
+
+  /* Custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: hsl(60, 4.8%, 95.9%);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: hsl(45, 93%, 47%, 0.3);
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: hsl(45, 93%, 47%, 0.5);
+  }
+
+  /* Line clamp utility */
+  .line-clamp-2 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+  }
+
+  .line-clamp-3 {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 3;
+  }
+}
+
+@layer components {
+  /* Custom button variants */
+  .btn-saffron {
+    @apply bg-gradient-to-r from-orange-400 to-yellow-400 hover:from-orange-500 hover:to-yellow-500 text-white font-medium shadow-md hover:shadow-lg transition-all duration-300;
+  }
+
+  .btn-brown {
+    @apply bg-gradient-to-r from-amber-800 to-orange-900 hover:from-amber-900 hover:to-orange-950 text-white font-medium shadow-md hover:shadow-lg transition-all duration-300;
+  }
+
+  /* Custom card variants */
+  .card-saffron {
+    @apply bg-gradient-to-br from-white to-orange-50 border border-orange-200 shadow-lg;
+  }
+
+  .card-leadership {
+    @apply bg-gradient-to-br from-white to-amber-50 border border-amber-200 shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+
+  /* Stats card styling */
+  .stat-card {
+    @apply bg-gradient-to-br from-white to-gray-50 border-l-4 border-orange-400 shadow-lg hover:shadow-xl transition-all duration-300;
+  }
+
+  /* Navigation active state */
+  .nav-active {
+    @apply bg-white text-amber-800 shadow-md;
+  }
+
+  /* Mobile responsive fixes */
+  @media (max-width: 768px) {
+    .container {
+      @apply px-4;
+    }
+    
+    .grid-responsive {
+      @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
+    }
+  }
+}
