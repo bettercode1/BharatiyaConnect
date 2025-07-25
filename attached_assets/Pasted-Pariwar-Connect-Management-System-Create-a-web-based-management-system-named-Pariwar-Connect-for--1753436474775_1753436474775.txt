@@ -1,0 +1,153 @@
+Pariwar-Connect Management System
+Create a web-based management system named "Pariwar-Connect" for Maharashtra BJP, designed to connect Admin, Leadership, and Member roles. The platform should feature a 3D animated background on the homepage, an interactive Maharashtra map with animated numbers, a custom-designed logo inspired by Chhatrapati Shivaji Maharaj, and a gradient-themed color scheme combining light tones with soil brown (#8B4513) as the dark color. The interface should be interactive, default to Marathi, and include a language switch button for English. Use Simple JavaScript, ReactJS, TypeScript, and Tailwind CSS for development. Below is the detailed prompt.
+
+Project Overview
+Develop a comprehensive web and mobile application called "Pariwar-Connect" to foster connection among Maharashtra BJP Admin, Leadership, and Members. The system will focus on member management, event coordination, announcements, leadership showcasing, and a dynamic homepage with special day highlights and an interactive Maharashtra map. The design should evoke pride, strength, and unity, drawing inspiration from Chhatrapati Shivaji Maharaj for a culturally rich and emotionally engaging user experience.
+
+Core Features
+🔐 User Roles & Authentication
+
+Implement a multi-role access system with three user types: Admin, Leadership, and Member.
+Provide secure login with demo credentials for testing (e.g., admin: admin@pariwarconnect.com, password: Demo123!).
+Use role-based access control to restrict/grant functionalities based on user roles.
+
+👥 Member Management
+
+Maintain a database of 24,567+ verified members across 288 constituencies.
+Include advanced search and filtering by region, designation, or constituency, with a hierarchy view (e.g., national, state, district levels).
+Create detailed member profiles containing:
+Full name, contact info, and photo.
+Achievements and contributions to the party.
+Social media handles (e.g., X, Instagram).
+
+Add a feedback mechanism for members to submit suggestions.
+Include a request-a-meeting feature to connect members with leaders.
+
+📅 Event & Meeting Management
+Support the full event lifecycle: create, invite, track attendance, and close events.
+Allow creation of both online and offline events with integration for platforms like Zoom or Google Meet.
+Implement RSVP management with automated confirmations.
+Enable post-event photo uploads (e.g., rallies, meetings).
+Integrate WhatsApp API for event reminders and updates.
+
+📢 Notice & Announcement System
+Create a categorized notice system with:
+Priority tags (e.g., Urgent, Info, Alert).
+Expiry dates for time-sensitive notices.
+Support for attachments (PDF, DOC, images).
+Option to pin important notices to the top.
+
+Allow admins to push notifications to specific groups or all members.
+
+🌟 Leadership Gallery
+Showcase prominent leaders, including:
+Narendra Modi (Prime Minister).
+Devendra Fadnavis (State Leader).
+Atal Bihari Vajpayee (Former Prime Minister).
+Nitin Gadkari (Union Minister).
+
+
+Each profile should include:
+Biography.
+Current designation.
+Contact details (if authorized).
+Links to social media profiles (e.g., X handles).
+Use high-quality images and a visually appealing layout.
+
+📊 Enhanced Dashboard
+Design a professional and dynamic dashboard with:
+8 real-time stat cards displaying metrics like total members, active events, recent notices, and constituency engagement.
+Visual analytics for:
+Regional engagement trends.
+Member growth over time.
+Event attendance rates.
+
+Provide role-specific dashboards (e.g., Admin sees all stats, Members see personalized data).
+Use charts and graphs (e.g., bar charts, pie charts) for data visualization.
+
+🏠 Dynamic Homepage Enhancements
+3D Animated Background:
+Implement a dynamic 3D background using WebGL or Three.js, inspired by Chhatrapati Shivaji Maharaj (e.g., a rotating 3D depiction of Raigad Fort or a warrior silhouette with a saffron gradient).
+Ensure smooth performance with lightweight animations suitable for mobile devices.
+
+Maharashtra Map on Homepage:
+Display an interactive SVG or WebGL-based Maharashtra map prominently on the homepage.
+Highlight 288 constituencies with animated numbers (e.g., member count, active events) that increment smoothly on hover or page load.
+Use saffron and soil brown accents with subtle 3D effects (e.g., elevation or glow on click).
+Link map regions to constituency details (e.g., member lists, events).
+
+
+Today's Special Day Section:
+Include a small section displaying the current date (e.g., July 25, 2025, 02:16 PM IST) and significant observances (e.g., World Cancer Day, Republic Day, Ganesh Chaturthi).
+Add a brief description and relevant image/icon (e.g., a saffron flag for Independence Day).
+
+Upcoming Special Days Section:
+Include a small section listing upcoming observances within the next 30 days (e.g., Maharashtra Day, Diwali).
+Show days remaining (dynamically calculated, e.g., "5 days left for Diwali").
+Use a calendar API or predefined dataset for dynamic updates.
+
+Language Switch:
+Default to a Marathi interface for all text and labels (e.g., "पुनः स्वागत आहेस, पाहिजे सदस्‍य").
+Include a toggle button to switch to English, prominently placed (e.g., top-right corner).
+
+
+Design Specifications
+🎨 Visual Design
+Color Scheme: Combine light tones (e.g., white, light saffron #FFC107) with soil brown (#8B4513) as the dark color, featuring a gradient touch at the top of pages (e.g., saffron-to-soil brown gradient).
+3D Animated Background: Use WebGL or Three.js for a dynamic 3D effect on the homepage, inspired by Chhatrapati Shivaji Maharaj’s legacy (e.g., a rotating fort or warrior silhouette).
+Logo Design:
+Create a custom logo featuring:
+A stylized silhouette of Chhatrapati Shivaji Maharaj (e.g., on horseback or with a sword).
+Elements like a lotus (BJP symbol) and saffron/soil brown tones.
+Bold, modern typography with cultural resonance (e.g., inspired by Devanagari or Marathi scripts).
+
+Ensure the logo is scalable for headers, favicons, and mobile app icons.
+
+Typography: Use modern, clean fonts (e.g., Poppins or Roboto for English, Noto Serif Devanagari for Marathi) to ensure readability and cultural alignment.
+Emotional Appeal: The design should evoke pride, strength, and unity, resonating with Maharashtra BJP’s grassroots and leadership.
+Maharashtra Map: Style the map with animated numbers (e.g., using CSS animations or GSAP) and a gradient overlay for a modern, interactive look.
+
+📱 Usability
+Ensure a fully responsive layout optimized for mobile, tablet, and desktop devices, mirroring the reference image’s card-based layout.
+Default to a Marathi language interface, with a toggle button for English using TypeScript for state management.
+Design a good interactive interface with smooth transitions, hover effects, and micro-interactions (e.g., animated buttons, map highlights), as seen in the reference image’s stat cards.
+Ensure intuitive navigation suitable for grassroots users with varying tech literacy.
+
+Technical Requirements
+Build the platform using Simple JavaScript, ReactJS, TypeScript, and Tailwind CSS for the frontend.
+Use Node.js/Express for backend APIs and MongoDB for the database.
+Use CDN-hosted libraries (e.g., React and Tailwind CSS from cdn.jsdelivr.net).
+Implement the 3D animated background using Three.js or WebGL for lightweight performance.
+Create the Maharashtra map using SVG or WebGL (e.g., D3.js or Three.js) with animated numbers via GSAP or CSS animations.
+Use a calendar API (e.g., Google Calendar or a custom JSON dataset) for dynamic special day updates.
+Implement language switching with TypeScript state management and i18n libraries (e.g., react-i18next).
+Ensure cross-browser compatibility (Chrome, Firefox, Safari, Edge).
+Implement RESTful APIs for data management, WhatsApp integration, and dynamic special day/map data.
+Use secure authentication (e.g., JWT or OAuth2) and encrypt sensitive data.
+Optimize for performance with lazy loading, image compression, and efficient database queries.
+
+Deliverables
+Source Code:
+Frontend codebase (ReactJS with TypeScript, Tailwind CSS, Simple JavaScript for animations).
+Backend APIs (Node.js/Express, MongoDB).
+Deployable on platforms like Replit or Vercel.
+
+Design Assets:
+Custom logo in vector format (SVG, PNG).
+3D animated background assets (e.g., WebGL or Three.js).
+Interactive Maharashtra map with animated numbers (SVG or WebGL).
+Mockups for key pages (homepage with special days and map, dashboard, member profile, event creation).
+
+Documentation:
+Setup guide for running the app on Replit.
+API documentation for backend endpoints, including special day and map data endpoints.
+User guide for navigating the platform and using the language switch.
+
+
+Example Workflow
+Homepage Interaction: User lands on the homepage, sees a 3D animated background (e.g., rotating Raigad Fort), an interactive Maharashtra map with animated member counts (e.g., 1,247 as in the reference), and small sections for "Today's Special Day" (e.g., July 25, 2025) and "Upcoming Special Days" (e.g., "5 days to Maharashtra Day"). A button toggles between Marathi and English.
+User Login: Admin logs in, sees the dashboard with stat cards (e.g., "सक्रीय सदस्य" 1,247, "+20%") and gradient styling.
+Member Management: Admin searches for members in a specific constituency, views profiles, and schedules a meeting.
+Event Creation: Leadership creates an event, sends WhatsApp invites, and tracks RSVPs.
+Notice Posting: Admin posts an urgent notice with a PDF attachment, pinned to the top.
+Leadership Gallery: Members browse leader profiles, view achievements, and follow their X handles.
