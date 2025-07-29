@@ -1,41 +1,47 @@
-import { createContext, useContext, useState, ReactNode } from "react";
-import { translations } from "@/lib/translations";
-
-type Language = 'mr' | 'en';
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import { Language, translations, Translations } from '../lib/translations';
 
 interface LanguageContextType {
   language: Language;
+  t: Translations;
   setLanguage: (lang: Language) => void;
-  t: (key: string) => string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
-export function LanguageProvider({ children }: { children: ReactNode }) {
-  const [language, setLanguage] = useState<Language>('mr');
+export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ children }) => {
+  const [language, setLanguageState] = useState<Language>('mr'); // Default to Marathi
 
-  const t = (key: string): string => {
-    const keys = key.split('.');
-    let value: any = translations[language];
-    
-    for (const k of keys) {
-      value = value?.[k];
+  useEffect(() => {
+    // Load saved language from localStorage
+    const savedLanguage = localStorage.getItem('language') as Language;
+    if (savedLanguage && (savedLanguage === 'mr' || savedLanguage === 'en')) {
+      setLanguageState(savedLanguage);
     }
-    
-    return value || key;
+  }, []);
+
+  const setLanguage = (lang: Language) => {
+    setLanguageState(lang);
+    localStorage.setItem('language', lang);
+  };
+
+  const value: LanguageContextType = {
+    language,
+    t: translations[language],
+    setLanguage,
   };
 
   return (
-    <LanguageContext.Provider value={{ language, setLanguage, t }}>
+    <LanguageContext.Provider value={value}>
       {children}
     </LanguageContext.Provider>
   );
-}
+};
 
-export function useLanguage() {
+export const useLanguage = (): LanguageContextType => {
   const context = useContext(LanguageContext);
   if (context === undefined) {
     throw new Error('useLanguage must be used within a LanguageProvider');
   }
   return context;
-}
+};

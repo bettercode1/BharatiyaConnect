@@ -1,8 +1,8 @@
-import { Crown, ChevronDown } from "lucide-react";
+import { Crown, ChevronDown, Menu, User, Settings, LogIn } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
-import { useLanguage } from "@/hooks/useLanguage";
-import LanguageToggle from "@/components/ui/language-toggle";
 import { Button } from "@/components/ui/button";
+import { LanguageToggle } from "@/components/ui/language-toggle";
+import { useLanguage } from "@/hooks/useLanguage";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -11,114 +11,154 @@ import {
 } from "@/components/ui/dropdown-menu";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Link, useLocation } from "wouter";
+import { useState, useEffect } from "react";
 
 interface HeaderProps {
   onMenuClick?: () => void;
 }
 
 export default function Header({ onMenuClick }: HeaderProps) {
-  const { user } = useAuth();
-  const { t } = useLanguage();
+  const { user, isAuthenticated } = useAuth();
+  const { t, language } = useLanguage();
   const [location] = useLocation();
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollTop = window.scrollY;
+      setIsScrolled(scrollTop > 10);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
 
   const handleLogout = () => {
-    window.location.href = "/api/logout";
+    // Redirect to login page instead of API logout
+    window.location.href = "/login";
   };
-
-  const navItems = [
-    { href: "/dashboard", label: t("nav.dashboard"), icon: "📊" },
-    { href: "/members", label: t("nav.members"), icon: "👥" },
-    { href: "/events", label: t("nav.events"), icon: "📅" },
-    { href: "/leadership", label: t("nav.leadership"), icon: "⭐" },
-    { href: "/notices", label: t("nav.notices"), icon: "📢" },
-  ];
 
   const isActive = (path: string) => {
     return location === path || (path === "/dashboard" && location === "/");
   };
 
   return (
-    <header className="bg-gradient-to-r from-orange-400 via-yellow-400 to-amber-600 shadow-lg sticky top-0 z-40">
-      <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-16">
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-3">
-              <div className="w-12 h-12 bg-white rounded-full flex items-center justify-center shadow-md">
-                <Crown className="w-6 h-6 text-amber-700" />
+    <header className={`fixed top-0 left-0 right-0 z-40 header-saffron-bg saffron-pattern-bg border-b border-orange-200/30 backdrop-blur-md transition-all duration-300 ${
+      isScrolled 
+        ? 'shadow-xl bg-opacity-95' 
+        : 'shadow-lg bg-opacity-90'
+    }`}>
+      <div className="max-w-full mx-auto px-2 sm:px-4 lg:px-8">
+        <div className="flex justify-between items-center h-14 sm:h-16">
+          {/* Left Side - Logo and Brand */}
+          <div className="flex items-center space-x-2 sm:space-x-4">
+            {/* BJP Logo */}
+            <div className="flex items-center space-x-2">
+              <div className="w-10 h-10 sm:w-16 sm:h-16 bg-gradient-to-br from-orange-500 via-yellow-500 to-orange-600 rounded-full p-1 sm:p-2 border-2 border-orange-300 hover:border-orange-400 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:scale-105">
+                <div className="w-full h-full flex items-center justify-center bg-gradient-to-br from-orange-400 to-yellow-400 rounded-full relative">
+              <img 
+                    src="/assets/bjp-symbol.png" 
+                alt="BJP Symbol" 
+                    className="w-6 h-6 sm:w-8 sm:h-8 object-contain"
+                    onError={(e) => {
+                      const target = e.target as HTMLImageElement;
+                      target.style.display = 'none';
+                    }}
+                  />
+                </div>
               </div>
-              <div className="text-white">
-                <h1 className="text-xl font-bold">पारिवार कनेक्ट</h1>
-                <p className="text-xs opacity-90">Maharashtra BJP</p>
-              </div>
+            </div>
+            
+            {/* Main Party Name */}
+            <div className="hidden sm:block">
+              <h1 className="text-lg sm:text-2xl font-bold text-white tracking-wide bjp-text-shadow drop-shadow-lg">
+                {language === 'mr' ? 'भारतीय जनता पार्टी - महाराष्ट्र' : 'Bharatiya Janata Party - Maharashtra'}
+              </h1>
+            </div>
+            <div className="sm:hidden">
+              <h1 className="text-sm font-bold text-white drop-shadow-lg">
+                {language === 'mr' ? 'भाजप महाराष्ट्र' : 'BJP Maharashtra'}
+              </h1>
             </div>
           </div>
 
-          {/* Desktop Navigation */}
-          <nav className="hidden md:flex space-x-1">
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
-                <Button
-                  variant={isActive(item.href) ? "default" : "ghost"}
-                  className={`${
-                    isActive(item.href)
-                      ? "bg-white text-amber-700 hover:bg-white/90"
-                      : "text-white hover:bg-white/20"
-                  } px-4 py-2 text-sm font-medium`}
-                >
-                  <span className="mr-2">{item.icon}</span>
-                  {item.label}
-                </Button>
-              </Link>
-            ))}
-          </nav>
+          {/* Center - Navigation removed - all navigation from left sidebar only */}
+          <div className="hidden lg:flex items-center space-x-8">
+            {/* Navigation removed - all functionality moved to left sidebar */}
+          </div>
 
-          <div className="flex items-center space-x-4">
-            {/* Language Toggle */}
-            <LanguageToggle />
-
-            {/* User Profile */}
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button
-                  variant="ghost"
-                  className="flex items-center space-x-2 text-white hover:bg-white/20"
-                >
-                  <Avatar className="w-8 h-8">
-                    <AvatarImage src={user?.profileImageUrl || ""} />
-                    <AvatarFallback className="bg-white text-amber-700 text-sm font-semibold">
-                      {user?.firstName?.[0] || "U"}
-                    </AvatarFallback>
-                  </Avatar>
-                  <span className="text-sm font-medium hidden sm:block">
-                    {user?.firstName || "सदस्य"}
-                  </span>
-                  <ChevronDown className="w-4 h-4" />
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent align="end" className="w-56">
-                <DropdownMenuItem className="cursor-pointer">
-                  <span>प्रोफाइल</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem className="cursor-pointer">
-                  <span>सेटिंग्ज</span>
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={handleLogout} className="cursor-pointer text-red-600">
-                  <span>लॉग आउट</span>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
-
+          {/* Right Side - Language Toggle and User Menu */}
+          <div className="flex items-center space-x-2 sm:space-x-4">
             {/* Mobile Menu Button */}
             <Button
               variant="ghost"
-              size="sm"
               onClick={onMenuClick}
-              className="md:hidden text-white hover:bg-white/20"
+              className="lg:hidden p-1 sm:p-2 text-orange-700 hover:text-orange-800 hover:bg-orange-50"
             >
-              <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 6h16M4 12h16M4 18h16" />
-              </svg>
+              <Menu className="h-5 w-5 sm:h-6 sm:w-6" />
             </Button>
+
+            {/* Language Toggle */}
+            <LanguageToggle />
+
+            {/* Login Button or User Menu */}
+            {!isAuthenticated ? (
+              <Link href="/login">
+                <Button className="flex items-center space-x-2 bg-white/20 backdrop-blur-sm rounded-lg border border-orange-200/30 text-white hover:bg-white/30">
+                  <LogIn className="h-4 w-4" />
+                  <span className="hidden sm:inline">
+                    {language === 'mr' ? 'लॉगिन' : 'Login'}
+                  </span>
+                </Button>
+              </Link>
+            ) : (
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" className="flex items-center space-x-1 sm:space-x-2 text-orange-700 hover:text-orange-800 hover:bg-orange-50 p-1 sm:p-2 bg-white/20 backdrop-blur-sm rounded-lg border border-orange-200/30">
+                  <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
+                    <AvatarImage src="/api/placeholder/32/32" />
+                      <AvatarFallback className="bg-orange-500 text-white text-xs sm:text-sm font-bold">
+                      {user?.firstName?.charAt(0).toUpperCase() || 'U'}
+                    </AvatarFallback>
+                  </Avatar>
+                    <div className="hidden sm:block text-left">
+                      <div className="text-xs sm:text-sm font-bold text-orange-800">
+                        {user?.firstName} {user?.lastName}
+                      </div>
+                      <div className="text-xs text-orange-600 font-medium">
+                        {user?.role || 'User'}
+                      </div>
+                    </div>
+                    <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4 text-orange-600" />
+                </Button>
+              </DropdownMenuTrigger>
+                <DropdownMenuContent align="end" className="w-48 z-50 bg-white border border-orange-200 shadow-lg">
+                  <DropdownMenuItem className="text-orange-700 hover:text-orange-800 hover:bg-orange-50">
+                    <Link href="/settings">
+                      <div className="flex items-center space-x-2 w-full">
+                        <Settings className="h-4 w-4" />
+                        <span>{language === 'mr' ? 'सेटिंग्ज' : 'Settings'}</span>
+                      </div>
+                    </Link>
+                  </DropdownMenuItem>
+                  <DropdownMenuItem className="text-orange-700 hover:text-orange-800 hover:bg-orange-50">
+                    <div className="flex items-center space-x-2 w-full">
+                      <User className="h-4 w-4" />
+                      <span>{language === 'mr' ? 'प्रोफाइल' : 'Profile'}</span>
+                    </div>
+                </DropdownMenuItem>
+                <DropdownMenuItem 
+                  onClick={handleLogout}
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                >
+                    <div className="flex items-center space-x-2 w-full">
+                      <Crown className="h-4 w-4" />
+                  <span>{language === 'mr' ? 'लॉगआउट' : 'Logout'}</span>
+                    </div>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+            )}
           </div>
         </div>
       </div>

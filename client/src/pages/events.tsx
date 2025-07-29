@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -53,7 +53,7 @@ import { useLanguage } from "@/hooks/useLanguage";
 const eventFormSchema = z.object({
   title: z.string().min(1, "शीर्षक आवश्यक आहे"),
   description: z.string().optional(),
-  eventType: z.enum(["online", "offline", "hybrid"]),
+  eventType: z.enum(["offline", "online", "hybrid"]),
   venue: z.string().optional(),
   eventDate: z.string().min(1, "कार्यक्रमाची तारीख आवश्यक आहे"),
   endDate: z.string().optional(),
@@ -66,17 +66,24 @@ const eventFormSchema = z.object({
 type EventFormData = z.infer<typeof eventFormSchema>;
 
 export default function Events() {
-  const { t } = useLanguage();
+  const { t, language } = useLanguage();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
-  const [status, setStatus] = useState("");
+  const [status, setStatus] = useState("all");
   const [page, setPage] = useState(1);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
+  // Cleanup effect to prevent memory leaks and DOM conflicts
+  useEffect(() => {
+    return () => {
+      setIsCreateOpen(false);
+    };
+  }, []);
+
   const { data: eventsData, isLoading } = useQuery({
     queryKey: ["/api/events", { search, status, page }],
-  });
+  }) as { data: { total?: number; events?: any[] } | undefined; isLoading: boolean };
 
   const createEventMutation = useMutation({
     mutationFn: async (data: EventFormData) => {
@@ -92,11 +99,17 @@ export default function Events() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/events"] });
       queryClient.invalidateQueries({ queryKey: ["/api/dashboard/upcoming-events"] });
+      
       toast({
         title: "यशस्वी",
         description: "कार्यक्रम यशस्वीरित्या तयार केला गेला",
       });
+      
+      // Reset form and close dialog with delay to prevent DOM conflicts
+      form.reset();
+      setTimeout(() => {
       setIsCreateOpen(false);
+      }, 100);
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
@@ -135,7 +148,16 @@ export default function Events() {
   });
 
   const onSubmit = (data: EventFormData) => {
+    try {
     createEventMutation.mutate(data);
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast({
+        title: "त्रुटी",
+        description: "फॉर्म सबमिट करताना समस्या आली",
+        variant: "destructive",
+      });
+    }
   };
 
   const formatDate = (dateString: string) => {
@@ -261,21 +283,21 @@ export default function Events() {
       {/* Header */}
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold text-amber-900">कार्यक्रम व्यवस्थापन</h1>
+          <h1 className="text-3xl font-bold text-amber-900">{t.events.title}</h1>
           <p className="text-gray-600 mt-2">
-            एकूण {eventsData?.total || 0} कार्यक्रम आहेत
+            {language === 'mr' ? 'एकूण' : 'Total'} {eventsData?.total || 0} {language === 'mr' ? 'कार्यक्रम आहेत' : 'events'}
           </p>
         </div>
-        <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+        <Dialog key="create-event-dialog" open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
             <Button className="bg-orange-500 hover:bg-amber-600 text-white">
               <Plus className="w-4 h-4 mr-2" />
-              नवीन कार्यक्रम जोडा
+              {t.events.addNew}
             </Button>
           </DialogTrigger>
           <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
             <DialogHeader>
-              <DialogTitle>नवीन कार्यक्रम तयार करा</DialogTitle>
+              <DialogTitle>{language === 'mr' ? 'नवीन कार्यक्रम तयार करा' : 'Create New Event'}</DialogTitle>
             </DialogHeader>
             <Form {...form}>
               <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
@@ -284,9 +306,9 @@ export default function Events() {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>कार्यक्रमाचे शीर्षक *</FormLabel>
+                      <FormLabel>{language === 'mr' ? 'कार्यक्रमाचे शीर्षक *' : 'Event Title *'}</FormLabel>
                       <FormControl>
-                        <Input placeholder="कार्यक्रमाचे नाव टाका" {...field} />
+                        <Input placeholder={language === 'mr' ? 'कार्यक्रमाचे नाव टाका' : 'Enter event name'} {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -442,14 +464,16 @@ export default function Events() {
                     variant="outline"
                     onClick={() => setIsCreateOpen(false)}
                   >
-                    रद्द करा
+                    {language === 'mr' ? 'रद्द करा' : 'Cancel'}
                   </Button>
                   <Button
                     type="submit"
                     disabled={createEventMutation.isPending}
                     className="bg-orange-500 hover:bg-amber-600 text-white"
                   >
-                    {createEventMutation.isPending ? "तयार करत आहे..." : "कार्यक्रम तयार करा"}
+                    {createEventMutation.isPending 
+                      ? (language === 'mr' ? "तयार करत आहे..." : "Creating...") 
+                      : (language === 'mr' ? "कार्यक्रम तयार करा" : "Create Event")}
                   </Button>
                 </div>
               </form>
@@ -465,7 +489,7 @@ export default function Events() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
-                placeholder="कार्यक्रम, स्थळ किंवा आयोजक शोधा..."
+                placeholder={language === 'mr' ? 'कार्यक्रम, स्थळ किंवा आयोजक शोधा...' : 'Search events, venue or organizer...'}
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-10"
@@ -473,26 +497,202 @@ export default function Events() {
             </div>
             <Select value={status} onValueChange={setStatus}>
               <SelectTrigger className="w-40">
-                <SelectValue placeholder="स्थिती" />
+                <SelectValue placeholder={language === 'mr' ? 'स्थिती' : 'Status'} />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">सर्व</SelectItem>
-                <SelectItem value="published">प्रकाशित</SelectItem>
-                <SelectItem value="draft">मसुदा</SelectItem>
-                <SelectItem value="cancelled">रद्द</SelectItem>
-                <SelectItem value="completed">पूर्ण</SelectItem>
+                <SelectItem value="all">{language === 'mr' ? 'सर्व' : 'All'}</SelectItem>
+                <SelectItem value="published">{language === 'mr' ? 'प्रकाशित' : 'Published'}</SelectItem>
+                <SelectItem value="draft">{language === 'mr' ? 'मसुदा' : 'Draft'}</SelectItem>
+                <SelectItem value="cancelled">{language === 'mr' ? 'रद्द' : 'Cancelled'}</SelectItem>
+                <SelectItem value="completed">{language === 'mr' ? 'पूर्ण' : 'Completed'}</SelectItem>
               </SelectContent>
             </Select>
             <Button variant="outline">
               <Filter className="w-4 h-4 mr-2" />
-              फिल्टर
+              {language === 'mr' ? 'फिल्टर' : 'Filter'}
             </Button>
           </div>
         </CardContent>
       </Card>
 
       {/* Events Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="responsive-grid">
+        {/* Notice-Based Events */}
+        <Card className="hover:shadow-lg transition-shadow cursor-pointer border-orange-200 responsive-card overflow-hidden">
+          <div className="relative">
+            <img 
+              src="https://cms.patrika.com/wp-content/uploads/2025/07/2_395772.jpg?w=450&q=90"
+              alt="कारगिल विजय दिवस समारंभ"
+              className="responsive-image w-full h-40 sm:h-48 object-cover"
+            />
+            <div className="absolute top-3 right-3">
+              <Badge className="responsive-badge bg-red-100 text-red-800 border-red-200">
+                <span className="mr-2">🇮🇳</span>
+                <span className="hidden sm:inline">राष्ट्रीय कार्यक्रम</span>
+              </Badge>
+            </div>
+          </div>
+          <CardContent className="responsive-p-4 sm:responsive-p-6">
+            <div className="space-y-4 sm:space-y-5">
+              <div className="flex items-start justify-between">
+                <h3 className="responsive-text-base sm:responsive-text-lg font-semibold text-amber-900 line-clamp-2 flex-1 pr-3">
+                  कारगिल विजय दिवस समारंभ
+                </h3>
+              </div>
+
+              <p className="responsive-text-sm text-gray-600 line-clamp-2 sm:line-clamp-3">
+                २६ जुलै २०२५ रोजी कारगिल विजय दिवसानिमित्त सर्व जिल्हांमध्ये श्रद्धांजली कार्यक्रम आयोजित करा. वीर शहीदांना आदरांजली वाहा आणि त्यांच्या त्यागाला स्मरण करा.
+              </p>
+
+              <div className="space-y-3 text-sm sm:text-base text-gray-600">
+                <div className="flex items-center">
+                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
+                  <span>26 जुलै 2025</span>
+                </div>
+                <div className="flex items-center">
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
+                  <span>सकाळी 10:00</span>
+                </div>
+                <div className="flex items-center">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
+                  <span className="truncate">सर्व जिल्हे</span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <Badge variant="outline" className="responsive-badge bg-orange-50">
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                    सर्व सदस्य
+                  </Badge>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button variant="ghost" size="sm" className="responsive-button">
+                    <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-lg transition-shadow cursor-pointer border-orange-200 responsive-card overflow-hidden">
+          <div className="relative">
+            <img 
+              src="https://staticimg.amarujala.com/assets/images/2024/09/03/cg-news_6ab53ff2ce8033ff9dd363b40e6002e2.jpeg?w=674&dpr=1.0&q=80"
+              alt="मासिक सदस्यता अभियान"
+              className="responsive-image w-full h-40 sm:h-48 object-cover"
+            />
+            <div className="absolute top-3 right-3">
+              <Badge className="responsive-badge bg-blue-100 text-blue-800 border-blue-200">
+                <span className="mr-2">👥</span>
+                <span className="hidden sm:inline">सदस्यत्व</span>
+              </Badge>
+            </div>
+          </div>
+          <CardContent className="responsive-p-4 sm:responsive-p-6">
+            <div className="space-y-4 sm:space-y-5">
+              <div className="flex items-start justify-between">
+                <h3 className="responsive-text-base sm:responsive-text-lg font-semibold text-amber-900 line-clamp-2 flex-1 pr-3">
+                  मासिक सदस्यता अभियान
+                </h3>
+              </div>
+
+              <p className="responsive-text-sm text-gray-600 line-clamp-2 sm:line-clamp-3">
+                ऑगस्ट महिन्यात नवीन सदस्यत्व मिळवण्यासाठी विशेष मोहीम राबवा. प्रत्येक मतदारसंघात कमीत कमी १०० नवीन सदस्य भरती करण्याचे लक्ष्य ठेवा.
+              </p>
+
+              <div className="space-y-3 text-sm sm:text-base text-gray-600">
+                <div className="flex items-center">
+                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
+                  <span>ऑगस्ट 2025</span>
+                </div>
+                <div className="flex items-center">
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
+                  <span>संपूर्ण महिना</span>
+                </div>
+                <div className="flex items-center">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
+                  <span className="truncate">सर्व मतदारसंघ</span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <Badge variant="outline" className="responsive-badge bg-blue-50">
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                    नेतृत्व
+                  </Badge>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button variant="ghost" size="sm" className="responsive-button">
+                    <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        <Card className="hover:shadow-lg transition-shadow cursor-pointer border-orange-200 responsive-card overflow-hidden">
+          <div className="relative">
+            <img 
+              src="https://superca.in/storage/app/public/blogs/pmgdisha.webp"
+              alt="डिजिटल साक्षरता कार्यशाळा"
+              className="responsive-image w-full h-40 sm:h-48 object-cover"
+            />
+            <div className="absolute top-3 right-3">
+              <Badge className="responsive-badge bg-green-100 text-green-800 border-green-200">
+                <span className="mr-2">📚</span>
+                <span className="hidden sm:inline">प्रशिक्षण</span>
+              </Badge>
+            </div>
+          </div>
+          <CardContent className="responsive-p-4 sm:responsive-p-6">
+            <div className="space-y-4 sm:space-y-5">
+              <div className="flex items-start justify-between">
+                <h3 className="responsive-text-base sm:responsive-text-lg font-semibold text-amber-900 line-clamp-2 flex-1 pr-3">
+                  डिजिटल साक्षरता कार्यशाळा
+                </h3>
+              </div>
+
+              <p className="responsive-text-sm text-gray-600 line-clamp-2 sm:line-clamp-3">
+                ग्रामीण भागातील कार्यकर्त्यांसाठी डिजिटल साक्षरता कार्यशाळा आयोजित करा. १५ ऑगस्ट ते ३१ ऑगस्ट २०२५ या कालावधीत सर्व जिल्ह्यांमध्ये कार्यशाळा घ्या.
+              </p>
+
+              <div className="space-y-3 text-sm sm:text-base text-gray-600">
+                <div className="flex items-center">
+                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
+                  <span>15-31 ऑगस्ट 2025</span>
+                </div>
+                <div className="flex items-center">
+                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
+                  <span>सकाळी 9:00 - दुपारी 5:00</span>
+                </div>
+                <div className="flex items-center">
+                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
+                  <span className="truncate">ग्रामीण केंद्रे</span>
+                </div>
+              </div>
+
+              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                <div className="flex items-center space-x-3">
+                  <Badge variant="outline" className="responsive-badge bg-green-50">
+                    <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                    कार्यकर्ते
+                  </Badge>
+                </div>
+                <div className="flex items-center space-x-2">
+                  <Button variant="ghost" size="sm" className="responsive-button">
+                    <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+                  </Button>
+                </div>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Regular Events */}
         {eventsData?.events?.map((event: any) => (
           <Card key={event.id} className="hover:shadow-lg transition-shadow cursor-pointer">
             <CardContent className="p-6">
@@ -562,31 +762,31 @@ export default function Events() {
             <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
               <Calendar className="w-12 h-12 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">कोणतेही कार्यक्रम आढळले नाहीत</h3>
-            <p className="text-gray-500">नवीन शोध टर्म वापरून पहा किंवा नवीन कार्यक्रम तयार करा</p>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">{language === 'mr' ? 'कोणतेही कार्यक्रम आढळले नाहीत' : 'No events found'}</h3>
+            <p className="text-gray-500">{language === 'mr' ? 'नवीन शोध टर्म वापरून पहा किंवा नवीन कार्यक्रम तयार करा' : 'Try a new search term or create a new event'}</p>
           </div>
         )}
       </div>
 
       {/* Pagination */}
-      {eventsData?.total > 20 && (
+      {(eventsData?.total || 0) > 20 && (
         <div className="flex justify-center space-x-2">
           <Button
             variant="outline"
             onClick={() => setPage(page - 1)}
             disabled={page === 1}
           >
-            मागील
+            {language === 'mr' ? 'मागील' : 'Previous'}
           </Button>
           <span className="flex items-center px-4 text-sm text-gray-600">
-            पान {page}
+            {language === 'mr' ? 'पान' : 'Page'} {page}
           </span>
           <Button
             variant="outline"
             onClick={() => setPage(page + 1)}
             disabled={page * 20 >= (eventsData?.total || 0)}
           >
-            पुढील
+            {language === 'mr' ? 'पुढील' : 'Next'}
           </Button>
         </div>
       )}

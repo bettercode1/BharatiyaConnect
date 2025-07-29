@@ -8,8 +8,9 @@ import memoize from "memoizee";
 import connectPg from "connect-pg-simple";
 import { storage } from "./storage";
 
+// For local development without Replit environment
 if (!process.env.REPLIT_DOMAINS) {
-  throw new Error("Environment variable REPLIT_DOMAINS not provided");
+  console.warn("REPLIT_DOMAINS not set. Using mock authentication for development.");
 }
 
 const getOidcConfig = memoize(
@@ -24,6 +25,21 @@ const getOidcConfig = memoize(
 
 export function getSession() {
   const sessionTtl = 7 * 24 * 60 * 60 * 1000; // 1 week
+  
+  // Use memory store for local development if no database
+  if (!process.env.DATABASE_URL) {
+    return session({
+      secret: process.env.SESSION_SECRET || 'dev-secret-key',
+      resave: false,
+      saveUninitialized: false,
+      cookie: {
+        httpOnly: true,
+        secure: false, // Allow HTTP in development
+        maxAge: sessionTtl,
+      },
+    });
+  }
+  
   const pgStore = connectPg(session);
   const sessionStore = new pgStore({
     conString: process.env.DATABASE_URL,
@@ -71,6 +87,43 @@ export async function setupAuth(app: Express) {
   app.use(getSession());
   app.use(passport.initialize());
   app.use(passport.session());
+
+  // Skip OIDC setup for local development
+  if (!process.env.REPLIT_DOMAINS) {
+    console.log("Skipping OIDC authentication setup for local development");
+    
+    passport.serializeUser((user: Express.User, cb) => cb(null, user));
+    passport.deserializeUser((user: Express.User, cb) => cb(null, user));
+    
+    // Add a mock login route for development
+    app.get("/api/login", (req, res) => {
+      // Create a mock user for development
+      const mockUser = {
+        id: "dev-user-1",
+        email: "dev@example.com",
+        firstName: "Development",
+        lastName: "User",
+        profileImageUrl: "",
+        role: "admin",
+        expires_at: Math.floor(Date.now() / 1000) + 3600, // 1 hour from now
+      };
+      
+      req.login(mockUser, (err) => {
+        if (err) {
+          return res.status(500).json({ message: "Login failed" });
+        }
+        res.redirect("/");
+      });
+    });
+    
+    app.get("/api/logout", (req, res) => {
+      req.logout(() => {
+        res.redirect("/");
+      });
+    });
+    
+    return;
+  }
 
   const config = await getOidcConfig();
 

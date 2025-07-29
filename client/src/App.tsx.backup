@@ -1,0 +1,99 @@
+import React from 'react';
+import { Router, Route, Switch, Redirect } from 'wouter';
+import { QueryClientProvider } from '@tanstack/react-query';
+import { queryClient } from './lib/queryClient';
+import Dashboard from './pages/dashboard';
+import Hero from './pages/hero';
+import Members from './pages/members';
+import Events from './pages/events';
+import Leadership from './pages/leadership';
+import Notices from './pages/notices';
+import NotFound from './pages/not-found';
+import { LanguageProvider } from './hooks/useLanguage';
+import Layout from './components/layout/layout';
+import './index.css';
+
+function App() {
+  return (
+    <QueryClientProvider client={queryClient}>
+      <LanguageProvider>
+        <Router>
+          <div className="App">
+          <Switch>
+            <Route path="/">
+              <Hero />
+            </Route>
+            <Route path="/dashboard">
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </Route>
+            <Route path="/members">
+              <Layout>
+                <Members />
+              </Layout>
+            </Route>
+            <Route path="/events">
+              <Layout>
+                <Events />
+              </Layout>
+            </Route>
+            <Route path="/leadership">
+              <Layout>
+                <Leadership />
+              </Layout>
+            </Route>
+            <Route path="/notices">
+              <Layout>
+                <Notices />
+              </Layout>
+            </Route>
+            <Route path="/analytics">
+              <Layout>
+                <Dashboard />
+              </Layout>
+            </Route>
+            <Route path="/reports">
+              <Layout>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">Reports</h1>
+                  <p>Reports page coming soon...</p>
+                </div>
+              </Layout>
+            </Route>
+            <Route path="/photos">
+              <Layout>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">Photo Gallery</h1>
+                  <p>Photo gallery page coming soon...</p>
+                </div>
+              </Layout>
+            </Route>
+            <Route path="/feedback">
+              <Layout>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">Feedback</h1>
+                  <p>Feedback page coming soon...</p>
+                </div>
+              </Layout>
+            </Route>
+            <Route path="/settings">
+              <Layout>
+                <div className="p-6">
+                  <h1 className="text-2xl font-bold">Settings</h1>
+                  <p>Settings page coming soon...</p>
+                </div>
+              </Layout>
+            </Route>
+            <Route>
+              <NotFound />
+            </Route>
+          </Switch>
+        </div>
+      </Router>
+    </LanguageProvider>
+    </QueryClientProvider>
+  );
+}
+
+export default App;

@@ -1,71 +1,68 @@
 import express, { type Request, Response, NextFunction } from "express";
-import { registerRoutes } from "./routes";
+import { createServer } from "http";
 import { setupVite, serveStatic, log } from "./vite";
 
 const app = express();
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
+// Simple logging middleware
 app.use((req, res, next) => {
   const start = Date.now();
   const path = req.path;
-  let capturedJsonResponse: Record<string, any> | undefined = undefined;
-
-  const originalResJson = res.json;
-  res.json = function (bodyJson, ...args) {
-    capturedJsonResponse = bodyJson;
-    return originalResJson.apply(res, [bodyJson, ...args]);
-  };
-
+  
   res.on("finish", () => {
     const duration = Date.now() - start;
     if (path.startsWith("/api")) {
-      let logLine = `${req.method} ${path} ${res.statusCode} in ${duration}ms`;
-      if (capturedJsonResponse) {
-        logLine += ` :: ${JSON.stringify(capturedJsonResponse)}`;
-      }
-
-      if (logLine.length > 80) {
-        logLine = logLine.slice(0, 79) + "…";
-      }
-
-      log(logLine);
+      log(`${req.method} ${path} ${res.statusCode} in ${duration}ms`);
     }
   });
 
   next();
 });
 
-(async () => {
-  const server = await registerRoutes(app);
+// Mock API routes for development
+app.get("/api/health", (req, res) => {
+  res.json({ status: "ok", message: "BJP Connect API is running" });
+});
 
+app.get("/api/dashboard/stats", (req, res) => {
+  res.json({
+    totalMembers: 24567,
+    verifiedMembers: 22000,
+    activeEvents: 15,
+    upcomingEvents: 8,
+    totalNotices: 45,
+    urgentNotices: 3,
+    totalConstituencies: 288,
+    totalDistricts: 36
+  });
+});
+
+(async () => {
+  // Error handling middleware
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {
     const status = err.status || err.statusCode || 500;
     const message = err.message || "Internal Server Error";
 
     res.status(status).json({ message });
-    throw err;
+    console.error(err);
   });
 
-  // importantly only setup vite in development and after
-  // setting up all the other routes so the catch-all route
-  // doesn't interfere with the other routes
-  if (app.get("env") === "development") {
+  // Create HTTP server
+  const server = createServer(app);
+
+  // Setup Vite in development mode
+  if (process.env.NODE_ENV === "development") {
     await setupVite(app, server);
   } else {
     serveStatic(app);
   }
 
-  // ALWAYS serve the app on the port specified in the environment variable PORT
-  // Other ports are firewalled. Default to 5000 if not specified.
-  // this serves both the API and the client.
-  // It is the only port that is not firewalled.
+  // Start server
   const port = parseInt(process.env.PORT || '5000', 10);
-  server.listen({
-    port,
-    host: "0.0.0.0",
-    reusePort: true,
-  }, () => {
-    log(`serving on port ${port}`);
+  server.listen(port, "0.0.0.0", () => {
+    log(`BJP Connect server running on port ${port}`);
+    log(`Development mode: ${process.env.NODE_ENV === "development" ? "enabled" : "disabled"}`);
   });
 })();

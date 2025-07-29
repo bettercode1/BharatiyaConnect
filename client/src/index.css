@@ -2,132 +2,574 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Prevent horizontal overflow and ensure proper viewport fitting */
+html, body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Custom CSS Variables for BJP Theme */
 :root {
-  --background: hsl(0, 0%, 100%);
-  --foreground: hsl(24, 9.8%, 10%);
-  --muted: hsl(60, 4.8%, 95.9%);
-  --muted-foreground: hsl(25, 5.3%, 44.7%);
-  --popover: hsl(0, 0%, 100%);
-  --popover-foreground: hsl(24, 9.8%, 10%);
-  --card: hsl(0, 0%, 100%);
-  --card-foreground: hsl(24, 9.8%, 10%);
-  --border: hsl(20, 5.9%, 90%);
-  --input: hsl(20, 5.9%, 90%);
-  --primary: hsl(45, 93%, 47%);
-  --primary-foreground: hsl(26, 83%, 14%);
-  --secondary: hsl(60, 4.8%, 95.9%);
-  --secondary-foreground: hsl(24, 9.8%, 10%);
-  --accent: hsl(60, 4.8%, 95.9%);
-  --accent-foreground: hsl(24, 9.8%, 10%);
-  --destructive: hsl(0, 84.2%, 60.2%);
-  --destructive-foreground: hsl(60, 9.1%, 97.8%);
-  --ring: hsl(24, 9.8%, 10%);
-  --radius: 0.5rem;
-
-  /* Custom BJP theme colors */
-  --saffron: hsl(45, 93%, 47%);
-  --soil-brown: hsl(25, 83%, 14%);
-  --deep-orange: hsl(33, 100%, 50%);
-  --gradient-start: hsl(45, 93%, 47%);
-  --gradient-middle: hsl(39, 100%, 50%);
-  --gradient-end: hsl(25, 83%, 14%);
+  --saffron: #FF9933;
+  --soil-brown: #8B4513;
+  --deep-orange: #FF6600;
+  --gradient-start: #FF9933;
+  --gradient-middle: #FF6600;
+  --gradient-end: #FF4500;
+  --primary-orange: #FF8C00;
 }
 
-.dark {
-  --background: hsl(240, 10%, 3.9%);
-  --foreground: hsl(0, 0%, 98%);
-  --muted: hsl(240, 3.7%, 15.9%);
-  --muted-foreground: hsl(240, 5%, 64.9%);
-  --popover: hsl(240, 10%, 3.9%);
-  --popover-foreground: hsl(0, 0%, 98%);
-  --card: hsl(240, 10%, 3.9%);
-  --card-foreground: hsl(0, 0%, 98%);
-  --border: hsl(240, 3.7%, 15.9%);
-  --input: hsl(240, 3.7%, 15.9%);
-  --primary: hsl(45, 93%, 47%);
-  --primary-foreground: hsl(26, 83%, 14%);
-  --secondary: hsl(240, 3.7%, 15.9%);
-  --secondary-foreground: hsl(0, 0%, 98%);
-  --accent: hsl(240, 3.7%, 15.9%);
-  --accent-foreground: hsl(0, 0%, 98%);
-  --destructive: hsl(0, 62.8%, 30.6%);
-  --destructive-foreground: hsl(0, 0%, 98%);
-  --ring: hsl(240, 4.9%, 83.9%);
+/* Enhanced Modal Visibility */
+[data-radix-dialog-overlay] {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  z-index: 9998 !important;
 }
 
-@layer base {
-  * {
-    @apply border-border;
-  }
+[data-radix-dialog-content] {
+  z-index: 9999 !important;
+  background-color: white !important;
+  border: 4px solid #f97316 !important;
+  border-radius: 24px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
 
-  body {
-    @apply font-sans antialiased bg-background text-foreground;
-    font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
-  }
+/* EventModal Specific Styles */
+.event-modal-content {
+  z-index: 9999 !important;
+  background-color: white !important;
+  border: 4px solid #f97316 !important;
+  border-radius: 24px !important;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25) !important;
+}
 
-  /* Custom gradient backgrounds */
-  .gradient-bg {
-    background: linear-gradient(135deg, var(--gradient-start) 0%, var(--gradient-middle) 50%, var(--gradient-end) 100%);
-  }
+.event-modal-backdrop {
+  background-color: rgba(0, 0, 0, 0.7) !important;
+  z-index: 9998 !important;
+}
 
-  .gradient-orange-amber {
-    background: linear-gradient(135deg, hsl(33, 100%, 50%) 0%, hsl(45, 93%, 47%) 50%, hsl(45, 100%, 51%) 100%);
-  }
+/* BJP Logo Glow Effect */
+.bjp-logo-glow {
+  box-shadow: 0 0 20px rgba(255, 153, 51, 0.3);
+  animation: bjp-glow 3s ease-in-out infinite alternate;
+}
 
-  .gradient-saffron-brown {
-    background: linear-gradient(135deg, hsl(45, 93%, 47%) 0%, hsl(39, 100%, 50%) 50%, hsl(25, 83%, 14%) 100%);
+@keyframes bjp-glow {
+  from {
+    box-shadow: 0 0 20px rgba(255, 153, 51, 0.3);
   }
+  to {
+    box-shadow: 0 0 30px rgba(255, 153, 51, 0.6);
+  }
+}
 
-  /* Custom hover and transition effects */
-  .card-hover {
+/* BJP Text Shadow */
+.bjp-text-shadow {
+  text-shadow: 2px 2px 4px rgba(255, 153, 51, 0.3);
+}
+
+/* BJP Gradient Underline */
+.bjp-gradient-underline {
+  background: linear-gradient(90deg, var(--gradient-start), var(--gradient-middle), var(--gradient-end));
+  height: 2px;
+  border-radius: 1px;
+}
+
+/* Saffron Background Patterns */
+.saffron-gradient-bg {
+  background: linear-gradient(135deg, #FF9933 0%, #FF6600 50%, #FF4500 100%);
+}
+
+.saffron-radial-pattern {
+  background: radial-gradient(circle at center, rgba(255, 153, 51, 0.1) 0%, transparent 70%);
+}
+
+.saffron-3d-orb {
+  background: radial-gradient(circle at 30% 30%, #FF9933, #FF6600, #FF4500);
+  box-shadow: 
+    inset 2px 2px 4px rgba(255, 255, 255, 0.3),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.2),
+    0 8px 16px rgba(255, 153, 51, 0.4);
+}
+
+/* Enhanced Saffron Pattern Background */
+.saffron-pattern-bg {
+  background: 
+    radial-gradient(circle at 20% 20%, rgba(255, 153, 51, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 80% 80%, rgba(255, 102, 0, 0.1) 0%, transparent 50%),
+    radial-gradient(circle at 40% 60%, rgba(255, 69, 0, 0.05) 0%, transparent 50%);
+}
+
+/* Saffron 3D Card Effect */
+.saffron-3d-card {
+  background: linear-gradient(135deg, rgba(255, 153, 51, 0.1) 0%, rgba(255, 102, 0, 0.1) 100%);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 153, 51, 0.2);
+  box-shadow: 
+    0 8px 32px rgba(255, 153, 51, 0.1),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
+/* Saffron Logo 3D Effect */
+.saffron-logo-3d {
+  background: radial-gradient(circle at 30% 30%, #FF9933, #FF6600);
+  box-shadow: 
+    inset 2px 2px 4px rgba(255, 255, 255, 0.3),
+    inset -2px -2px 4px rgba(0, 0, 0, 0.2),
+    0 4px 8px rgba(255, 153, 51, 0.3);
+}
+
+/* BJP Card Hover Effect */
+.bjp-card-hover {
+  transition: all 0.3s ease;
+}
+
+.bjp-card-hover:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(255, 153, 51, 0.15);
+}
+
+/* Responsive Design Improvements */
+.responsive-container {
+  width: 100%;
+  max-width: 100%;
+  padding: 0 1.5rem;
+}
+
+@media (min-width: 640px) {
+  .responsive-container {
+    padding: 0 2rem;
+  }
+}
+
+@media (min-width: 768px) {
+  .responsive-container {
+    padding: 0 2.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-container {
+    padding: 0 3rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .responsive-container {
+    padding: 0 4rem;
+  }
+}
+
+@media (min-width: 1536px) {
+  .responsive-container {
+    padding: 0 5rem;
+  }
+}
+
+/* Responsive Grid Improvements */
+.responsive-grid {
+  display: grid;
+  gap: 1.5rem;
+  grid-template-columns: 1fr;
+}
+
+@media (min-width: 640px) {
+  .responsive-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 2rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .responsive-grid {
+    grid-template-columns: repeat(3, 1fr);
+    gap: 2.5rem;
+  }
+}
+
+@media (min-width: 1280px) {
+  .responsive-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 3rem;
+  }
+}
+
+/* Responsive Card Improvements */
+.responsive-card {
+  border-radius: 1rem;
+  overflow: hidden;
     transition: all 0.3s ease;
   }
 
-  .card-hover:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 20px 25px -5px hsl(45, 93%, 47%, 0.1), 0 10px 10px -5px hsl(45, 93%, 47%, 0.04);
+@media (min-width: 768px) {
+  .responsive-card {
+    border-radius: 1.25rem;
   }
+}
 
-  /* Loading shimmer effect */
-  .loading-shimmer {
-    background: linear-gradient(90deg, hsl(0, 0%, 94%) 25%, hsl(0, 0%, 88%) 50%, hsl(0, 0%, 94%) 75%);
-    background-size: 200% 100%;
-    animation: shimmer 1.5s infinite;
+/* Responsive Text Sizing - Enhanced for Better Visibility */
+.responsive-text-sm {
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-text-sm {
+    font-size: 1.125rem;
+    line-height: 1.75rem;
   }
+}
 
-  @keyframes shimmer {
-    0% { background-position: -200% 0; }
-    100% { background-position: 200% 0; }
+.responsive-text-base {
+  font-size: 1.125rem;
+  line-height: 1.75rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-text-base {
+    font-size: 1.25rem;
+    line-height: 2rem;
   }
+}
 
-  /* Typography improvements */
-  .font-marathi {
-    font-family: 'Noto Sans Devanagari', 'Poppins', sans-serif;
+.responsive-text-lg {
+  font-size: 1.25rem;
+  line-height: 2rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-text-lg {
+    font-size: 1.5rem;
+    line-height: 2.25rem;
   }
+}
 
-  .font-english {
-    font-family: 'Poppins', 'Noto Sans Devanagari', sans-serif;
+.responsive-text-xl {
+  font-size: 1.5rem;
+  line-height: 2.25rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-text-xl {
+    font-size: 1.875rem;
+    line-height: 2.5rem;
   }
+}
 
-  /* Custom scrollbar */
-  ::-webkit-scrollbar {
-    width: 8px;
+.responsive-text-2xl {
+  font-size: 1.875rem;
+  line-height: 2.5rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-text-2xl {
+    font-size: 2.25rem;
+    line-height: 2.75rem;
   }
+}
 
-  ::-webkit-scrollbar-track {
-    background: hsl(60, 4.8%, 95.9%);
+.responsive-text-3xl {
+  font-size: 2.25rem;
+  line-height: 2.75rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-text-3xl {
+    font-size: 3rem;
+    line-height: 3.5rem;
   }
+}
 
-  ::-webkit-scrollbar-thumb {
-    background: hsl(45, 93%, 47%, 0.3);
-    border-radius: 4px;
+/* Responsive Spacing - Enhanced for Better Visibility */
+.responsive-p-4 {
+  padding: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-p-4 {
+    padding: 2rem;
   }
+}
 
-  ::-webkit-scrollbar-thumb:hover {
-    background: hsl(45, 93%, 47%, 0.5);
+.responsive-p-6 {
+  padding: 2rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-p-6 {
+    padding: 2.5rem;
   }
+}
 
-  /* Line clamp utility */
+.responsive-gap-4 {
+  gap: 1.5rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-gap-4 {
+    gap: 2rem;
+  }
+}
+
+.responsive-gap-6 {
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-gap-6 {
+    gap: 2.5rem;
+  }
+}
+
+/* Responsive Image Improvements - Enhanced for Better Visibility */
+.responsive-image {
+  width: 100%;
+  height: auto;
+  object-fit: cover;
+  border-radius: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-image {
+    border-radius: 1rem;
+  }
+}
+
+/* Responsive Badge Improvements - Enhanced for Better Visibility */
+.responsive-badge {
+  font-size: 0.875rem;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.5rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-badge {
+    font-size: 1rem;
+    padding: 0.75rem 1rem;
+    border-radius: 0.75rem;
+  }
+}
+
+/* Responsive Button Improvements - Enhanced for Better Visibility */
+.responsive-button {
+  padding: 0.75rem 1.5rem;
+  font-size: 1rem;
+  border-radius: 0.75rem;
+}
+
+@media (min-width: 768px) {
+  .responsive-button {
+    padding: 1rem 2rem;
+    font-size: 1.125rem;
+    border-radius: 1rem;
+  }
+}
+
+/* Header Saffron Background */
+.header-saffron-bg {
+  background: linear-gradient(135deg, #FF9933 0%, #FF6600 50%, #FF4500 100%);
+}
+
+/* Custom Animations */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes spin-reverse {
+  from { transform: rotate(360deg); }
+  to { transform: rotate(0deg); }
+}
+
+@keyframes pulse-slow {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.5; }
+}
+
+@keyframes pulse-slower {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+@keyframes pulse-slowest {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.2; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes bounce-gentle {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-5px); }
+}
+
+@keyframes breathe {
+  0%, 100% { transform: scale(1); opacity: 0.4; }
+  50% { transform: scale(1.1); opacity: 0.6; }
+}
+
+@keyframes ping-slow {
+  75%, 100% {
+    transform: scale(2);
+    opacity: 0;
+  }
+}
+
+@keyframes ping-slower {
+  75%, 100% {
+    transform: scale(2.5);
+    opacity: 0;
+  }
+}
+
+@keyframes ping-slowest {
+  75%, 100% {
+    transform: scale(3);
+    opacity: 0;
+  }
+}
+
+@keyframes orbit-1 {
+  0% { transform: translateX(-50%) rotate(0deg) translateX(20px) rotate(0deg); }
+  100% { transform: translateX(-50%) rotate(360deg) translateX(20px) rotate(-360deg); }
+}
+
+@keyframes orbit-2 {
+  0% { transform: translateY(-50%) rotate(0deg) translateY(20px) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(360deg) translateY(20px) rotate(-360deg); }
+}
+
+@keyframes orbit-3 {
+  0% { transform: translateX(-50%) rotate(0deg) translateX(20px) rotate(0deg); }
+  100% { transform: translateX(-50%) rotate(-360deg) translateX(20px) rotate(360deg); }
+}
+
+@keyframes orbit-4 {
+  0% { transform: translateY(-50%) rotate(0deg) translateY(20px) rotate(0deg); }
+  100% { transform: translateY(-50%) rotate(-360deg) translateY(20px) rotate(360deg); }
+}
+
+/* Animation Classes */
+.animate-spin-slow {
+  animation: spin-slow 3s linear infinite;
+}
+
+.animate-spin-reverse {
+  animation: spin-reverse 4s linear infinite;
+}
+
+.animate-pulse-slow {
+  animation: pulse-slow 2s ease-in-out infinite;
+}
+
+.animate-pulse-slower {
+  animation: pulse-slower 3s ease-in-out infinite;
+}
+
+.animate-pulse-slowest {
+  animation: pulse-slowest 4s ease-in-out infinite;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-bounce-gentle {
+  animation: bounce-gentle 1s ease-in-out infinite;
+}
+
+.animate-breathe {
+  animation: breathe 4s ease-in-out infinite;
+}
+
+.animate-ping-slow {
+  animation: ping-slow 2s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.animate-ping-slower {
+  animation: ping-slower 3s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.animate-ping-slowest {
+  animation: ping-slowest 4s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+.animate-orbit-1 {
+  animation: orbit-1 3s linear infinite;
+}
+
+.animate-orbit-2 {
+  animation: orbit-2 4s linear infinite;
+}
+
+.animate-orbit-3 {
+  animation: orbit-3 5s linear infinite;
+}
+
+.animate-orbit-4 {
+  animation: orbit-4 6s linear infinite;
+}
+
+/* Sidebar Scrollbar Styling */
+.sidebar-scroll::-webkit-scrollbar {
+  width: 4px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb {
+  background: rgba(255, 153, 51, 0.3);
+  border-radius: 2px;
+}
+
+.sidebar-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(255, 153, 51, 0.5);
+}
+
+/* Modal Z-Index Fixes */
+.modal-overlay {
+  z-index: 60 !important;
+}
+
+.modal-content {
+  z-index: 70 !important;
+}
+
+/* Ensure modals are always on top */
+[data-radix-dialog-overlay] {
+  z-index: 60 !important;
+}
+
+[data-radix-dialog-content] {
+  z-index: 70 !important;
+}
+
+/* Responsive modal positioning */
+@media (max-width: 768px) {
+  [data-radix-dialog-content] {
+    margin: 1rem;
+    max-width: calc(100vw - 2rem);
+    max-height: calc(100vh - 2rem);
+  }
+}
+
+/* Line clamp utilities */
+.line-clamp-1 {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 1;
+}
+
   .line-clamp-2 {
     overflow: hidden;
     display: -webkit-box;
@@ -141,45 +583,74 @@
     -webkit-box-orient: vertical;
     -webkit-line-clamp: 3;
   }
+
+/* Dynamic Saffron Home Button */
+.dynamic-saffron-home-btn {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 50;
 }
 
-@layer components {
-  /* Custom button variants */
-  .btn-saffron {
-    @apply bg-gradient-to-r from-orange-400 to-yellow-400 hover:from-orange-500 hover:to-yellow-500 text-white font-medium shadow-md hover:shadow-lg transition-all duration-300;
+@media (max-width: 640px) {
+  .dynamic-saffron-home-btn {
+    bottom: 1rem;
+    right: 1rem;
   }
+}
 
-  .btn-brown {
-    @apply bg-gradient-to-r from-amber-800 to-orange-900 hover:from-amber-900 hover:to-orange-950 text-white font-medium shadow-md hover:shadow-lg transition-all duration-300;
+@media (max-width: 480px) {
+  .dynamic-saffron-home-btn {
+    bottom: 0.75rem;
+    right: 0.75rem;
   }
+}
 
-  /* Custom card variants */
-  .card-saffron {
-    @apply bg-gradient-to-br from-white to-orange-50 border border-orange-200 shadow-lg;
+.dynamic-saffron-btn {
+  position: relative;
+  overflow: hidden;
+}
+
+.dynamic-home-icon {
+  position: relative;
+  z-index: 10;
+}
+
+.click-ripple-saffron {
+  animation: ping-slow 0.6s ease-out;
+}
+
+/* Enhanced tooltip animations */
+@keyframes pulse-gentle {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.8; }
+}
+
+.animate-pulse-gentle {
+  animation: pulse-gentle 2s ease-in-out infinite;
+}
+
+@keyframes pulse-fast {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.3; }
+}
+
+.animate-pulse-fast {
+  animation: pulse-fast 0.5s ease-in-out infinite;
+}
+
+/* Ensure content doesn't overflow on small screens */
+@media (max-width: 768px) {
+  .responsive-container {
+    padding-left: 0.5rem;
+    padding-right: 0.5rem;
   }
-
-  .card-leadership {
-    @apply bg-gradient-to-br from-white to-amber-50 border border-amber-200 shadow-lg hover:shadow-xl transition-all duration-300;
+  
+  .responsive-p-4 {
+    padding: 1rem;
   }
-
-  /* Stats card styling */
-  .stat-card {
-    @apply bg-gradient-to-br from-white to-gray-50 border-l-4 border-orange-400 shadow-lg hover:shadow-xl transition-all duration-300;
-  }
-
-  /* Navigation active state */
-  .nav-active {
-    @apply bg-white text-amber-800 shadow-md;
-  }
-
-  /* Mobile responsive fixes */
-  @media (max-width: 768px) {
-    .container {
-      @apply px-4;
-    }
-    
-    .grid-responsive {
-      @apply grid-cols-1 md:grid-cols-2 lg:grid-cols-3;
-    }
+  
+  .responsive-p-6 {
+    padding: 1.5rem;
   }
 }

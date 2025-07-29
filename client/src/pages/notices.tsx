@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -71,14 +71,21 @@ export default function Notices() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
-  const [priority, setPriority] = useState("");
-  const [category, setCategory] = useState("");
+  const [priority, setPriority] = useState("all");
+  const [category, setCategory] = useState("all");
   const [page, setPage] = useState(1);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
+  // Cleanup effect to prevent memory leaks and DOM conflicts
+  useEffect(() => {
+    return () => {
+      setIsCreateOpen(false);
+    };
+  }, []);
+
   const { data: noticesData, isLoading } = useQuery({
     queryKey: ["/api/notices", { search, priority, category, page }],
-  });
+  }) as { data: { notices?: any[]; total?: number } | undefined; isLoading: boolean };
 
   const createNoticeMutation = useMutation({
     mutationFn: async (data: NoticeFormData) => {
@@ -95,7 +102,10 @@ export default function Notices() {
         title: "यशस्वी",
         description: "सूचना यशस्वीरित्या तयार केली गेली",
       });
-      setIsCreateOpen(false);
+      // Use setTimeout to prevent DOM conflicts
+      setTimeout(() => {
+        setIsCreateOpen(false);
+      }, 100);
     },
     onError: (error) => {
       if (isUnauthorizedError(error)) {
@@ -164,13 +174,30 @@ export default function Notices() {
   });
 
   const onSubmit = (data: NoticeFormData) => {
-    createNoticeMutation.mutate(data);
+    try {
+      createNoticeMutation.mutate(data);
+    } catch (error) {
+      console.error('Form submission error:', error);
+      toast({
+        title: "त्रुटी",
+        description: "फॉर्म सबमिट करताना समस्या आली",
+        variant: "destructive",
+      });
+    }
   };
 
   const handleDelete = (id: string) => {
     if (confirm("तुम्हाला खात्री आहे की तुम्ही ही सूचना हटवू इच्छिता?")) {
       deleteNoticeMutation.mutate(id);
     }
+  };
+
+  const formatDate = (dateString: string) => {
+    return new Date(dateString).toLocaleDateString('hi-IN', {
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
   };
 
   const getPriorityColor = (priority: string) => {
@@ -180,7 +207,7 @@ export default function Notices() {
       case 'high':
         return 'bg-orange-100 text-orange-800 border-orange-200';
       case 'medium':
-        return 'bg-blue-100 text-blue-800 border-blue-200';
+        return 'bg-yellow-100 text-yellow-800 border-yellow-200';
       case 'low':
         return 'bg-green-100 text-green-800 border-green-200';
       default:
@@ -188,10 +215,25 @@ export default function Notices() {
     }
   };
 
+  const getPriorityIcon = (priority: string) => {
+    switch (priority) {
+      case 'urgent':
+        return <AlertTriangle className="w-4 h-4" />;
+      case 'high':
+        return <Bell className="w-4 h-4" />;
+      case 'medium':
+        return <Info className="w-4 h-4" />;
+      case 'low':
+        return <CheckCircle className="w-4 h-4" />;
+      default:
+        return <Info className="w-4 h-4" />;
+    }
+  };
+
   const getPriorityLabel = (priority: string) => {
     switch (priority) {
       case 'urgent':
-        return 'तातडीची';
+        return 'तातडीचे';
       case 'high':
         return 'उच्च';
       case 'medium':
@@ -201,32 +243,6 @@ export default function Notices() {
       default:
         return priority;
     }
-  };
-
-  const getPriorityIcon = (priority: string) => {
-    switch (priority) {
-      case 'urgent':
-        return <AlertTriangle className="w-3 h-3" />;
-      case 'high':
-        return <Bell className="w-3 h-3" />;
-      case 'medium':
-        return <Info className="w-3 h-3" />;
-      case 'low':
-        return <CheckCircle className="w-3 h-3" />;
-      default:
-        return <Info className="w-3 h-3" />;
-    }
-  };
-
-  const getTimeAgo = (dateString: string) => {
-    const now = new Date();
-    const noticeDate = new Date(dateString);
-    const diffInHours = Math.floor((now.getTime() - noticeDate.getTime()) / (1000 * 60 * 60));
-    
-    if (diffInHours < 1) return "आत्ताच";
-    if (diffInHours < 24) return `${diffInHours} तास आधी`;
-    const diffInDays = Math.floor(diffInHours / 24);
-    return `${diffInDays} दिवस आधी`;
   };
 
   const getTargetAudienceLabel = (audience: string) => {
@@ -270,17 +286,20 @@ export default function Notices() {
     },
     {
       id: '3',
-      title: 'डिजिटल साक्षरता कार्यशाळा',
-      content: 'ग्रामीण भागातील कार्यकर्त्यांसाठी डिजिटल साक्षरता कार्यशाळा आयोजित करा. १५ ऑगस्ट ते ३१ ऑगस्ट २०२५ या कालावधीत सर्व जिल्ह्यांमध्ये कार्यशाळा घ्या.',
+      title: 'डिजिटल अभियान प्रशिक्षण',
+      content: 'सोशल मीडिया वापरून पक्षाचे संदेश पोहोचवण्यासाठी विशेष प्रशिक्षण कार्यक्रम. सर्व जिल्हा अध्यक्षांनी सहभाग घ्यावा.',
       priority: 'high',
       category: 'प्रशिक्षण',
-      targetAudience: 'all',
-      isPinned: false,
-      publishedAt: new Date(Date.now() - 48 * 60 * 60 * 1000).toISOString(),
+      targetAudience: 'leadership',
+      isPinned: true,
+      publishedAt: new Date(Date.now() - 3 * 24 * 60 * 60 * 1000).toISOString(),
       viewCount: 89,
-      attachments: []
+      attachments: [{ name: 'training_schedule.pdf' }]
     }
   ];
+
+  // Use default data if API data is not available
+  const noticesDisplayData = noticesData?.notices || defaultNotices;
 
   if (isLoading) {
     return (
@@ -292,25 +311,22 @@ export default function Notices() {
         <Card>
           <CardContent className="p-6">
             <div className="flex items-center space-x-4">
-              <Skeleton className="h-10 flex-1" />
+              <Skeleton className="h-10 w-64" />
               <Skeleton className="h-10 w-24" />
               <Skeleton className="h-10 w-24" />
             </div>
           </CardContent>
         </Card>
-        <div className="space-y-4">
-          {[...Array(3)].map((_, i) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {[...Array(6)].map((_, i) => (
             <Card key={i}>
               <CardContent className="p-6">
-                <div className="flex items-start justify-between mb-2">
-                  <Skeleton className="h-6 w-64" />
-                  <Skeleton className="h-6 w-20" />
-                </div>
+                <Skeleton className="h-6 w-3/4 mb-4" />
                 <Skeleton className="h-4 w-full mb-2" />
-                <Skeleton className="h-4 w-3/4 mb-4" />
-                <div className="flex items-center justify-between">
-                  <Skeleton className="h-4 w-32" />
-                  <Skeleton className="h-4 w-24" />
+                <Skeleton className="h-4 w-2/3 mb-4" />
+                <div className="flex justify-between items-center">
+                  <Skeleton className="h-6 w-20" />
+                  <Skeleton className="h-6 w-16" />
                 </div>
               </CardContent>
             </Card>
@@ -319,8 +335,6 @@ export default function Notices() {
       </div>
     );
   }
-
-  const noticesDisplayData = noticesData?.notices?.length > 0 ? noticesData.notices : defaultNotices;
 
   return (
     <div className="space-y-6">
@@ -350,7 +364,7 @@ export default function Notices() {
                   name="title"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>शीर्षक *</FormLabel>
+                      <FormLabel>शीर्षक</FormLabel>
                       <FormControl>
                         <Input placeholder="सूचनेचे शीर्षक" {...field} />
                       </FormControl>
@@ -364,11 +378,11 @@ export default function Notices() {
                   name="content"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>सामग्री *</FormLabel>
+                      <FormLabel>सामग्री</FormLabel>
                       <FormControl>
                         <Textarea 
-                          placeholder="सूचनेची संपूर्ण माहिती" 
-                          className="min-h-[100px]"
+                          placeholder="सूचनेची तपशीलवार माहिती" 
+                          rows={4}
                           {...field} 
                         />
                       </FormControl>
@@ -383,15 +397,15 @@ export default function Notices() {
                     name="priority"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>प्राधान्यता *</FormLabel>
+                        <FormLabel>प्राधान्य</FormLabel>
                         <Select onValueChange={field.onChange} defaultValue={field.value}>
                           <FormControl>
                             <SelectTrigger>
-                              <SelectValue placeholder="प्राधान्यता निवडा" />
+                              <SelectValue placeholder="प्राधान्य निवडा" />
                             </SelectTrigger>
                           </FormControl>
                           <SelectContent>
-                            <SelectItem value="urgent">तातडीची</SelectItem>
+                            <SelectItem value="urgent">तातडीचे</SelectItem>
                             <SelectItem value="high">उच्च</SelectItem>
                             <SelectItem value="medium">मध्यम</SelectItem>
                             <SelectItem value="low">कमी</SelectItem>
@@ -407,9 +421,9 @@ export default function Notices() {
                     name="category"
                     render={({ field }) => (
                       <FormItem>
-                        <FormLabel>श्रेणी *</FormLabel>
+                        <FormLabel>श्रेणी</FormLabel>
                         <FormControl>
-                          <Input placeholder="उदा. राष्ट्रीय कार्यक्रम, सदस्यत्व" {...field} />
+                          <Input placeholder="श्रेणी" {...field} />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -422,11 +436,11 @@ export default function Notices() {
                   name="targetAudience"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>लक्ष्य प्रेक्षक *</FormLabel>
+                      <FormLabel>लक्ष्य दर्शक</FormLabel>
                       <Select onValueChange={field.onChange} defaultValue={field.value}>
                         <FormControl>
                           <SelectTrigger>
-                            <SelectValue placeholder="प्रेक्षक निवडा" />
+                            <SelectValue placeholder="लक्ष्य दर्शक निवडा" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
@@ -435,50 +449,6 @@ export default function Notices() {
                           <SelectItem value="constituency">मतदारसंघ</SelectItem>
                         </SelectContent>
                       </Select>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="constituency"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>मतदारसंघ</FormLabel>
-                        <FormControl>
-                          <Input placeholder="विशिष्ट मतदारसंघ" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="district"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>जिल्हा</FormLabel>
-                        <FormControl>
-                          <Input placeholder="विशिष्ट जिल्हा" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <FormField
-                  control={form.control}
-                  name="expiryDate"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>समाप्ती तारीख</FormLabel>
-                      <FormControl>
-                        <Input type="datetime-local" {...field} />
-                      </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
@@ -497,7 +467,7 @@ export default function Notices() {
                     disabled={createNoticeMutation.isPending}
                     className="bg-orange-500 hover:bg-amber-600 text-white"
                   >
-                    {createNoticeMutation.isPending ? "तयार करत आहे..." : "सूचना प्रकाशित करा"}
+                    {createNoticeMutation.isPending ? "तयार करत आहे..." : "सूचना तयार करा"}
                   </Button>
                 </div>
               </form>
@@ -513,7 +483,7 @@ export default function Notices() {
             <div className="relative flex-1">
               <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
               <Input
-                placeholder="सूचना शीर्षक किंवा सामग्री शोधा..."
+                placeholder="सूचना शोधा..."
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 className="pl-10"
@@ -521,25 +491,14 @@ export default function Notices() {
             </div>
             <Select value={priority} onValueChange={setPriority}>
               <SelectTrigger className="w-40">
-                <SelectValue placeholder="प्राधान्यता" />
+                <SelectValue placeholder="प्राधान्य" />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="">सर्व</SelectItem>
-                <SelectItem value="urgent">तातडीची</SelectItem>
+                <SelectItem value="all">सर्व</SelectItem>
+                <SelectItem value="urgent">तातडीचे</SelectItem>
                 <SelectItem value="high">उच्च</SelectItem>
                 <SelectItem value="medium">मध्यम</SelectItem>
                 <SelectItem value="low">कमी</SelectItem>
-              </SelectContent>
-            </Select>
-            <Select value={category} onValueChange={setCategory}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder="श्रेणी" />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="">सर्व श्रेणी</SelectItem>
-                <SelectItem value="राष्ट्रीय कार्यक्रम">राष्ट्रीय कार्यक्रम</SelectItem>
-                <SelectItem value="सदस्यत्व">सदस्यत्व</SelectItem>
-                <SelectItem value="प्रशिक्षण">प्रशिक्षण</SelectItem>
               </SelectContent>
             </Select>
             <Button variant="outline">
@@ -550,115 +509,118 @@ export default function Notices() {
         </CardContent>
       </Card>
 
-      {/* Notices List */}
-      <div className="space-y-4">
-        {noticesDisplayData?.map((notice: any, index: number) => (
-          <Card key={notice.id} className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                <div className="flex items-start justify-between">
-                  <div className="flex items-start space-x-3 flex-1">
-                    {notice.isPinned && (
-                      <Pin className="w-4 h-4 text-orange-600 mt-1 flex-shrink-0" />
-                    )}
-                    <div className="flex-1 min-w-0">
-                      <h4 className="font-semibold text-amber-900 text-lg line-clamp-2 pr-4">
-                        {notice.title}
-                      </h4>
-                      <div className="flex items-center space-x-2 mt-1">
-                        <Badge className={getPriorityColor(notice.priority)}>
-                          <span className="mr-1">{getPriorityIcon(notice.priority)}</span>
-                          {getPriorityLabel(notice.priority)}
-                        </Badge>
-                        <Badge variant="outline" className="text-xs">
-                          {notice.category}
-                        </Badge>
-                        <Badge variant="secondary" className="text-xs">
-                          {getTargetAudienceLabel(notice.targetAudience)}
-                        </Badge>
-                      </div>
+      {/* Notices Grid */}
+      <div className="responsive-grid">
+        {noticesDisplayData && noticesDisplayData.length > 0 ? (
+          noticesDisplayData.map((notice: any, index: number) => {
+            // Map notice titles to images
+            const getNoticeImage = (title: string) => {
+              if (title.includes('कारगिल विजय दिवस')) {
+                return 'https://cms.patrika.com/wp-content/uploads/2025/07/2_395772.jpg?w=450&q=90';
+              } else if (title.includes('मासिक सदस्यता')) {
+                return 'https://staticimg.amarujala.com/assets/images/2024/09/03/cg-news_6ab53ff2ce8033ff9dd363b40e6002e2.jpeg?w=674&dpr=1.0&q=80';
+              } else if (title.includes('डिजिटल')) {
+                return 'https://superca.in/storage/app/public/blogs/pmgdisha.webp';
+              }
+              return '/api/placeholder/400/300';
+            };
+
+            return (
+              <Card key={notice.id} className="hover:shadow-lg transition-shadow responsive-card overflow-hidden">
+                <div className="relative">
+                  <img 
+                    src={getNoticeImage(notice.title)}
+                    alt={notice.title}
+                    className="responsive-image w-full h-40 sm:h-48 object-cover"
+                    onError={(e) => {
+                      e.currentTarget.style.display = 'none';
+                    }}
+                  />
+                  <div className="absolute top-3 left-3">
+                    <div className="flex items-center gap-2 sm:gap-3">
+                      {getPriorityIcon(notice.priority)}
+                      <Badge className={`responsive-badge ${getPriorityColor(notice.priority)}`}>
+                        <span className="hidden sm:inline">{getPriorityLabel(notice.priority)}</span>
+                      </Badge>
                     </div>
                   </div>
-                  <div className="flex items-center space-x-1 flex-shrink-0">
-                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                      <Eye className="w-3 h-3" />
-                    </Button>
-                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                      <Edit className="w-3 h-3" />
-                    </Button>
-                    {/* Only show delete for non-default notices */}
-                    {noticesData?.notices?.find((n: any) => n.id === notice.id) && (
-                      <Button 
-                        size="sm" 
-                        variant="ghost" 
-                        className="h-8 w-8 p-0 text-red-600 hover:text-red-700"
-                        onClick={() => handleDelete(notice.id)}
-                        disabled={deleteNoticeMutation.isPending}
-                      >
-                        <Trash2 className="w-3 h-3" />
-                      </Button>
-                    )}
-                  </div>
-                </div>
-
-                <p className="text-gray-600 text-sm line-clamp-3 leading-relaxed">
-                  {notice.content}
-                </p>
-
-                <div className="flex items-center justify-between text-sm text-gray-500 pt-2 border-t border-gray-100">
-                  <div className="flex items-center space-x-4">
-                    <div className="flex items-center">
-                      <Clock className="w-3 h-3 mr-1" />
-                      <span>{getTimeAgo(notice.publishedAt)} प्रकाशित</span>
-                    </div>
-                    {notice.attachments?.length > 0 && (
-                      <div className="flex items-center">
-                        <Paperclip className="w-3 h-3 mr-1" />
-                        <span>{notice.attachments.length} संलग्नक</span>
-                      </div>
-                    )}
-                  </div>
-                  {notice.viewCount > 0 && (
-                    <div className="flex items-center">
-                      <Eye className="w-3 h-3 mr-1" />
-                      <span>{notice.viewCount} वाचले</span>
+                  {notice.isPinned && (
+                    <div className="absolute top-3 right-3">
+                      <Pin className="w-4 h-4 sm:w-5 sm:h-5 text-orange-500 bg-white/80 rounded-full p-1" />
                     </div>
                   )}
                 </div>
-              </div>
-            </CardContent>
-          </Card>
-        )) || (
-          <div className="text-center py-12">
+                <CardContent className="responsive-p-4 sm:responsive-p-6">
+                  <div className="mb-4 sm:mb-5">
+                    <h3 className="responsive-text-base sm:responsive-text-lg font-semibold mb-3 line-clamp-2">{notice.title}</h3>
+                    <p className="responsive-text-sm text-gray-600 mb-4 sm:mb-5 line-clamp-2 sm:line-clamp-3">{notice.content}</p>
+                    
+                    <div className="space-y-3 text-sm sm:text-base text-gray-500 mb-4 sm:mb-5">
+                      <div className="flex items-center gap-3">
+                        <Clock className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span>{formatDate(notice.publishedAt)}</span>
+                      </div>
+                      <div className="flex items-center gap-3">
+                        <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <span>{notice.viewCount} पहाणे</span>
+                      </div>
+                      {notice.attachments?.length > 0 && (
+                        <div className="flex items-center gap-3">
+                          <Paperclip className="w-4 h-4 sm:w-5 sm:h-5" />
+                          <span>{notice.attachments.length} संलग्नक</span>
+                        </div>
+                      )}
+                    </div>
+                    
+                    <div className="flex items-center justify-between pt-4 border-t border-gray-100">
+                      <Badge variant="outline" className="responsive-badge">
+                        {getTargetAudienceLabel(notice.targetAudience)}
+                      </Badge>
+                      <div className="flex items-center space-x-2 sm:space-x-3">
+                        <Button size="sm" variant="ghost" className="responsive-button">
+                          <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+                        </Button>
+                        <Button size="sm" variant="ghost" className="responsive-button">
+                          <Edit className="w-4 h-4 sm:w-5 sm:h-5" />
+                        </Button>
+                        <Button 
+                          size="sm" 
+                          variant="ghost" 
+                          className="responsive-button text-red-600 hover:text-red-700"
+                          onClick={() => handleDelete(notice.id)}
+                        >
+                          <Trash2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                        </Button>
+                      </div>
+                    </div>
+                  </div>
+                </CardContent>
+              </Card>
+            );
+          })
+        ) : (
+          <div className="col-span-full text-center py-12">
             <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-              <Search className="w-12 h-12 text-gray-400" />
+              <Bell className="w-12 h-12 text-gray-400" />
             </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">कोणत्याही सूचना आढळल्या नाहीत</h3>
+            <h3 className="text-lg font-medium text-gray-900 mb-2">कोणतीही सूचना आढळली नाही</h3>
             <p className="text-gray-500">नवीन शोध टर्म वापरून पहा किंवा नवीन सूचना तयार करा</p>
           </div>
         )}
       </div>
 
       {/* Pagination */}
-      {noticesData?.total > 20 && (
-        <div className="flex justify-center space-x-2">
-          <Button
-            variant="outline"
-            onClick={() => setPage(page - 1)}
-            disabled={page === 1}
-          >
-            मागील
-          </Button>
-          <span className="flex items-center px-4 text-sm text-gray-600">
-            पान {page}
-          </span>
-          <Button
-            variant="outline"
-            onClick={() => setPage(page + 1)}
-            disabled={page * 20 >= (noticesData?.total || 0)}
-          >
-            पुढील
-          </Button>
+      {(noticesData?.total || 0) > 20 && (
+        <div className="flex justify-center">
+          <div className="flex items-center space-x-2">
+            <Button variant="outline" size="sm">
+              मागे
+            </Button>
+            <span className="text-sm text-gray-600">पृष्ठ {page} / {Math.ceil((noticesData?.total || 0) / 20)}</span>
+            <Button variant="outline" size="sm">
+              पुढे
+            </Button>
+          </div>
         </div>
       )}
     </div>

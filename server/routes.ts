@@ -6,7 +6,8 @@ import {
   insertMemberSchema,
   insertEventSchema,
   insertNoticeSchema,
-  insertLeadershipSchema
+  insertLeadershipSchema,
+  insertFeedbackSchema
 } from "@shared/schema";
 import { z } from "zod";
 
@@ -286,6 +287,81 @@ export async function registerRoutes(app: Express): Promise<Server> {
     } catch (error) {
       console.error("Error deleting notice:", error);
       res.status(500).json({ message: "Failed to delete notice" });
+    }
+  });
+
+  // Feedback routes
+  app.get('/api/feedback', isAuthenticated, async (req, res) => {
+    try {
+      const { search, status, category, page = '1', limit = '20' } = req.query;
+      const offset = (parseInt(page as string) - 1) * parseInt(limit as string);
+      
+      const result = await storage.getFeedback({
+        search: search as string,
+        status: status as string,
+        category: category as string,
+        limit: parseInt(limit as string),
+        offset
+      });
+      
+      res.json(result);
+    } catch (error) {
+      console.error("Error fetching feedback:", error);
+      res.status(500).json({ message: "Failed to fetch feedback" });
+    }
+  });
+
+  app.get('/api/feedback/:id', isAuthenticated, async (req, res) => {
+    try {
+      const feedback = await storage.getFeedbackItem(req.params.id);
+      if (!feedback) {
+        return res.status(404).json({ message: "Feedback not found" });
+      }
+      res.json(feedback);
+    } catch (error) {
+      console.error("Error fetching feedback:", error);
+      res.status(500).json({ message: "Failed to fetch feedback" });
+    }
+  });
+
+  app.post('/api/feedback', isAuthenticated, async (req: any, res) => {
+    try {
+      const feedbackData = insertFeedbackSchema.parse({
+        ...req.body,
+        memberId: req.user.claims.sub
+      });
+      const feedback = await storage.createFeedback(feedbackData);
+      res.status(201).json(feedback);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid feedback data", errors: error.errors });
+      }
+      console.error("Error creating feedback:", error);
+      res.status(500).json({ message: "Failed to create feedback" });
+    }
+  });
+
+  app.put('/api/feedback/:id', isAuthenticated, async (req, res) => {
+    try {
+      const feedbackData = insertFeedbackSchema.partial().parse(req.body);
+      const feedback = await storage.updateFeedback(req.params.id, feedbackData);
+      res.json(feedback);
+    } catch (error) {
+      if (error instanceof z.ZodError) {
+        return res.status(400).json({ message: "Invalid feedback data", errors: error.errors });
+      }
+      console.error("Error updating feedback:", error);
+      res.status(500).json({ message: "Failed to update feedback" });
+    }
+  });
+
+  app.delete('/api/feedback/:id', isAuthenticated, async (req, res) => {
+    try {
+      await storage.deleteFeedback(req.params.id);
+      res.status(204).send();
+    } catch (error) {
+      console.error("Error deleting feedback:", error);
+      res.status(500).json({ message: "Failed to delete feedback" });
     }
   });
 

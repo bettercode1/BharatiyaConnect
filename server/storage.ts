@@ -3,6 +3,7 @@ import {
   members,
   events,
   notices,
+  feedback,
   leadership,
   eventAttendees,
   type User,
@@ -10,10 +11,12 @@ import {
   type Member,
   type Event,
   type Notice,
+  type Feedback,
   type Leadership,
   type InsertMember,
   type InsertEvent,
   type InsertNotice,
+  type InsertFeedback,
   type InsertLeadership,
 } from "@shared/schema";
 import { db } from "./db";
@@ -70,6 +73,20 @@ export interface IStorage {
   updateNotice(id: string, notice: Partial<InsertNotice>): Promise<Notice>;
   deleteNotice(id: string): Promise<void>;
   getRecentNotices(limit?: number): Promise<Notice[]>;
+  
+  // Feedback operations
+  getFeedback(params?: {
+    search?: string;
+    status?: string;
+    category?: string;
+    limit?: number;
+    offset?: number;
+  }): Promise<{ feedback: Feedback[]; total: number }>;
+  getFeedbackItem(id: string): Promise<Feedback | undefined>;
+  createFeedback(feedback: InsertFeedback): Promise<Feedback>;
+  updateFeedback(id: string, feedback: Partial<InsertFeedback>): Promise<Feedback>;
+  deleteFeedback(id: string): Promise<void>;
+  getRecentFeedback(limit?: number): Promise<Feedback[]>;
   
   // Leadership operations
   getLeadership(): Promise<Leadership[]>;
@@ -360,6 +377,84 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(notices)
       .orderBy(desc(notices.isPinned), desc(notices.publishedAt))
+      .limit(limit);
+  }
+
+  async getFeedback(params: {
+    search?: string;
+    status?: string;
+    category?: string;
+    limit?: number;
+    offset?: number;
+  } = {}): Promise<{ feedback: Feedback[]; total: number }> {
+    const { search, status, category, limit = 20, offset = 0 } = params;
+    
+    let query = db.select().from(feedback);
+    let countQuery = db.select({ count: count() }).from(feedback);
+    
+    const conditions = [];
+    
+    if (search) {
+      conditions.push(or(
+        like(feedback.subject, `%${search}%`),
+        like(feedback.message, `%${search}%`),
+        like(feedback.memberName, `%${search}%`)
+      ));
+    }
+    
+    if (status) {
+      conditions.push(eq(feedback.status, status));
+    }
+    
+    if (category) {
+      conditions.push(eq(feedback.category, category));
+    }
+    
+    if (conditions.length > 0) {
+      const whereClause = conditions.length === 1 ? conditions[0] : and(...conditions);
+      query = query.where(whereClause);
+      countQuery = countQuery.where(whereClause);
+    }
+    
+    const [feedbackResult, totalResult] = await Promise.all([
+      query.orderBy(desc(feedback.createdAt)).limit(limit).offset(offset),
+      countQuery
+    ]);
+    
+    return {
+      feedback: feedbackResult,
+      total: totalResult[0].count
+    };
+  }
+
+  async getFeedbackItem(id: string): Promise<Feedback | undefined> {
+    const [feedbackItem] = await db.select().from(feedback).where(eq(feedback.id, id));
+    return feedbackItem;
+  }
+
+  async createFeedback(feedbackData: InsertFeedback): Promise<Feedback> {
+    const [newFeedback] = await db.insert(feedback).values(feedbackData).returning();
+    return newFeedback;
+  }
+
+  async updateFeedback(id: string, feedbackData: Partial<InsertFeedback>): Promise<Feedback> {
+    const [updatedFeedback] = await db
+      .update(feedback)
+      .set({ ...feedbackData, updatedAt: new Date() })
+      .where(eq(feedback.id, id))
+      .returning();
+    return updatedFeedback;
+  }
+
+  async deleteFeedback(id: string): Promise<void> {
+    await db.delete(feedback).where(eq(feedback.id, id));
+  }
+
+  async getRecentFeedback(limit: number = 5): Promise<Feedback[]> {
+    return await db
+      .select()
+      .from(feedback)
+      .orderBy(desc(feedback.createdAt))
       .limit(limit);
   }
 
