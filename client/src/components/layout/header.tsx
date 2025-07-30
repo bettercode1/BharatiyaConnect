@@ -19,7 +19,7 @@ interface HeaderProps {
 
 export default function Header({ onMenuClick }: HeaderProps) {
   const { user, isAuthenticated } = useAuth();
-  const { t, language } = useLanguage();
+  const { t, language, fontClass, fontDisplayClass } = useLanguage();
   const [location] = useLocation();
   const [isScrolled, setIsScrolled] = useState(false);
 
@@ -71,12 +71,12 @@ export default function Header({ onMenuClick }: HeaderProps) {
             
             {/* Main Party Name */}
             <div className="hidden sm:block">
-              <h1 className="text-lg sm:text-2xl font-bold text-white tracking-wide bjp-text-shadow drop-shadow-lg">
+              <h1 className={`text-lg sm:text-2xl font-bold text-white tracking-wide bjp-text-shadow drop-shadow-lg ${fontDisplayClass}`}>
                 {language === 'mr' ? 'भारतीय जनता पार्टी - महाराष्ट्र' : 'Bharatiya Janata Party - Maharashtra'}
               </h1>
             </div>
             <div className="sm:hidden">
-              <h1 className="text-sm font-bold text-white drop-shadow-lg">
+              <h1 className={`text-sm font-bold text-white drop-shadow-lg ${fontDisplayClass}`}>
                 {language === 'mr' ? 'भाजप महाराष्ट्र' : 'BJP Maharashtra'}
               </h1>
             </div>
@@ -114,7 +114,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
             ) : (
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                  <Button variant="ghost" className="flex items-center space-x-1 sm:space-x-2 text-orange-700 hover:text-orange-800 hover:bg-orange-50 p-1 sm:p-2 bg-white/20 backdrop-blur-sm rounded-lg border border-orange-200/30">
+                  <Button variant="ghost" className="flex items-center space-x-1 sm:space-x-2 text-orange-700 hover:text-orange-800 hover:bg-orange-50 p-1 sm:p-2 bg-white/20 backdrop-blur-sm rounded-xl border border-orange-200/30">
                   <Avatar className="h-6 w-6 sm:h-8 sm:w-8">
                     <AvatarImage src="/api/placeholder/32/32" />
                       <AvatarFallback className="bg-orange-500 text-white text-xs sm:text-sm font-bold">
@@ -132,24 +132,16 @@ export default function Header({ onMenuClick }: HeaderProps) {
                     <ChevronDown className="h-3 w-3 sm:h-4 sm:w-4 text-orange-600" />
                 </Button>
               </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="w-48 z-50 bg-white border border-orange-200 shadow-lg">
-                  <DropdownMenuItem className="text-orange-700 hover:text-orange-800 hover:bg-orange-50">
-                    <Link href="/settings">
-                      <div className="flex items-center space-x-2 w-full">
-                        <Settings className="h-4 w-4" />
-                        <span>{language === 'mr' ? 'सेटिंग्ज' : 'Settings'}</span>
-                      </div>
-                    </Link>
-                  </DropdownMenuItem>
-                  <DropdownMenuItem className="text-orange-700 hover:text-orange-800 hover:bg-orange-50">
-                    <div className="flex items-center space-x-2 w-full">
+                <DropdownMenuContent align="end" className="w-48 z-50 bg-white border border-orange-200 shadow-lg rounded-xl p-2">
+                  <DropdownMenuItem className="text-orange-700 hover:text-orange-800 hover:bg-orange-50 rounded-lg mx-1 my-1 p-3">
+                    <Link href="/profile" className="flex items-center space-x-2 w-full">
                       <User className="h-4 w-4" />
                       <span>{language === 'mr' ? 'प्रोफाइल' : 'Profile'}</span>
-                    </div>
+                    </Link>
                 </DropdownMenuItem>
                 <DropdownMenuItem 
                   onClick={handleLogout}
-                    className="text-red-600 hover:text-red-700 hover:bg-red-50"
+                    className="text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg mx-1 my-1 p-3"
                 >
                     <div className="flex items-center space-x-2 w-full">
                       <Crown className="h-4 w-4" />

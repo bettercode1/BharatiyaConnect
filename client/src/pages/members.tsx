@@ -37,10 +37,18 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
-import { Search, Plus, Filter, MapPin, Phone, Calendar, Upload, User, Mail, Briefcase, Home, X, ChevronDown } from "lucide-react";
+import { Search, Plus, Filter, MapPin, Phone, Calendar, Upload, User, Mail, Briefcase, Home, X, ChevronDown, Edit, Trash2 } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 
 const memberFormSchema = z.object({
@@ -283,7 +291,7 @@ const joiningDateRanges = [
 ];
 
 export default function Members() {
-  const { t, language } = useLanguage();
+  const { t, language, fontClass, fontDisplayClass } = useLanguage();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
@@ -461,574 +469,717 @@ export default function Members() {
 
   if (isLoading) {
     return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-between">
-          <Skeleton className="h-8 w-48" />
-          <Skeleton className="h-10 w-24" />
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {[...Array(6)].map((_, i) => (
-            <Card key={`skeleton-${i}`}>
-              <CardContent className="p-6">
-                <div className="flex items-center space-x-4">
-                  <Skeleton className="w-16 h-16 rounded-full" />
-                  <div className="space-y-2 flex-1">
-                    <Skeleton className="h-4 w-24" />
-                    <Skeleton className="h-3 w-32" />
-                    <Skeleton className="h-3 w-20" />
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 p-6 sm:p-8 lg:p-12">
+        <div className="max-w-7xl mx-auto space-y-8">
+          <div className="flex items-center justify-between">
+            <Skeleton className="h-8 w-48" />
+            <Skeleton className="h-10 w-24" />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[...Array(6)].map((_, i) => (
+              <Card key={`skeleton-${i}`} className="bg-white shadow-lg rounded-xl">
+                <CardContent className="p-6">
+                  <div className="flex items-center space-x-4">
+                    <Skeleton className="w-16 h-16 rounded-full" />
+                    <div className="space-y-2 flex-1">
+                      <Skeleton className="h-4 w-24" />
+                      <Skeleton className="h-3 w-32" />
+                      <Skeleton className="h-3 w-20" />
+                    </div>
                   </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
+                </CardContent>
+              </Card>
+            ))}
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Top ref for scroll to top */}
-      <div ref={topRef} />
-      
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-amber-900">
-            {language === 'mr' ? 'सदस्य व्यवस्थापन' : 'Member Management'}
-          </h1>
-          <p className="text-gray-600 mt-2">
-            {language === 'mr' 
-              ? `एकूण ${filteredMembers.length} सदस्य आहेत` 
-              : `There are ${filteredMembers.length} members in total.`
-            }
-          </p>
-        </div>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 p-6 sm:p-8 lg:p-12">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Top ref for scroll to top */}
+        <div ref={topRef} />
         
-        <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-orange-500 hover:bg-amber-600 text-white">
-              <Plus className="w-4 h-4 mr-2" />
-              {language === 'mr' ? 'नवीन सदस्य जोडा' : 'Add new member'}
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle className="text-2xl font-bold text-orange-600">
-                {language === 'mr' ? 'नवीन सदस्य नोंदणी' : 'New Member Registration'}
-              </DialogTitle>
-            </DialogHeader>
-            
-            <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                {/* Personal Information Section */}
-                <div className="bg-orange-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-semibold text-orange-800 mb-4 flex items-center">
-                    <User className="w-5 h-5 mr-2" />
-                    {language === 'mr' ? 'व्यक्तिगत माहिती' : 'Personal Information'}
-                  </h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="fullName"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{language === 'mr' ? 'पूर्ण नाव *' : 'Full Name *'}</FormLabel>
-                          <FormControl>
-                            <Input placeholder="पूर्ण नाव लिहा" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="dateOfBirth"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{language === 'mr' ? 'जन्मदिनांक *' : 'Date of Birth *'}</FormLabel>
-                          <FormControl>
-                            <Input type="date" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="phone"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{language === 'mr' ? 'फोन नंबर *' : 'Phone Number *'}</FormLabel>
-                          <FormControl>
-                            <Input placeholder="9876543210" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="email"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{language === 'mr' ? 'ईमेल (ऐच्छिक)' : 'Email (Optional)'}</FormLabel>
-                          <FormControl>
-                            <Input type="email" placeholder="example@email.com" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="profession"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{language === 'mr' ? 'व्यवसाय *' : 'Profession *'}</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="व्यवसाय निवडा" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {professionOptions.map((profession) => (
-                                <SelectItem key={profession} value={profession}>
-                                  {profession}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="profilePhoto"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{language === 'mr' ? 'फोटो URL (ऐच्छिक)' : 'Photo URL (Optional)'}</FormLabel>
-                          <FormControl>
-                            <Input placeholder="https://example.com/photo.jpg" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-                </div>
-
-                {/* Location Information Section */}
-                <div className="bg-blue-50 p-4 rounded-lg">
-                  <h3 className="text-lg font-semibold text-blue-800 mb-4 flex items-center">
-                    <Home className="w-5 h-5 mr-2" />
-                    {language === 'mr' ? 'पत्ता माहिती' : 'Address Information'}
-                  </h3>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <FormField
-                      control={form.control}
-                      name="state"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{language === 'mr' ? 'राज्य *' : 'State *'}</FormLabel>
-                          <FormControl>
-                            <Input {...field} disabled />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="district"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{language === 'mr' ? 'जिल्हा *' : 'District *'}</FormLabel>
-                          <Select onValueChange={field.onChange} defaultValue={field.value}>
-                            <FormControl>
-                              <SelectTrigger>
-                                <SelectValue placeholder="जिल्हा निवडा" />
-                              </SelectTrigger>
-                            </FormControl>
-                            <SelectContent>
-                              {maharashtraDistricts.map((district) => (
-                                <SelectItem key={district} value={district}>
-                                  {district}
-                                </SelectItem>
-                              ))}
-                            </SelectContent>
-                          </Select>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="city"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{language === 'mr' ? 'शहर/गाव *' : 'City/Village *'}</FormLabel>
-                          <FormControl>
-                            <Input placeholder="शहर किंवा गावाचे नाव" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="pinCode"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{language === 'mr' ? 'पिन कोड *' : 'Pin Code *'}</FormLabel>
-                          <FormControl>
-                            <Input placeholder="123456" maxLength={6} {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="constituency"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{language === 'mr' ? 'मतदारसंघ (ऐच्छिक)' : 'Constituency (Optional)'}</FormLabel>
-                          <FormControl>
-                            <Input placeholder="मतदारसंघाचे नाव" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-
-                    <FormField
-                      control={form.control}
-                      name="membershipDate"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel>{language === 'mr' ? 'सदस्यत्व दिनांक' : 'Membership Date'}</FormLabel>
-                          <FormControl>
-                            <Input type="date" {...field} />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  <FormField
-                    control={form.control}
-                    name="address"
-                    render={({ field }) => (
-                      <FormItem className="mt-4">
-                        <FormLabel>{language === 'mr' ? 'संपूर्ण पत्ता (ऐच्छिक)' : 'Full Address (Optional)'}</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            placeholder="संपूर्ण पत्ता लिहा..."
-                            className="min-h-[80px]"
-                            {...field}
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                {/* Submit Buttons */}
-                <div className="flex justify-end space-x-3 pt-4 border-t">
-                  <Button
-                    type="button"
-                    variant="outline"
-                    onClick={() => setIsCreateOpen(false)}
-                  >
-                    {language === 'mr' ? 'रद्द करा' : 'Cancel'}
-                  </Button>
-                  <Button
-                    type="submit"
-                    disabled={createMemberMutation.isPending}
-                    className="bg-orange-500 hover:bg-orange-600 text-white"
-                  >
-                    {createMemberMutation.isPending 
-                      ? (language === 'mr' ? 'सेव्ह करत आहे...' : 'Saving...')
-                      : (language === 'mr' ? 'सदस्य जोडा' : 'Add Member')
-                    }
-                  </Button>
-                </div>
-              </form>
-            </Form>
-          </DialogContent>
-        </Dialog>
-      </div>
-
-      {/* Search and Filters */}
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-4">
-            <div className="relative flex-1 w-full">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                placeholder={language === 'mr' ? "सदस्याचे नाव, शहर, मतदारसंघ किंवा व्यवसाय शोधा..." : "Search member name, city, constituency or profession..."}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            
-            <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
-              <PopoverTrigger asChild>
-                <Button variant="outline" className="relative">
-                  <Filter className="w-4 h-4 mr-2" />
-                  {language === 'mr' ? 'फिल्टर' : 'Filter'}
-                  {getActiveFilterCount() > 0 && (
-                    <Badge className="absolute -top-2 -right-2 h-5 w-5 rounded-full p-0 flex items-center justify-center bg-orange-500 text-white text-xs">
-                      {getActiveFilterCount()}
-                    </Badge>
-                  )}
-                  <ChevronDown className="w-4 h-4 ml-2" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-80" align="end">
-                <div className="space-y-4">
-                  <div className="flex items-center justify-between">
-                    <h4 className="text-sm font-medium">
-                      {language === 'mr' ? 'फिल्टर' : 'Filters'}
-                    </h4>
-                    {getActiveFilterCount() > 0 && (
-                      <Button
-                        variant="ghost"
-                        size="sm"
-                        onClick={clearFilters}
-                        className="h-auto p-1 text-xs text-orange-600 hover:text-orange-700"
-                      >
-                        <X className="w-3 h-3 mr-1" />
-                        {language === 'mr' ? 'साफ करा' : 'Clear'}
-                      </Button>
-                    )}
-                  </div>
-                  
-                  <div className="space-y-3">
-                    {/* Age Group Filter */}
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">
-                        {language === 'mr' ? 'वयोगट' : 'Age Group'}
-                      </label>
-                      <Select
-                        value={filters.ageGroup}
-                        onValueChange={(value) => handleFilterChange('ageGroup', value)}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder={language === 'mr' ? 'वयोगट निवडा' : 'Select age group'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {ageGroups.map((group) => (
-                            <SelectItem key={group.value} value={group.value}>
-                              {group.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* City Filter */}
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">
-                        {language === 'mr' ? 'शहर' : 'City'}
-                      </label>
-                      <Select
-                        value={filters.city}
-                        onValueChange={(value) => handleFilterChange('city', value)}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder={language === 'mr' ? 'शहर निवडा' : 'Select city'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {uniqueCities.map((city) => (
-                            <SelectItem key={city} value={city}>
-                              {city}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-
-                    {/* Joining Date Range Filter */}
-                    <div>
-                      <label className="text-sm font-medium mb-2 block">
-                        {language === 'mr' ? 'सदस्यत्व कालावधी' : 'Joining Period'}
-                      </label>
-                      <Select
-                        value={filters.joiningDateRange}
-                        onValueChange={(value) => handleFilterChange('joiningDateRange', value)}
-                      >
-                        <SelectTrigger className="w-full">
-                          <SelectValue placeholder={language === 'mr' ? 'कालावधी निवडा' : 'Select period'} />
-                        </SelectTrigger>
-                        <SelectContent>
-                          {joiningDateRanges.map((range) => (
-                            <SelectItem key={range.value} value={range.value}>
-                              {range.label}
-                            </SelectItem>
-                          ))}
-                        </SelectContent>
-                      </Select>
-                    </div>
-                  </div>
-                </div>
-              </PopoverContent>
-            </Popover>
-          </div>
-
-          {/* Active Filters Display */}
-          {getActiveFilterCount() > 0 && (
-            <div className="flex flex-wrap gap-2 mt-4">
-              {filters.ageGroup && (
-                <Badge variant="secondary" className="bg-orange-100 text-orange-800">
-                  वयोगट: {ageGroups.find(g => g.value === filters.ageGroup)?.label}
-                  <X 
-                    className="w-3 h-3 ml-2 cursor-pointer" 
-                    onClick={() => removeFilter('ageGroup')}
-                  />
-                </Badge>
-              )}
-              {filters.city && (
-                <Badge variant="secondary" className="bg-blue-100 text-blue-800">
-                  शहर: {filters.city}
-                  <X 
-                    className="w-3 h-3 ml-2 cursor-pointer" 
-                    onClick={() => removeFilter('city')}
-                  />
-                </Badge>
-              )}
-              {filters.joiningDateRange && (
-                <Badge variant="secondary" className="bg-green-100 text-green-800">
-                  कालावधी: {joiningDateRanges.find(r => r.value === filters.joiningDateRange)?.label}
-                  <X 
-                    className="w-3 h-3 ml-2 cursor-pointer" 
-                    onClick={() => removeFilter('joiningDateRange')}
-                  />
-                </Badge>
-              )}
-            </div>
-          )}
-        </CardContent>
-      </Card>
-
-      {/* Members Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-        {filteredMembers.map((member) => (
-          <Card key={`member-${member.id}`} className="hover:shadow-lg transition-all duration-300 hover:-translate-y-1 cursor-pointer border-l-4 border-orange-500">
-            <CardContent className="p-6">
-              <div className="flex items-start space-x-4">
-                <Avatar className="w-16 h-16 border-2 border-orange-200">
-                  <AvatarImage src={member.profilePhoto} alt={member.fullName} />
-                  <AvatarFallback className="bg-orange-100 text-orange-700 font-bold text-lg">
-                    {member.fullName.split(' ').map((n: string) => n[0]).join('')}
-                  </AvatarFallback>
-                </Avatar>
-                <div className="flex-1 min-w-0">
-                  <h3 className="font-semibold text-amber-900 truncate text-lg">
-                    {member.fullName}
-                  </h3>
-                  <div className="space-y-2 mt-2">
-                    <div className="flex items-center text-sm text-gray-600">
-                      <MapPin className="w-3 h-3 mr-1 flex-shrink-0" />
-                      <span className="truncate">{member.city}, {member.district}</span>
-                    </div>
-                    {member.phone && (
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Phone className="w-3 h-3 mr-1 flex-shrink-0" />
-                        <span>{member.phone}</span>
-                      </div>
-                    )}
-                    {member.profession && (
-                      <div className="flex items-center text-sm text-gray-600">
-                        <Briefcase className="w-3 h-3 mr-1 flex-shrink-0" />
-                        <span className="truncate">{member.profession}</span>
-                      </div>
-                    )}
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Calendar className="w-3 h-3 mr-1 flex-shrink-0" />
-                      <span>वय: {member.age} वर्षे</span>
-                    </div>
-                    <div className="flex items-center text-sm text-gray-500">
-                      <Calendar className="w-3 h-3 mr-1 flex-shrink-0" />
-                      <span>सदस्य: {formatDate(member.membershipDate)}</span>
-                    </div>
-                  </div>
-                  <div className="mt-3 flex items-center justify-between flex-wrap gap-2">
-                    {member.isVerified ? (
-                      <Badge className="bg-green-100 text-green-800 text-xs">
-                        सत्यापित
-                      </Badge>
-                    ) : (
-                      <Badge variant="outline" className="text-xs text-yellow-600 border-yellow-600">
-                        प्रलंबित
-                      </Badge>
-                    )}
-                    {member.constituency && (
-                      <Badge variant="outline" className="text-xs">
-                        {member.constituency}
-                      </Badge>
-                    )}
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        ))}
-        
-        {filteredMembers.length === 0 && (
-          <div className="col-span-full text-center py-12">
-            <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-              <Search className="w-12 h-12 text-gray-400" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">
-              {language === 'mr' ? 'कोणतेही सदस्य आढळले नाहीत' : 'No members found.'}
-            </h3>
-            <p className="text-gray-500">
-              {language === 'mr' ? 'फिल्टर साफ करा किंवा नवीन शोध टर्म वापरा' : 'Clear filters or try a new search term'}
+        {/* Header */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+          <div>
+            <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-bold text-amber-900 mb-2 ${fontDisplayClass}`}>
+              {language === 'mr' ? 'सदस्य व्यवस्थापन' : 'Member Management'}
+            </h1>
+            <p className={`text-gray-600 text-lg ${fontClass}`}>
+              {language === 'mr' 
+                ? `एकूण ${filteredMembers.length} सदस्य आहेत` 
+                : `There are ${filteredMembers.length} members in total.`
+              }
             </p>
+          </div>
+          
+          <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+            <DialogTrigger asChild>
+              <Button className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-6 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105">
+                <Plus className="w-5 h-5 mr-2" />
+                {language === 'mr' ? 'नवीन सदस्य जोडा' : 'Add new member'}
+              </Button>
+            </DialogTrigger>
+            <DialogContent className="max-w-5xl max-h-[90vh] overflow-y-auto bg-white rounded-2xl border-2 border-orange-200 shadow-2xl">
+              <DialogHeader className="pb-6">
+                <DialogTitle className={`text-3xl font-bold text-orange-600 ${fontDisplayClass}`}>
+                  {language === 'mr' ? 'नवीन सदस्य नोंदणी' : 'New Member Registration'}
+                </DialogTitle>
+                <p className={`text-gray-600 ${fontClass}`}>
+                  {language === 'mr' ? 'सर्व आवश्यक फील्ड भरा' : 'Please fill all required fields'}
+                </p>
+              </DialogHeader>
+              
+              <Form {...form}>
+                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                  {/* Personal Information Section */}
+                  <div className="bg-gradient-to-br from-orange-50 to-orange-100 p-6 rounded-xl border border-orange-200">
+                    <h3 className={`text-xl font-semibold text-orange-800 mb-6 flex items-center ${fontDisplayClass}`}>
+                      <User className="w-6 h-6 mr-3" />
+                      {language === 'mr' ? 'व्यक्तिगत माहिती' : 'Personal Information'}
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="fullName"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className={`text-sm font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'पूर्ण नाव *' : 'Full Name *'}
+                            </FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder={language === 'mr' ? "पूर्ण नाव लिहा" : "Enter full name"} 
+                                className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="dateOfBirth"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className={`text-sm font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'जन्मदिनांक *' : 'Date of Birth *'}
+                            </FormLabel>
+                            <FormControl>
+                              <Input 
+                                type="date" 
+                                className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="phone"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className={`text-sm font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'फोन नंबर *' : 'Phone Number *'}
+                            </FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder="9876543210" 
+                                className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="email"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className={`text-sm font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'ईमेल (ऐच्छिक)' : 'Email (Optional)'}
+                            </FormLabel>
+                            <FormControl>
+                              <Input 
+                                type="email" 
+                                placeholder="example@email.com" 
+                                className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="profession"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className={`text-sm font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'व्यवसाय *' : 'Profession *'}
+                            </FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500">
+                                  <SelectValue placeholder={language === 'mr' ? "व्यवसाय निवडा" : "Select profession"} />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {professionOptions.map((profession) => (
+                                  <SelectItem key={profession} value={profession}>
+                                    {profession}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="profilePhoto"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className={`text-sm font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'फोटो URL (ऐच्छिक)' : 'Photo URL (Optional)'}
+                            </FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder="https://example.com/photo.jpg" 
+                                className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+                  </div>
+
+                  {/* Location Information Section */}
+                  <div className="bg-gradient-to-br from-blue-50 to-blue-100 p-6 rounded-xl border border-blue-200">
+                    <h3 className={`text-xl font-semibold text-blue-800 mb-6 flex items-center ${fontDisplayClass}`}>
+                      <Home className="w-6 h-6 mr-3" />
+                      {language === 'mr' ? 'पत्ता माहिती' : 'Address Information'}
+                    </h3>
+                    
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                      <FormField
+                        control={form.control}
+                        name="state"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className={`text-sm font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'राज्य *' : 'State *'}
+                            </FormLabel>
+                            <FormControl>
+                              <Input 
+                                {...field} 
+                                disabled 
+                                className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500 bg-gray-50"
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="district"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className={`text-sm font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'जिल्हा *' : 'District *'}
+                            </FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                              <FormControl>
+                                <SelectTrigger className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500">
+                                  <SelectValue placeholder={language === 'mr' ? "जिल्हा निवडा" : "Select district"} />
+                                </SelectTrigger>
+                              </FormControl>
+                              <SelectContent>
+                                {maharashtraDistricts.map((district) => (
+                                  <SelectItem key={district} value={district}>
+                                    {district}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="city"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className={`text-sm font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'शहर/गाव *' : 'City/Village *'}
+                            </FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder={language === 'mr' ? "शहर किंवा गावाचे नाव" : "Enter city or village name"} 
+                                className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="pinCode"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className={`text-sm font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'पिन कोड *' : 'Pin Code *'}
+                            </FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder="123456" 
+                                maxLength={6} 
+                                className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="constituency"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className={`text-sm font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'मतदारसंघ (ऐच्छिक)' : 'Constituency (Optional)'}
+                            </FormLabel>
+                            <FormControl>
+                              <Input 
+                                placeholder={language === 'mr' ? "मतदारसंघाचे नाव" : "Enter constituency name"} 
+                                className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+
+                      <FormField
+                        control={form.control}
+                        name="membershipDate"
+                        render={({ field }) => (
+                          <FormItem>
+                            <FormLabel className={`text-sm font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'सदस्यत्व दिनांक' : 'Membership Date'}
+                            </FormLabel>
+                            <FormControl>
+                              <Input 
+                                type="date" 
+                                className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                                {...field} 
+                              />
+                            </FormControl>
+                            <FormMessage />
+                          </FormItem>
+                        )}
+                      />
+                    </div>
+
+                    <FormField
+                      control={form.control}
+                      name="address"
+                      render={({ field }) => (
+                        <FormItem className="mt-6">
+                          <FormLabel className={`text-sm font-semibold ${fontClass}`}>
+                            {language === 'mr' ? 'संपूर्ण पत्ता (ऐच्छिक)' : 'Full Address (Optional)'}
+                          </FormLabel>
+                          <FormControl>
+                            <Textarea 
+                              placeholder={language === 'mr' ? "संपूर्ण पत्ता लिहा..." : "Enter complete address..."}
+                              className="min-h-[100px] rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                              {...field}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                  {/* Submit Buttons */}
+                  <div className="flex justify-end space-x-4 pt-6 border-t border-gray-200">
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => setIsCreateOpen(false)}
+                      className="px-6 py-3 rounded-xl border-2 border-gray-300 hover:border-gray-400"
+                    >
+                      {language === 'mr' ? 'रद्द करा' : 'Cancel'}
+                    </Button>
+                    <Button
+                      type="submit"
+                      disabled={createMemberMutation.isPending}
+                      className="bg-gradient-to-r from-orange-500 to-orange-600 hover:from-orange-600 hover:to-orange-700 text-white px-8 py-3 rounded-xl shadow-lg hover:shadow-xl transition-all duration-300 transform hover:scale-105"
+                    >
+                      {createMemberMutation.isPending 
+                        ? (language === 'mr' ? 'सेव्ह करत आहे...' : 'Saving...')
+                        : (language === 'mr' ? 'सदस्य जोडा' : 'Add Member')
+                      }
+                    </Button>
+                  </div>
+                </form>
+              </Form>
+            </DialogContent>
+          </Dialog>
+        </div>
+
+        {/* Search and Filters */}
+        <Card className="bg-white shadow-lg rounded-xl border border-orange-200">
+          <CardContent className="p-8">
+            <div className="flex flex-col md:flex-row items-center space-y-4 md:space-y-0 md:space-x-6">
+              <div className="relative flex-1 w-full">
+                <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
+                <Input
+                  placeholder={language === 'mr' ? "सदस्याचे नाव, शहर, मतदारसंघ किंवा व्यवसाय शोधा..." : "Search member name, city, constituency or profession..."}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-12 py-3 rounded-xl border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                />
+              </div>
+              
+              <Popover open={isFilterOpen} onOpenChange={setIsFilterOpen}>
+                <PopoverTrigger asChild>
+                  <Button variant="outline" className="relative px-6 py-3 rounded-xl border-2 border-orange-200 hover:border-orange-300">
+                    <Filter className="w-5 h-5 mr-2" />
+                    {language === 'mr' ? 'फिल्टर' : 'Filter'}
+                    {getActiveFilterCount() > 0 && (
+                      <Badge className="absolute -top-2 -right-2 h-6 w-6 rounded-full p-0 flex items-center justify-center bg-orange-500 text-white text-xs font-bold">
+                        {getActiveFilterCount()}
+                      </Badge>
+                    )}
+                    <ChevronDown className="w-5 h-5 ml-2" />
+                  </Button>
+                </PopoverTrigger>
+                <PopoverContent className="w-80 bg-white rounded-xl border-2 border-orange-200 shadow-xl" align="end">
+                  <div className="space-y-6 p-4">
+                    <div className="flex items-center justify-between">
+                      <h4 className={`text-lg font-semibold text-orange-800 ${fontDisplayClass}`}>
+                        {language === 'mr' ? 'फिल्टर' : 'Filters'}
+                      </h4>
+                      {getActiveFilterCount() > 0 && (
+                        <Button
+                          variant="ghost"
+                          size="sm"
+                          onClick={clearFilters}
+                          className="h-auto p-2 text-sm text-orange-600 hover:text-orange-700 rounded-lg"
+                        >
+                          <X className="w-4 h-4 mr-1" />
+                          {language === 'mr' ? 'साफ करा' : 'Clear'}
+                        </Button>
+                      )}
+                    </div>
+                    
+                    <div className="space-y-4">
+                      {/* Age Group Filter */}
+                      <div>
+                        <label className={`text-sm font-semibold mb-3 block text-gray-700 ${fontClass}`}>
+                          {language === 'mr' ? 'वयोगट' : 'Age Group'}
+                        </label>
+                        <Select
+                          value={filters.ageGroup}
+                          onValueChange={(value) => handleFilterChange('ageGroup', value)}
+                        >
+                          <SelectTrigger className="w-full rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500">
+                            <SelectValue placeholder={language === 'mr' ? 'वयोगट निवडा' : 'Select age group'} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {ageGroups.map((group) => (
+                              <SelectItem key={group.value} value={group.value}>
+                                {group.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* City Filter */}
+                      <div>
+                        <label className={`text-sm font-semibold mb-3 block text-gray-700 ${fontClass}`}>
+                          {language === 'mr' ? 'शहर' : 'City'}
+                        </label>
+                        <Select
+                          value={filters.city}
+                          onValueChange={(value) => handleFilterChange('city', value)}
+                        >
+                          <SelectTrigger className="w-full rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500">
+                            <SelectValue placeholder={language === 'mr' ? 'शहर निवडा' : 'Select city'} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {uniqueCities.map((city) => (
+                              <SelectItem key={city} value={city}>
+                                {city}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+
+                      {/* Joining Date Range Filter */}
+                      <div>
+                        <label className={`text-sm font-semibold mb-3 block text-gray-700 ${fontClass}`}>
+                          {language === 'mr' ? 'सदस्यत्व कालावधी' : 'Joining Period'}
+                        </label>
+                        <Select
+                          value={filters.joiningDateRange}
+                          onValueChange={(value) => handleFilterChange('joiningDateRange', value)}
+                        >
+                          <SelectTrigger className="w-full rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500">
+                            <SelectValue placeholder={language === 'mr' ? 'कालावधी निवडा' : 'Select period'} />
+                          </SelectTrigger>
+                          <SelectContent>
+                            {joiningDateRanges.map((range) => (
+                              <SelectItem key={range.value} value={range.value}>
+                                {range.label}
+                              </SelectItem>
+                            ))}
+                          </SelectContent>
+                        </Select>
+                      </div>
+                    </div>
+                  </div>
+                </PopoverContent>
+              </Popover>
+            </div>
+
+            {/* Active Filters Display */}
+            {getActiveFilterCount() > 0 && (
+              <div className="flex flex-wrap gap-3 mt-6">
+                {filters.ageGroup && (
+                  <Badge variant="secondary" className="bg-orange-100 text-orange-800 px-3 py-1 rounded-lg">
+                    वयोगट: {ageGroups.find(g => g.value === filters.ageGroup)?.label}
+                    <X 
+                      className="w-4 h-4 ml-2 cursor-pointer hover:text-orange-600" 
+                      onClick={() => removeFilter('ageGroup')}
+                    />
+                  </Badge>
+                )}
+                {filters.city && (
+                  <Badge variant="secondary" className="bg-blue-100 text-blue-800 px-3 py-1 rounded-lg">
+                    शहर: {filters.city}
+                    <X 
+                      className="w-4 h-4 ml-2 cursor-pointer hover:text-blue-600" 
+                      onClick={() => removeFilter('city')}
+                    />
+                  </Badge>
+                )}
+                {filters.joiningDateRange && (
+                  <Badge variant="secondary" className="bg-green-100 text-green-800 px-3 py-1 rounded-lg">
+                    कालावधी: {joiningDateRanges.find(r => r.value === filters.joiningDateRange)?.label}
+                    <X 
+                      className="w-4 h-4 ml-2 cursor-pointer hover:text-green-600" 
+                      onClick={() => removeFilter('joiningDateRange')}
+                    />
+                  </Badge>
+                )}
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Members Table */}
+        <Card className="bg-white shadow-lg rounded-xl border border-orange-200 overflow-hidden">
+          <CardContent className="p-0">
+            <div className="overflow-x-auto">
+              <Table>
+                <TableHeader>
+                  <TableRow className="bg-gradient-to-r from-orange-50 to-orange-100 hover:bg-orange-100">
+                    <TableHead className="text-orange-800 font-bold px-6 py-4">
+                      {language === 'mr' ? 'सदस्य' : 'Member'}
+                    </TableHead>
+                    <TableHead className="text-orange-800 font-bold px-6 py-4">
+                      {language === 'mr' ? 'संपर्क' : 'Contact'}
+                    </TableHead>
+                    <TableHead className="text-orange-800 font-bold px-6 py-4">
+                      {language === 'mr' ? 'स्थान' : 'Location'}
+                    </TableHead>
+                    <TableHead className="text-orange-800 font-bold px-6 py-4">
+                      {language === 'mr' ? 'व्यवसाय' : 'Profession'}
+                    </TableHead>
+                    <TableHead className="text-orange-800 font-bold px-6 py-4">
+                      {language === 'mr' ? 'वय' : 'Age'}
+                    </TableHead>
+                    <TableHead className="text-orange-800 font-bold px-6 py-4">
+                      {language === 'mr' ? 'सदस्यत्व' : 'Membership'}
+                    </TableHead>
+                    <TableHead className="text-orange-800 font-bold px-6 py-4">
+                      {language === 'mr' ? 'स्थिती' : 'Status'}
+                    </TableHead>
+                    <TableHead className="text-orange-800 font-bold px-6 py-4 text-center">
+                      {language === 'mr' ? 'कृती' : 'Actions'}
+                    </TableHead>
+                  </TableRow>
+                </TableHeader>
+                <TableBody>
+                  {filteredMembers.map((member) => (
+                    <TableRow key={`member-${member.id}`} className="hover:bg-orange-50 transition-colors duration-200 border-b border-orange-100">
+                      <TableCell className="px-6 py-4">
+                        <div className="flex items-center space-x-3">
+                          <Avatar className="w-10 h-10 border-2 border-orange-200 shadow-md">
+                            <AvatarImage src={member.profilePhoto} alt={member.fullName} />
+                            <AvatarFallback className="bg-gradient-to-br from-orange-100 to-orange-200 text-orange-700 font-bold text-sm">
+                              {member.fullName.split(' ').map((n: string) => n[0]).join('')}
+                            </AvatarFallback>
+                          </Avatar>
+                          <div>
+                            <div className={`font-semibold text-gray-900 ${fontDisplayClass}`}>
+                              {member.fullName}
+                            </div>
+                            {member.email && (
+                              <div className="text-xs text-gray-500 font-english">
+                                {member.email}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        <div className="flex items-center space-x-2">
+                          <Phone className="w-4 h-4 text-orange-500" />
+                          <span className={`text-sm ${fontClass}`}>{member.phone}</span>
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        <div className="flex items-center space-x-2">
+                          <MapPin className="w-4 h-4 text-orange-500" />
+                          <div>
+                            <div className={`text-sm font-medium ${fontClass}`}>{member.city}</div>
+                            <div className="text-xs text-gray-500 font-english">{member.district}</div>
+                          </div>
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        <div className={`text-sm ${fontClass}`}>
+                          {member.profession}
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        <div className={`text-sm ${fontClass}`}>
+                          {member.age} {language === 'mr' ? 'वर्षे' : 'years'}
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        <div className={`text-sm ${fontClass}`}>
+                          {formatDate(member.membershipDate)}
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        <div className="flex items-center space-x-2">
+                          {member.isVerified ? (
+                            <Badge className="bg-green-100 text-green-800 text-xs px-2 py-1 rounded-lg border border-green-200">
+                              {language === 'mr' ? 'सत्यापित' : 'Verified'}
+                            </Badge>
+                          ) : (
+                            <Badge variant="outline" className="text-xs text-yellow-600 border-yellow-600 px-2 py-1 rounded-lg">
+                              {language === 'mr' ? 'प्रलंबित' : 'Pending'}
+                            </Badge>
+                          )}
+                          {member.constituency && (
+                            <Badge variant="outline" className="text-xs px-2 py-1 rounded-lg border-orange-200 text-orange-700">
+                              {member.constituency}
+                            </Badge>
+                          )}
+                        </div>
+                      </TableCell>
+                      <TableCell className="px-6 py-4">
+                        <div className="flex items-center justify-center space-x-2">
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0 text-orange-600 hover:text-orange-700 hover:bg-orange-100 rounded-lg"
+                          >
+                            <Edit className="w-4 h-4" />
+                          </Button>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            className="h-8 w-8 p-0 text-red-600 hover:text-red-700 hover:bg-red-100 rounded-lg"
+                          >
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </div>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+            </div>
+            
+            {filteredMembers.length === 0 && (
+              <div className="text-center py-16">
+                <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center shadow-lg">
+                  <Search className="w-16 h-16 text-orange-500" />
+                </div>
+                <h3 className={`text-2xl font-bold text-gray-900 mb-3 ${fontDisplayClass}`}>
+                  {language === 'mr' ? 'कोणतेही सदस्य आढळले नाहीत' : 'No members found.'}
+                </h3>
+                <p className={`text-gray-500 text-lg ${fontClass}`}>
+                  {language === 'mr' ? 'फिल्टर साफ करा किंवा नवीन शोध टर्म वापरा' : 'Clear filters or try a new search term'}
+                </p>
+              </div>
+            )}
+          </CardContent>
+        </Card>
+
+        {/* Pagination for large datasets */}
+        {filteredMembers.length > 12 && (
+          <div className="flex justify-center space-x-4">
+            <Button
+              variant="outline"
+              onClick={() => setPage(page - 1)}
+              disabled={page === 1}
+              className="px-6 py-3 rounded-xl border-2 border-orange-200 hover:border-orange-300"
+            >
+              {language === 'mr' ? 'मागील' : 'Previous'}
+            </Button>
+            <span className={`flex items-center px-6 text-lg text-gray-600 ${fontClass}`}>
+              {language === 'mr' ? `पान ${page}` : `Page ${page}`}
+            </span>
+            <Button
+              variant="outline"
+              onClick={() => setPage(page + 1)}
+              disabled={page * 12 >= filteredMembers.length}
+              className="px-6 py-3 rounded-xl border-2 border-orange-200 hover:border-orange-300"
+            >
+              {language === 'mr' ? 'पुढील' : 'Next'}
+            </Button>
           </div>
         )}
       </div>
-
-      {/* Pagination for large datasets */}
-      {filteredMembers.length > 12 && (
-        <div className="flex justify-center space-x-2">
-          <Button
-            variant="outline"
-            onClick={() => setPage(page - 1)}
-            disabled={page === 1}
-          >
-            {language === 'mr' ? 'मागील' : 'Previous'}
-          </Button>
-          <span className="flex items-center px-4 text-sm text-gray-600">
-            {language === 'mr' ? `पान ${page}` : `Page ${page}`}
-          </span>
-          <Button
-            variant="outline"
-            onClick={() => setPage(page + 1)}
-            disabled={page * 12 >= filteredMembers.length}
-          >
-            {language === 'mr' ? 'पुढील' : 'Next'}
-          </Button>
-        </div>
-      )}
     </div>
   );
 }

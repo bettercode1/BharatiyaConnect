@@ -5,6 +5,49 @@ export default {
   content: ["./client/index.html", "./client/src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      fontFamily: {
+        // English fonts - Modern and professional
+        'sans': ['Inter', 'system-ui', 'sans-serif'],
+        'english': ['Inter', 'system-ui', 'sans-serif'],
+        'display': ['Poppins', 'system-ui', 'sans-serif'],
+        'mono': ['JetBrains Mono', 'monospace'],
+        
+        // Marathi fonts - Beautiful and readable
+        'marathi': ['Noto Sans Devanagari', 'Arial', 'sans-serif'],
+        'marathi-display': ['Noto Serif Devanagari', 'serif'],
+        'devanagari': ['Noto Sans Devanagari', 'Arial', 'sans-serif'],
+        
+        // Fallback fonts
+        'fallback': ['system-ui', '-apple-system', 'BlinkMacSystemFont', 'Segoe UI', 'Roboto', 'sans-serif'],
+      },
+      fontSize: {
+        // Enhanced font sizes for better readability
+        'xs': ['0.75rem', { lineHeight: '1rem', letterSpacing: '0.025em' }],
+        'sm': ['0.875rem', { lineHeight: '1.25rem', letterSpacing: '0.025em' }],
+        'base': ['1rem', { lineHeight: '1.5rem', letterSpacing: '0.025em' }],
+        'lg': ['1.125rem', { lineHeight: '1.75rem', letterSpacing: '0.025em' }],
+        'xl': ['1.25rem', { lineHeight: '1.75rem', letterSpacing: '0.025em' }],
+        '2xl': ['1.5rem', { lineHeight: '2rem', letterSpacing: '0.025em' }],
+        '3xl': ['1.875rem', { lineHeight: '2.25rem', letterSpacing: '0.025em' }],
+        '4xl': ['2.25rem', { lineHeight: '2.5rem', letterSpacing: '0.025em' }],
+        '5xl': ['3rem', { lineHeight: '1', letterSpacing: '0.025em' }],
+        '6xl': ['3.75rem', { lineHeight: '1', letterSpacing: '0.025em' }],
+        '7xl': ['4.5rem', { lineHeight: '1', letterSpacing: '0.025em' }],
+        '8xl': ['6rem', { lineHeight: '1', letterSpacing: '0.025em' }],
+        '9xl': ['8rem', { lineHeight: '1', letterSpacing: '0.025em' }],
+      },
+      fontWeight: {
+        // Enhanced font weights
+        'thin': '100',
+        'extralight': '200',
+        'light': '300',
+        'normal': '400',
+        'medium': '500',
+        'semibold': '600',
+        'bold': '700',
+        'extrabold': '800',
+        'black': '900',
+      },
       borderRadius: {
         lg: "var(--radius)",
         md: "calc(var(--radius) - 2px)",

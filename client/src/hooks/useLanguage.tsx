@@ -5,6 +5,8 @@ interface LanguageContextType {
   language: Language;
   t: Translations;
   setLanguage: (lang: Language) => void;
+  fontClass: string;
+  fontDisplayClass: string;
 }
 
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
@@ -25,10 +27,16 @@ export const LanguageProvider: React.FC<{ children: React.ReactNode }> = ({ chil
     localStorage.setItem('language', lang);
   };
 
+  // Font classes based on language
+  const fontClass = language === 'mr' ? 'font-marathi' : 'font-english';
+  const fontDisplayClass = language === 'mr' ? 'font-marathi-display' : 'font-display';
+
   const value: LanguageContextType = {
     language,
     t: translations[language],
     setLanguage,
+    fontClass,
+    fontDisplayClass,
   };
 
   return (

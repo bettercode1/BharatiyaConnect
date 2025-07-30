@@ -85,16 +85,6 @@ const Dashboard: React.FC = () => {
     setNotices([...noticeCRUD.readAll()]);
   };
 
-  const stats = {
-    totalMembers: mockDashboardStats.totalMembers,
-    newMembers: 156, // Mock value for new members this month
-    activeEvents: mockDashboardStats.activeEvents,
-    totalNotices: mockDashboardStats.totalNotices,
-    newNotices: 12, // Mock value for new notices
-    totalFeedback: mockFeedback.length,
-    newFeedback: 5 // Mock value for new feedback
-  };
-
   return (
     <div className="saffron-pattern-bg relative overflow-hidden">
       {/* Background Elements */}
@@ -133,61 +123,6 @@ const Dashboard: React.FC = () => {
               </Button>
             </div>
           </div>
-        </div>
-
-        {/* Stats Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 mb-6 sm:mb-8">
-          <Card className="saffron-hover-card">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">एकूण सदस्य</CardTitle>
-              <Users className="h-3 w-3 sm:h-4 sm:w-4 text-muted-foreground" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-xl sm:text-2xl font-bold">{stats.totalMembers}</div>
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                +{stats.newMembers} या महिन्यात
-              </p>
-            </CardContent>
-          </Card>
-          
-          <Card className="saffron-hover-card">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">सक्रिय कार्यक्रम</CardTitle>
-              <Calendar className="h-3 w-3 sm:h-4 sm:w-4 text-blue-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-xl sm:text-2xl font-bold text-blue-600">{stats.activeEvents}</div>
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                या आठवड्यात
-              </p>
-            </CardContent>
-          </Card>
-          
-          <Card className="saffron-hover-card">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">एकूण सूचना</CardTitle>
-              <Bell className="h-3 w-3 sm:h-4 sm:w-4 text-green-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-xl sm:text-2xl font-bold text-green-600">{stats.totalNotices}</div>
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                +{stats.newNotices} नवीन
-              </p>
-            </CardContent>
-          </Card>
-          
-          <Card className="saffron-hover-card">
-            <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-              <CardTitle className="text-xs sm:text-sm font-medium">एकूण फीडबॅक</CardTitle>
-              <MessageSquare className="h-3 w-3 sm:h-4 sm:w-4 text-purple-500" />
-            </CardHeader>
-            <CardContent>
-              <div className="text-xl sm:text-2xl font-bold text-purple-600">{stats.totalFeedback}</div>
-              <p className="text-xs sm:text-sm text-muted-foreground">
-                +{stats.newFeedback} नवीन
-              </p>
-            </CardContent>
-          </Card>
         </div>
 
         {/* Main Content Tabs */}
