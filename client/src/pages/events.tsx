@@ -47,6 +47,8 @@ import {
   Edit,
   Trash2,
   Eye,
+  X,
+  ChevronDown,
 } from "lucide-react";
 import { useLanguage } from "@/hooks/useLanguage";
 
@@ -65,8 +67,60 @@ const eventFormSchema = z.object({
 
 type EventFormData = z.infer<typeof eventFormSchema>;
 
+// Maharashtra districts for dropdown
+const maharashtraDistricts = [
+  "अहमदनगर", "अकोला", "अमरावती", "औरंगाबाद", "बीड", "भंडारा", "बुलढाणा", "चंद्रपूर",
+  "धुळे", "गडचिरोली", "गोंदिया", "हिंगोली", "जालना", "जळगाव", "कोल्हापूर", "लातूर",
+  "मुंबई शहर", "मुंबई उपनगर", "नागपूर", "नांदेड", "नंदूरबार", "नाशिक", "उस्मानाबाद",
+  "पालघर", "परभणी", "पुणे", "रायगड", "रत्नागिरी", "सांगली", "सतारा", "सिंधुदुर्ग",
+  "सोलापूर", "ठाणे", "वर्धा", "वाशिम", "यवतमाळ"
+];
+
+// Mock event data
+const mockEvents = [
+  {
+    id: '1',
+    title: 'कारगिल विजय दिवस समारंभ',
+    description: '२६ जुलै २०२५ रोजी कारगिल विजय दिवसानिमित्त सर्व जिल्हांमध्ये श्रद्धांजली कार्यक्रम आयोजित करा. वीर शहीदांना आदरांजली वाहा आणि त्यांच्या त्यागाला स्मरण करा.',
+    eventType: 'offline',
+    venue: 'सर्व जिल्हे',
+    eventDate: '2025-07-26T10:00:00Z',
+    endDate: '2025-07-26T12:00:00Z',
+    maxAttendees: 1000,
+    status: 'published',
+    image: 'https://cms.patrika.com/wp-content/uploads/2025/07/2_395772.jpg?w=450&q=90',
+    badge: { text: 'राष्ट्रीय कार्यक्रम', color: 'bg-red-100 text-red-800 border-red-200', icon: '🇮🇳' }
+  },
+  {
+    id: '2',
+    title: 'मासिक सदस्यता अभियान',
+    description: 'ऑगस्ट महिन्यात नवीन सदस्यत्व मिळवण्यासाठी विशेष मोहीम राबवा. प्रत्येक मतदारसंघात कमीत कमी १०० नवीन सदस्य भरती करण्याचे लक्ष्य ठेवा.',
+    eventType: 'offline',
+    venue: 'सर्व मतदारसंघ',
+    eventDate: '2025-08-01T09:00:00Z',
+    endDate: '2025-08-31T18:00:00Z',
+    maxAttendees: 5000,
+    status: 'published',
+    image: 'https://staticimg.amarujala.com/assets/images/2024/09/03/cg-news_6ab53ff2ce8033ff9dd363b40e6002e2.jpeg?w=674&dpr=1.0&q=80',
+    badge: { text: 'सदस्यत्व', color: 'bg-blue-100 text-blue-800 border-blue-200', icon: '👥' }
+  },
+  {
+    id: '3',
+    title: 'डिजिटल साक्षरता कार्यशाळा',
+    description: 'ग्रामीण भागातील कार्यकर्त्यांसाठी डिजिटल साक्षरता कार्यशाळा आयोजित करा. १५ ऑगस्ट ते ३१ ऑगस्ट २०२५ या कालावधीत सर्व जिल्ह्यांमध्ये कार्यशाळा घ्या.',
+    eventType: 'hybrid',
+    venue: 'ग्रामीण केंद्रे',
+    eventDate: '2025-08-15T09:00:00Z',
+    endDate: '2025-08-31T17:00:00Z',
+    maxAttendees: 200,
+    status: 'published',
+    image: 'https://superca.in/storage/app/public/blogs/pmgdisha.webp',
+    badge: { text: 'प्रशिक्षण', color: 'bg-green-100 text-green-800 border-green-200', icon: '📚' }
+  }
+];
+
 export default function Events() {
-  const { t, language } = useLanguage();
+  const { language, fontClass, fontDisplayClass } = useLanguage();
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [search, setSearch] = useState("");
@@ -101,8 +155,8 @@ export default function Events() {
       queryClient.invalidateQueries({ queryKey: ["/api/dashboard/upcoming-events"] });
       
       toast({
-        title: "यशस्वी",
-        description: "कार्यक्रम यशस्वीरित्या तयार केला गेला",
+        title: language === 'mr' ? "यशस्वी" : "Success",
+        description: language === 'mr' ? "कार्यक्रम यशस्वीरित्या तयार केला गेला" : "Event created successfully",
       });
       
       // Reset form and close dialog with delay to prevent DOM conflicts
@@ -114,8 +168,8 @@ export default function Events() {
     onError: (error) => {
       if (isUnauthorizedError(error)) {
         toast({
-          title: "अनधिकृत",
-          description: "तुम्ही लॉग आउट झाला आहात. पुन्हा लॉगिन करत आहे...",
+          title: language === 'mr' ? "अनधिकृत" : "Unauthorized",
+          description: language === 'mr' ? "तुम्ही लॉग आउट झाला आहात. पुन्हा लॉगिन करत आहे..." : "You have been logged out. Logging in again...",
           variant: "destructive",
         });
         setTimeout(() => {
@@ -124,8 +178,8 @@ export default function Events() {
         return;
       }
       toast({
-        title: "त्रुटी",
-        description: "कार्यक्रम तयार करता आला नाही",
+        title: language === 'mr' ? "त्रुटी" : "Error",
+        description: language === 'mr' ? "कार्यक्रम तयार करता आला नाही" : "Failed to create event",
         variant: "destructive",
       });
     },
@@ -153,15 +207,15 @@ export default function Events() {
     } catch (error) {
       console.error('Form submission error:', error);
       toast({
-        title: "त्रुटी",
-        description: "फॉर्म सबमिट करताना समस्या आली",
+        title: language === 'mr' ? "त्रुटी" : "Error",
+        description: language === 'mr' ? "फॉर्म सबमिट करताना समस्या आली" : "Error submitting form",
         variant: "destructive",
       });
     }
   };
 
   const formatDate = (dateString: string) => {
-    return new Date(dateString).toLocaleDateString('hi-IN', {
+    return new Date(dateString).toLocaleDateString(language === 'mr' ? 'hi-IN' : 'en-IN', {
       day: 'numeric',
       month: 'long',
       year: 'numeric'
@@ -169,10 +223,10 @@ export default function Events() {
   };
 
   const formatTime = (dateString: string) => {
-    return new Date(dateString).toLocaleTimeString('hi-IN', {
+    return new Date(dateString).toLocaleTimeString(language === 'mr' ? 'hi-IN' : 'en-IN', {
       hour: '2-digit',
       minute: '2-digit'
-    });
+    }).replace('am', 'AM').replace('pm', 'PM');
   };
 
   const getEventTypeColor = (type: string) => {
@@ -191,11 +245,11 @@ export default function Events() {
   const getEventTypeLabel = (type: string) => {
     switch (type) {
       case 'online':
-        return 'ऑनलाइन';
+        return language === 'mr' ? 'ऑनलाइन' : 'Online';
       case 'offline':
-        return 'ऑफलाइन';
+        return language === 'mr' ? 'ऑफलाइन' : 'Offline';
       case 'hybrid':
-        return 'हायब्रिड';
+        return language === 'mr' ? 'हायब्रिड' : 'Hybrid';
       default:
         return type;
     }
@@ -232,26 +286,36 @@ export default function Events() {
   const getStatusLabel = (status: string) => {
     switch (status) {
       case 'published':
-        return 'प्रकाशित';
+        return language === 'mr' ? 'प्रकाशित' : 'Published';
       case 'draft':
-        return 'मसुदा';
+        return language === 'mr' ? 'मसुदा' : 'Draft';
       case 'cancelled':
-        return 'रद्द';
+        return language === 'mr' ? 'रद्द' : 'Cancelled';
       case 'completed':
-        return 'पूर्ण';
+        return language === 'mr' ? 'पूर्ण' : 'Completed';
       default:
         return status;
     }
   };
 
+  // Filter events based on search and status
+  const filteredEvents = mockEvents.filter(event => {
+    const matchesSearch = event.title.toLowerCase().includes(search.toLowerCase()) ||
+                         event.description.toLowerCase().includes(search.toLowerCase()) ||
+                         event.venue.toLowerCase().includes(search.toLowerCase());
+    const matchesStatus = status === 'all' || event.status === status;
+    return matchesSearch && matchesStatus;
+  });
+
   if (isLoading) {
     return (
-      <div className="space-y-6">
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 p-6 sm:p-8 lg:p-12">
+        <div className="max-w-7xl mx-auto space-y-8">
         <div className="flex items-center justify-between">
           <Skeleton className="h-8 w-48" />
           <Skeleton className="h-10 w-32" />
         </div>
-        <Card>
+          <Card className="bg-white shadow-lg rounded-xl border border-orange-200">
           <CardContent className="p-6">
             <div className="flex items-center space-x-4">
               <Skeleton className="h-10 flex-1" />
@@ -259,10 +323,10 @@ export default function Events() {
             </div>
           </CardContent>
         </Card>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[...Array(6)].map((_, i) => (
-            <Card key={i}>
-              <CardContent className="p-6">
+              <Card key={i} className="bg-white shadow-lg rounded-xl border border-orange-200">
+                <CardContent className="p-4">
                 <Skeleton className="h-6 w-3/4 mb-4" />
                 <Skeleton className="h-4 w-full mb-2" />
                 <Skeleton className="h-4 w-2/3 mb-4" />
@@ -273,94 +337,148 @@ export default function Events() {
               </CardContent>
             </Card>
           ))}
+          </div>
         </div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-6">
-      {/* Header */}
-      <div className="flex items-center justify-between">
-        <div>
-          <h1 className="text-3xl font-bold text-amber-900">{t.events.title}</h1>
-          <p className="text-gray-600 mt-2">
-            {language === 'mr' ? 'एकूण' : 'Total'} {eventsData?.total || 0} {language === 'mr' ? 'कार्यक्रम आहेत' : 'events'}
-          </p>
-        </div>
-        <Dialog key="create-event-dialog" open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-          <DialogTrigger asChild>
-            <Button className="bg-orange-500 hover:bg-amber-600 text-white">
-              <Plus className="w-4 h-4 mr-2" />
-              {t.events.addNew}
-            </Button>
-          </DialogTrigger>
-          <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
-            <DialogHeader>
-              <DialogTitle>{language === 'mr' ? 'नवीन कार्यक्रम तयार करा' : 'Create New Event'}</DialogTitle>
+    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 p-6 sm:p-8 lg:p-12">
+      <div className="max-w-7xl mx-auto space-y-8">
+        {/* Header Section */}
+        <div className="text-center mb-8">
+          <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-bold text-amber-900 mb-4 ${fontDisplayClass}`}>
+            {language === 'mr' ? 'कार्यक्रम व्यवस्थापन' : 'Event Management'}
+              </h1>
+          <p className={`text-lg text-amber-700 ${fontClass}`}>
+            
+              </p>
+            </div>
+
+        {/* Search and Filters */}
+        <Card className="bg-white shadow-lg rounded-xl border border-orange-200">
+          <CardContent className="p-6">
+            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+              <div className="relative flex-1 w-full">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-orange-500 w-5 h-5" />
+                <Input
+                  placeholder={language === 'mr' ? 'कार्यक्रम, स्थळ किंवा आयोजक शोधा...' : 'Search events, venue or organizer...'}
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  className="pl-12 py-3 rounded-xl border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                />
+              </div>
+              <Select value={status} onValueChange={setStatus}>
+                <SelectTrigger className="w-40 rounded-xl border-orange-200 focus:border-orange-500 focus:ring-orange-500">
+                  <SelectValue placeholder={language === 'mr' ? 'स्थिती' : 'Status'} />
+                </SelectTrigger>
+                <SelectContent>
+                  <SelectItem value="all">{language === 'mr' ? 'सर्व' : 'All'}</SelectItem>
+                  <SelectItem value="published">{language === 'mr' ? 'प्रकाशित' : 'Published'}</SelectItem>
+                  <SelectItem value="draft">{language === 'mr' ? 'मसुदा' : 'Draft'}</SelectItem>
+                  <SelectItem value="cancelled">{language === 'mr' ? 'रद्द' : 'Cancelled'}</SelectItem>
+                  <SelectItem value="completed">{language === 'mr' ? 'पूर्ण' : 'Completed'}</SelectItem>
+                </SelectContent>
+              </Select>
+              <Button variant="outline" className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50">
+                <Filter className="w-4 h-4 mr-2" />
+                {language === 'mr' ? 'फिल्टर' : 'Filter'}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+
+        {/* Add New Event Button */}
+        <div className="flex justify-end">
+          <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+              <DialogTrigger asChild>
+              <Button className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-200">
+                  <Plus className="w-5 h-5 mr-2" />
+                {language === 'mr' ? 'नवीन कार्यक्रम' : 'New Event'}
+                </Button>
+              </DialogTrigger>
+            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-xl border border-orange-200">
+            <DialogHeader className="pb-6">
+              <DialogTitle className={`text-2xl font-bold text-amber-900 ${fontDisplayClass}`}>
+                {language === 'mr' ? 'नवीन कार्यक्रम तयार करा' : 'Create New Event'}
+              </DialogTitle>
+              <p className={`text-gray-600 ${fontClass}`}>
+                  {language === 'mr' ? 'कार्यक्रमाची सर्व माहिती भरा आणि तयार करा' : 'Fill all event details and create'}
+              </p>
             </DialogHeader>
+              
             <Form {...form}>
-              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-                <FormField
-                  control={form.control}
-                  name="title"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{language === 'mr' ? 'कार्यक्रमाचे शीर्षक *' : 'Event Title *'}</FormLabel>
-                      <FormControl>
-                        <Input placeholder={language === 'mr' ? 'कार्यक्रमाचे नाव टाका' : 'Enter event name'} {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <FormField
-                  control={form.control}
-                  name="description"
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>वर्णन</FormLabel>
-                      <FormControl>
-                        <Textarea placeholder="कार्यक्रमाचा तपशील" {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="eventType"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>कार्यक्रमाचा प्रकार *</FormLabel>
-                        <Select onValueChange={field.onChange} defaultValue={field.value}>
+              <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                {/* Personal Information Section */}
+                  <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-6 border border-orange-200">
+                  <h3 className={`text-lg font-bold text-amber-900 mb-4 flex items-center ${fontDisplayClass}`}>
+                    <Calendar className="w-5 h-5 mr-2" />
+                    {language === 'mr' ? 'कार्यक्रम माहिती' : 'Event Information'}
+                  </h3>
+                    
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="title"
+                      render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className={`text-amber-800 font-semibold ${fontClass}`}>
+                            {language === 'mr' ? 'कार्यक्रमाचे शीर्षक *' : 'Event Title *'}
+                          </FormLabel>
                           <FormControl>
-                            <SelectTrigger>
-                              <SelectValue placeholder="प्रकार निवडा" />
-                            </SelectTrigger>
+                            <Input 
+                              placeholder={language === 'mr' ? 'कार्यक्रमाचे नाव टाका' : 'Enter event name'} 
+                              {...field} 
+                              className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                            />
                           </FormControl>
-                          <SelectContent>
-                            <SelectItem value="offline">ऑफलाइन</SelectItem>
-                            <SelectItem value="online">ऑनलाइन</SelectItem>
-                            <SelectItem value="hybrid">हायब्रिड</SelectItem>
-                          </SelectContent>
-                        </Select>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="eventType"
+                      render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className={`text-amber-800 font-semibold ${fontClass}`}>
+                            {language === 'mr' ? 'कार्यक्रमाचा प्रकार *' : 'Event Type *'}
+                          </FormLabel>
+                          <Select onValueChange={field.onChange} defaultValue={field.value}>
+                            <FormControl>
+                              <SelectTrigger className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500">
+                                <SelectValue placeholder={language === 'mr' ? 'प्रकार निवडा' : 'Select type'} />
+                              </SelectTrigger>
+                            </FormControl>
+                            <SelectContent>
+                              <SelectItem value="offline">{language === 'mr' ? 'ऑफलाइन' : 'Offline'}</SelectItem>
+                              <SelectItem value="online">{language === 'mr' ? 'ऑनलाइन' : 'Online'}</SelectItem>
+                              <SelectItem value="hybrid">{language === 'mr' ? 'हायब्रिड' : 'Hybrid'}</SelectItem>
+                            </SelectContent>
+                          </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
 
                   <FormField
                     control={form.control}
-                    name="venue"
+                    name="description"
                     render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>स्थळ</FormLabel>
+                        <FormItem>
+                          <FormLabel className={`text-amber-800 font-semibold ${fontClass}`}>
+                          {language === 'mr' ? 'वर्णन' : 'Description'}
+                        </FormLabel>
                         <FormControl>
-                          <Input placeholder="कार्यक्रमाचे स्थळ" {...field} />
+                          <Textarea 
+                            placeholder={language === 'mr' ? 'कार्यक्रमाचा तपशील' : 'Event details'} 
+                            {...field} 
+                            className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                              rows={3}
+                          />
                         </FormControl>
                         <FormMessage />
                       </FormItem>
@@ -368,108 +486,190 @@ export default function Events() {
                   />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="eventDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>सुरुवातीची तारीख आणि वेळ *</FormLabel>
-                        <FormControl>
-                          <Input type="datetime-local" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                  {/* Location and Time Section */}
+                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                  <h3 className={`text-lg font-bold text-blue-900 mb-4 flex items-center ${fontDisplayClass}`}>
+                    <MapPin className="w-5 h-5 mr-2" />
+                      {language === 'mr' ? 'स्थान आणि वेळ' : 'Location & Time'}
+                  </h3>
+                    
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="venue"
+                      render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className={`text-blue-800 font-semibold ${fontClass}`}>
+                            {language === 'mr' ? 'स्थळ' : 'Venue'}
+                          </FormLabel>
+                          <FormControl>
+                            <Input 
+                              placeholder={language === 'mr' ? 'कार्यक्रमाचे स्थळ' : 'Event venue'} 
+                              {...field} 
+                              className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  <FormField
-                    control={form.control}
-                    name="endDate"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>समाप्तीची तारीख आणि वेळ</FormLabel>
-                        <FormControl>
-                          <Input type="datetime-local" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <FormField
+                      control={form.control}
+                        name="district"
+                      render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className={`text-blue-800 font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'जिल्हा' : 'District'}
+                          </FormLabel>
+                            <Select onValueChange={field.onChange} defaultValue={field.value}>
+                          <FormControl>
+                                <SelectTrigger className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500">
+                                  <SelectValue placeholder={language === 'mr' ? 'जिल्हा निवडा' : 'Select district'} />
+                                </SelectTrigger>
+                          </FormControl>
+                              <SelectContent>
+                                {maharashtraDistricts.map((district) => (
+                                  <SelectItem key={district} value={district}>
+                                    {district}
+                                  </SelectItem>
+                                ))}
+                              </SelectContent>
+                            </Select>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="eventDate"
+                      render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className={`text-blue-800 font-semibold ${fontClass}`}>
+                            {language === 'mr' ? 'सुरुवातीची तारीख आणि वेळ *' : 'Start Date & Time *'}
+                          </FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="datetime-local" 
+                              {...field} 
+                              className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+
+                    <FormField
+                      control={form.control}
+                      name="endDate"
+                      render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className={`text-blue-800 font-semibold ${fontClass}`}>
+                            {language === 'mr' ? 'समाप्तीची तारीख आणि वेळ' : 'End Date & Time'}
+                          </FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="datetime-local" 
+                              {...field} 
+                              className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="maxAttendees"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>कमाल उपस्थित</FormLabel>
-                        <FormControl>
-                          <Input type="number" placeholder="जास्तीत जास्त लोक" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                {/* Additional Details Section */}
+                  <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
+                  <h3 className={`text-lg font-bold text-green-900 mb-4 flex items-center ${fontDisplayClass}`}>
+                    <Users className="w-5 h-5 mr-2" />
+                    {language === 'mr' ? 'अतिरिक्त माहिती' : 'Additional Details'}
+                  </h3>
+                    
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <FormField
+                      control={form.control}
+                      name="maxAttendees"
+                      render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className={`text-green-800 font-semibold ${fontClass}`}>
+                            {language === 'mr' ? 'कमाल उपस्थित' : 'Max Attendees'}
+                          </FormLabel>
+                          <FormControl>
+                            <Input 
+                              type="number" 
+                              placeholder={language === 'mr' ? 'जास्तीत जास्त लोक' : 'Maximum people'} 
+                              {...field} 
+                              className="rounded-lg border-green-200 focus:border-green-500 focus:ring-green-500"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
 
-                  <FormField
-                    control={form.control}
-                    name="meetingLink"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>मीटिंग लिंक</FormLabel>
-                        <FormControl>
-                          <Input placeholder="ऑनलाइन मीटिंगची लिंक" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
+                    <FormField
+                      control={form.control}
+                        name="meetingLink"
+                      render={({ field }) => (
+                        <FormItem>
+                            <FormLabel className={`text-green-800 font-semibold ${fontClass}`}>
+                              {language === 'mr' ? 'मीटिंग लिंक' : 'Meeting Link'}
+                          </FormLabel>
+                          <FormControl>
+                            <Input 
+                                placeholder={language === 'mr' ? 'ऑनलाइन मीटिंगची लिंक' : 'Online meeting link'} 
+                              {...field} 
+                              className="rounded-lg border-green-200 focus:border-green-500 focus:ring-green-500"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                  </div>
+
+                    <FormField
+                      control={form.control}
+                      name="constituency"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className={`text-green-800 font-semibold ${fontClass}`}>
+                            {language === 'mr' ? 'मतदारसंघ' : 'Constituency'}
+                          </FormLabel>
+                          <FormControl>
+                            <Input 
+                              placeholder={language === 'mr' ? 'मतदारसंघाचे नाव' : 'Constituency name'} 
+                              {...field} 
+                              className="rounded-lg border-green-200 focus:border-green-500 focus:ring-green-500"
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  <FormField
-                    control={form.control}
-                    name="constituency"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>मतदारसंघ</FormLabel>
-                        <FormControl>
-                          <Input placeholder="मतदारसंघाचे नाव" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-
-                  <FormField
-                    control={form.control}
-                    name="district"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>जिल्हा</FormLabel>
-                        <FormControl>
-                          <Input placeholder="जिल्ह्याचे नाव" {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
-
-                <div className="flex justify-end space-x-2 pt-4">
+                  {/* Submit Buttons */}
+                <div className="flex justify-end space-x-4 pt-6">
                   <Button
                     type="button"
                     variant="outline"
                     onClick={() => setIsCreateOpen(false)}
+                      className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50"
                   >
                     {language === 'mr' ? 'रद्द करा' : 'Cancel'}
                   </Button>
                   <Button
                     type="submit"
                     disabled={createEventMutation.isPending}
-                    className="bg-orange-500 hover:bg-amber-600 text-white"
+                      className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-200"
                   >
                     {createEventMutation.isPending 
                       ? (language === 'mr' ? "तयार करत आहे..." : "Creating...") 
@@ -480,316 +680,124 @@ export default function Events() {
             </Form>
           </DialogContent>
         </Dialog>
+        </div>
+
+        {/* Events Grid */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filteredEvents.map((event) => (
+            <Card key={event.id} className="bg-white shadow-lg rounded-xl border border-orange-200 overflow-hidden hover:shadow-xl transition-all duration-200 h-auto">
+            <div className="relative">
+              <img 
+                  src={event.image}
+                  alt={event.title}
+                  className="w-full h-32 object-cover"
+                />
+                                  <div className="absolute top-2 right-2">
+                  <Badge className={`${event.badge.color} rounded-xl px-3 py-1`}>
+                    <span className="mr-2">{event.badge.icon}</span>
+                    <span className="hidden sm:inline">{event.badge.text}</span>
+                </Badge>
+              </div>
+            </div>
+              <CardContent className="p-4">
+                <div className="space-y-3">
+                <div className="flex items-start justify-between">
+                    <h3 className={`font-semibold text-amber-900 line-clamp-2 flex-1 pr-2 text-sm ${fontDisplayClass}`}>
+                      {event.title}
+                  </h3>
+                </div>
+
+                  <p className={`text-gray-600 line-clamp-2 text-xs ${fontClass}`}>
+                    {event.description}
+                </p>
+
+                  <div className="space-y-2 text-xs text-gray-600">
+                  <div className="flex items-center">
+                      <Calendar className="w-3 h-3 mr-2 text-orange-500" />
+                      <span className={fontClass}>{formatDate(event.eventDate)}</span>
+                  </div>
+                  <div className="flex items-center">
+                      <Clock className="w-3 h-3 mr-2 text-orange-500" />
+                      <span className={fontClass}>{formatTime(event.eventDate)}</span>
+                  </div>
+                  <div className="flex items-center">
+                      <MapPin className="w-3 h-3 mr-2 text-orange-500" />
+                      <span className={`truncate ${fontClass}`}>{event.venue}</span>
+                  </div>
+                    {event.maxAttendees && (
+                  <div className="flex items-center">
+                        <Users className="w-3 h-3 mr-2 text-orange-500" />
+                        <span className={fontClass}>
+                          {language === 'mr' ? 'कमाल: ' : 'Max: '}{event.maxAttendees} {language === 'mr' ? 'लोक' : 'people'}
+                        </span>
+                  </div>
+                    )}
+                </div>
+
+                  <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                  <div className="flex items-center space-x-2">
+                      <Badge variant="outline" className={`${getEventTypeColor(event.eventType)} rounded-md text-xs`}>
+                        {getEventTypeIcon(event.eventType)}
+                        <span className="ml-1">{getEventTypeLabel(event.eventType)}</span>
+                </Badge>
+              </div>
+                    <div className="flex items-center space-x-1">
+                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-orange-600 hover:text-orange-700 hover:bg-orange-100 rounded-md">
+                        <Eye className="w-3 h-3" />
+                      </Button>
+                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-100 rounded-md">
+                        <Edit className="w-3 h-3" />
+                      </Button>
+                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-red-600 hover:text-red-700 hover:bg-red-100 rounded-md">
+                        <Trash2 className="w-3 h-3" />
+                      </Button>
+                    </div>
+                  </div>
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+
+          {filteredEvents.length === 0 && (
+            <div className="col-span-full text-center py-16">
+              <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center shadow-lg">
+                <Calendar className="w-16 h-16 text-orange-500" />
+              </div>
+              <h3 className={`text-2xl font-bold text-gray-900 mb-3 ${fontDisplayClass}`}>
+                {language === 'mr' ? 'कोणतेही कार्यक्रम आढळले नाहीत' : 'No events found'}
+              </h3>
+              <p className={`text-gray-500 text-lg ${fontClass}`}>
+                {language === 'mr' ? 'फिल्टर साफ करा किंवा नवीन शोध टर्म वापरा' : 'Clear filters or try a new search term'}
+              </p>
+            </div>
+          )}
       </div>
 
-      {/* Search and Filters */}
-      <Card>
-        <CardContent className="p-6">
-          <div className="flex items-center space-x-4">
-            <div className="relative flex-1">
-              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-              <Input
-                placeholder={language === 'mr' ? 'कार्यक्रम, स्थळ किंवा आयोजक शोधा...' : 'Search events, venue or organizer...'}
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                className="pl-10"
-              />
-            </div>
-            <Select value={status} onValueChange={setStatus}>
-              <SelectTrigger className="w-40">
-                <SelectValue placeholder={language === 'mr' ? 'स्थिती' : 'Status'} />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="all">{language === 'mr' ? 'सर्व' : 'All'}</SelectItem>
-                <SelectItem value="published">{language === 'mr' ? 'प्रकाशित' : 'Published'}</SelectItem>
-                <SelectItem value="draft">{language === 'mr' ? 'मसुदा' : 'Draft'}</SelectItem>
-                <SelectItem value="cancelled">{language === 'mr' ? 'रद्द' : 'Cancelled'}</SelectItem>
-                <SelectItem value="completed">{language === 'mr' ? 'पूर्ण' : 'Completed'}</SelectItem>
-              </SelectContent>
-            </Select>
-            <Button variant="outline">
-              <Filter className="w-4 h-4 mr-2" />
-              {language === 'mr' ? 'फिल्टर' : 'Filter'}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Events Grid */}
-      <div className="responsive-grid">
-        {/* Notice-Based Events */}
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer border-orange-200 responsive-card overflow-hidden">
-          <div className="relative">
-            <img 
-              src="https://cms.patrika.com/wp-content/uploads/2025/07/2_395772.jpg?w=450&q=90"
-              alt="कारगिल विजय दिवस समारंभ"
-              className="responsive-image w-full h-40 sm:h-48 object-cover"
-            />
-            <div className="absolute top-3 right-3">
-              <Badge className="responsive-badge bg-red-100 text-red-800 border-red-200">
-                <span className="mr-2">🇮🇳</span>
-                <span className="hidden sm:inline">राष्ट्रीय कार्यक्रम</span>
-              </Badge>
-            </div>
-          </div>
-          <CardContent className="responsive-p-4 sm:responsive-p-6">
-            <div className="space-y-4 sm:space-y-5">
-              <div className="flex items-start justify-between">
-                <h3 className="responsive-text-base sm:responsive-text-lg font-semibold text-amber-900 line-clamp-2 flex-1 pr-3">
-                  कारगिल विजय दिवस समारंभ
-                </h3>
-              </div>
-
-              <p className="responsive-text-sm text-gray-600 line-clamp-2 sm:line-clamp-3">
-                २६ जुलै २०२५ रोजी कारगिल विजय दिवसानिमित्त सर्व जिल्हांमध्ये श्रद्धांजली कार्यक्रम आयोजित करा. वीर शहीदांना आदरांजली वाहा आणि त्यांच्या त्यागाला स्मरण करा.
-              </p>
-
-              <div className="space-y-3 text-sm sm:text-base text-gray-600">
-                <div className="flex items-center">
-                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
-                  <span>26 जुलै 2025</span>
-                </div>
-                <div className="flex items-center">
-                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
-                  <span>सकाळी 10:00</span>
-                </div>
-                <div className="flex items-center">
-                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
-                  <span className="truncate">सर्व जिल्हे</span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                <div className="flex items-center space-x-3">
-                  <Badge variant="outline" className="responsive-badge bg-orange-50">
-                    <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                    सर्व सदस्य
-                  </Badge>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Button variant="ghost" size="sm" className="responsive-button">
-                    <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer border-orange-200 responsive-card overflow-hidden">
-          <div className="relative">
-            <img 
-              src="https://staticimg.amarujala.com/assets/images/2024/09/03/cg-news_6ab53ff2ce8033ff9dd363b40e6002e2.jpeg?w=674&dpr=1.0&q=80"
-              alt="मासिक सदस्यता अभियान"
-              className="responsive-image w-full h-40 sm:h-48 object-cover"
-            />
-            <div className="absolute top-3 right-3">
-              <Badge className="responsive-badge bg-blue-100 text-blue-800 border-blue-200">
-                <span className="mr-2">👥</span>
-                <span className="hidden sm:inline">सदस्यत्व</span>
-              </Badge>
-            </div>
-          </div>
-          <CardContent className="responsive-p-4 sm:responsive-p-6">
-            <div className="space-y-4 sm:space-y-5">
-              <div className="flex items-start justify-between">
-                <h3 className="responsive-text-base sm:responsive-text-lg font-semibold text-amber-900 line-clamp-2 flex-1 pr-3">
-                  मासिक सदस्यता अभियान
-                </h3>
-              </div>
-
-              <p className="responsive-text-sm text-gray-600 line-clamp-2 sm:line-clamp-3">
-                ऑगस्ट महिन्यात नवीन सदस्यत्व मिळवण्यासाठी विशेष मोहीम राबवा. प्रत्येक मतदारसंघात कमीत कमी १०० नवीन सदस्य भरती करण्याचे लक्ष्य ठेवा.
-              </p>
-
-              <div className="space-y-3 text-sm sm:text-base text-gray-600">
-                <div className="flex items-center">
-                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
-                  <span>ऑगस्ट 2025</span>
-                </div>
-                <div className="flex items-center">
-                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
-                  <span>संपूर्ण महिना</span>
-                </div>
-                <div className="flex items-center">
-                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
-                  <span className="truncate">सर्व मतदारसंघ</span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                <div className="flex items-center space-x-3">
-                  <Badge variant="outline" className="responsive-badge bg-blue-50">
-                    <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                    नेतृत्व
-                  </Badge>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Button variant="ghost" size="sm" className="responsive-button">
-                    <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        <Card className="hover:shadow-lg transition-shadow cursor-pointer border-orange-200 responsive-card overflow-hidden">
-          <div className="relative">
-            <img 
-              src="https://superca.in/storage/app/public/blogs/pmgdisha.webp"
-              alt="डिजिटल साक्षरता कार्यशाळा"
-              className="responsive-image w-full h-40 sm:h-48 object-cover"
-            />
-            <div className="absolute top-3 right-3">
-              <Badge className="responsive-badge bg-green-100 text-green-800 border-green-200">
-                <span className="mr-2">📚</span>
-                <span className="hidden sm:inline">प्रशिक्षण</span>
-              </Badge>
-            </div>
-          </div>
-          <CardContent className="responsive-p-4 sm:responsive-p-6">
-            <div className="space-y-4 sm:space-y-5">
-              <div className="flex items-start justify-between">
-                <h3 className="responsive-text-base sm:responsive-text-lg font-semibold text-amber-900 line-clamp-2 flex-1 pr-3">
-                  डिजिटल साक्षरता कार्यशाळा
-                </h3>
-              </div>
-
-              <p className="responsive-text-sm text-gray-600 line-clamp-2 sm:line-clamp-3">
-                ग्रामीण भागातील कार्यकर्त्यांसाठी डिजिटल साक्षरता कार्यशाळा आयोजित करा. १५ ऑगस्ट ते ३१ ऑगस्ट २०२५ या कालावधीत सर्व जिल्ह्यांमध्ये कार्यशाळा घ्या.
-              </p>
-
-              <div className="space-y-3 text-sm sm:text-base text-gray-600">
-                <div className="flex items-center">
-                  <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
-                  <span>15-31 ऑगस्ट 2025</span>
-                </div>
-                <div className="flex items-center">
-                  <Clock className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
-                  <span>सकाळी 9:00 - दुपारी 5:00</span>
-                </div>
-                <div className="flex items-center">
-                  <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
-                  <span className="truncate">ग्रामीण केंद्रे</span>
-                </div>
-              </div>
-
-              <div className="flex items-center justify-between pt-4 border-t border-gray-100">
-                <div className="flex items-center space-x-3">
-                  <Badge variant="outline" className="responsive-badge bg-green-50">
-                    <Users className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
-                    कार्यकर्ते
-                  </Badge>
-                </div>
-                <div className="flex items-center space-x-2">
-                  <Button variant="ghost" size="sm" className="responsive-button">
-                    <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
-                  </Button>
-                </div>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Regular Events */}
-        {eventsData?.events?.map((event: any) => (
-          <Card key={event.id} className="hover:shadow-lg transition-shadow cursor-pointer">
-            <CardContent className="p-6">
-              <div className="space-y-4">
-                <div className="flex items-start justify-between">
-                  <h3 className="font-semibold text-amber-900 line-clamp-2 flex-1 pr-2">
-                    {event.title}
-                  </h3>
-                  <div className="flex items-center space-x-1">
-                    <Badge className={getEventTypeColor(event.eventType)}>
-                      <span className="mr-1">{getEventTypeIcon(event.eventType)}</span>
-                      {getEventTypeLabel(event.eventType)}
-                    </Badge>
-                  </div>
-                </div>
-
-                {event.description && (
-                  <p className="text-gray-600 text-sm line-clamp-2">
-                    {event.description}
-                  </p>
-                )}
-
-                <div className="space-y-2">
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Calendar className="w-3 h-3 mr-2" />
-                    <span>{formatDate(event.eventDate)}</span>
-                  </div>
-                  <div className="flex items-center text-sm text-gray-600">
-                    <Clock className="w-3 h-3 mr-2" />
-                    <span>{formatTime(event.eventDate)}</span>
-                  </div>
-                  {event.venue && (
-                    <div className="flex items-center text-sm text-gray-600">
-                      <MapPin className="w-3 h-3 mr-2" />
-                      <span className="truncate">{event.venue}</span>
-                    </div>
-                  )}
-                  {event.maxAttendees && (
-                    <div className="flex items-center text-sm text-gray-600">
-                      <Users className="w-3 h-3 mr-2" />
-                      <span>कमाल: {event.maxAttendees} लोक</span>
-                    </div>
-                  )}
-                </div>
-
-                <div className="flex items-center justify-between pt-2">
-                  <Badge className={getStatusColor(event.status)}>
-                    {getStatusLabel(event.status)}
-                  </Badge>
-                  <div className="flex items-center space-x-1">
-                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                      <Eye className="w-3 h-3" />
-                    </Button>
-                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0">
-                      <Edit className="w-3 h-3" />
-                    </Button>
-                    <Button size="sm" variant="ghost" className="h-8 w-8 p-0 text-red-600 hover:text-red-700">
-                      <Trash2 className="w-3 h-3" />
-                    </Button>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-        )) || (
-          <div className="col-span-full text-center py-12">
-            <div className="w-24 h-24 mx-auto mb-4 bg-gray-100 rounded-full flex items-center justify-center">
-              <Calendar className="w-12 h-12 text-gray-400" />
-            </div>
-            <h3 className="text-lg font-medium text-gray-900 mb-2">{language === 'mr' ? 'कोणतेही कार्यक्रम आढळले नाहीत' : 'No events found'}</h3>
-            <p className="text-gray-500">{language === 'mr' ? 'नवीन शोध टर्म वापरून पहा किंवा नवीन कार्यक्रम तयार करा' : 'Try a new search term or create a new event'}</p>
+        {/* Pagination */}
+        {(filteredEvents.length > 20) && (
+            <div className="flex justify-center space-x-4">
+              <Button
+                variant="outline"
+                onClick={() => setPage(page - 1)}
+                disabled={page === 1}
+                className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50"
+              >
+                {language === 'mr' ? 'मागील' : 'Previous'}
+              </Button>
+            <span className={`flex items-center px-4 text-sm text-gray-600 ${fontClass}`}>
+                {language === 'mr' ? 'पान' : 'Page'} {page}
+              </span>
+              <Button
+                variant="outline"
+                onClick={() => setPage(page + 1)}
+              disabled={page * 20 >= filteredEvents.length}
+                className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50"
+              >
+                {language === 'mr' ? 'पुढील' : 'Next'}
+              </Button>
           </div>
         )}
       </div>
-
-      {/* Pagination */}
-      {(eventsData?.total || 0) > 20 && (
-        <div className="flex justify-center space-x-2">
-          <Button
-            variant="outline"
-            onClick={() => setPage(page - 1)}
-            disabled={page === 1}
-          >
-            {language === 'mr' ? 'मागील' : 'Previous'}
-          </Button>
-          <span className="flex items-center px-4 text-sm text-gray-600">
-            {language === 'mr' ? 'पान' : 'Page'} {page}
-          </span>
-          <Button
-            variant="outline"
-            onClick={() => setPage(page + 1)}
-            disabled={page * 20 >= (eventsData?.total || 0)}
-          >
-            {language === 'mr' ? 'पुढील' : 'Next'}
-          </Button>
-        </div>
-      )}
     </div>
   );
 }

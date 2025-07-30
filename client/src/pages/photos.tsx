@@ -117,16 +117,8 @@ export default function PhotoGallery() {
           </div>
         </div>
 
-        {/* Notice-Based Photos Section */}
+        {/* Photos Section */}
         <div className="mb-12 sm:mb-16">
-          <div className="text-center mb-8 sm:mb-12">
-            <h2 className="text-3xl sm:text-4xl font-bold text-gray-800 mb-4 sm:mb-6">
-              {language === 'mr' ? 'सूचना आधारित छायाचित्रे' : 'Notice-Based Photos'}
-            </h2>
-            <p className="text-lg sm:text-xl text-gray-600">
-              {language === 'mr' ? 'महत्वपूर्ण सूचना आणि कार्यक्रमांची दृश्य प्रतिमा' : 'Visual representation of important notices and events'}
-            </p>
-          </div>
 
           <div className="responsive-grid">
             {noticePhotos.map((photo, index) => (
@@ -135,75 +127,75 @@ export default function PhotoGallery() {
                   <img 
                     src={photo.image} 
                     alt={photo.title}
-                    className="responsive-image w-full h-40 sm:h-48 md:h-56 object-cover"
+                    className="responsive-image w-full h-32 object-cover"
                     onError={(e) => {
                       // Fallback for broken images
                       e.currentTarget.style.display = 'none';
                     }}
                   />
-                  <div className="absolute top-3 left-3">
-                    <Badge className={`responsive-badge ${getPriorityColor(photo.priority)}`}>
-                      <span className="mr-2">{getCategoryIcon(photo.category)}</span>
+                  <div className="absolute top-2 left-2">
+                    <Badge className={`${getPriorityColor(photo.priority)} rounded-md text-xs`}>
+                      <span className="mr-1">{getCategoryIcon(photo.category)}</span>
                       <span className="hidden sm:inline">{photo.category}</span>
                     </Badge>
                   </div>
-                  <div className="absolute top-3 right-3">
-                    <Button variant="ghost" size="sm" className="bg-black/20 text-white hover:bg-black/40 responsive-button">
-                      <Heart className="w-4 h-4 sm:w-5 sm:h-5" />
+                  <div className="absolute top-2 right-2">
+                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0 bg-black/20 text-white hover:bg-black/40 rounded-md">
+                      <Heart className="w-3 h-3" />
                     </Button>
                   </div>
                 </div>
                 
-                <CardContent className="responsive-p-4 sm:responsive-p-6">
-                  <div className="space-y-4 sm:space-y-5">
+                <CardContent className="responsive-p-4">
+                  <div className="space-y-3">
                     <div>
-                      <h3 className="responsive-text-base sm:responsive-text-lg font-bold text-gray-800 mb-3 line-clamp-1">
+                      <h3 className="text-sm font-bold text-gray-800 mb-2 line-clamp-1">
                         {photo.title}
                       </h3>
-                      <p className="responsive-text-sm text-gray-600 line-clamp-2 sm:line-clamp-3">
+                      <p className="text-xs text-gray-600 line-clamp-2">
                         {photo.description}
                       </p>
                     </div>
 
-                    <div className="space-y-2 sm:space-y-3 text-sm sm:text-base text-gray-500">
+                    <div className="space-y-2 text-xs text-gray-500">
                       <div className="flex items-center">
-                        <Calendar className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
+                        <Calendar className="w-3 h-3 mr-2" />
                         <span>{photo.date}</span>
                       </div>
                       <div className="flex items-center">
-                        <MapPin className="w-4 h-4 sm:w-5 sm:h-5 mr-3" />
+                        <MapPin className="w-3 h-3 mr-2" />
                         <span className="truncate">{photo.location}</span>
                       </div>
                     </div>
 
-                    <div className="flex flex-wrap gap-2">
+                    <div className="flex flex-wrap gap-1">
                       {photo.tags.slice(0, 2).map((tag, index) => (
-                        <Badge key={index} variant="outline" className="responsive-badge text-sm">
+                        <Badge key={index} variant="outline" className="text-xs rounded-md">
                           #{tag}
                         </Badge>
                       ))}
                     </div>
 
-                    <div className="flex items-center justify-between pt-4 sm:pt-5 border-t border-gray-100">
-                      <div className="flex items-center space-x-4 sm:space-x-6 text-sm sm:text-base text-gray-500">
+                    <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                      <div className="flex items-center space-x-3 text-xs text-gray-500">
                         <div className="flex items-center">
-                          <Heart className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                          <Heart className="w-3 h-3 mr-1" />
                           <span>{photo.likes}</span>
                         </div>
                         <div className="flex items-center">
-                          <MessageCircle className="w-4 h-4 sm:w-5 sm:h-5 mr-2" />
+                          <MessageCircle className="w-3 h-3 mr-1" />
                           <span>{photo.comments}</span>
                         </div>
                       </div>
-                      <div className="flex items-center space-x-2 sm:space-x-3">
-                        <Button variant="ghost" size="sm" className="responsive-button">
-                          <Eye className="w-4 h-4 sm:w-5 sm:h-5" />
+                      <div className="flex items-center space-x-1">
+                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-orange-600 hover:text-orange-700 hover:bg-orange-100 rounded-md">
+                          <Eye className="w-3 h-3" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="responsive-button">
-                          <Share2 className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-100 rounded-md">
+                          <Share2 className="w-3 h-3" />
                         </Button>
-                        <Button variant="ghost" size="sm" className="responsive-button">
-                          <Download className="w-4 h-4 sm:w-5 sm:h-5" />
+                        <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-green-600 hover:text-green-700 hover:bg-green-100 rounded-md">
+                          <Download className="w-3 h-3" />
                         </Button>
                       </div>
                     </div>

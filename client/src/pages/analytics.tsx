@@ -321,6 +321,202 @@ const mockAnalyticsData = [
     isVerified: true,
     isActive: true,
     age: 56
+  },
+  // Add more members with diverse city data to populate the chart
+  {
+    id: '21',
+    fullName: 'राजेश कुमार',
+    dateOfBirth: '1982-05-14',
+    gender: 'Male',
+    city: 'मुंबई',
+    district: 'मुंबई शहर',
+    profession: 'व्यापारी',
+    membershipDate: '2020-06-20',
+    isVerified: true,
+    isActive: true,
+    age: 42
+  },
+  {
+    id: '22',
+    fullName: 'सुनीता देशमुख',
+    dateOfBirth: '1990-12-03',
+    gender: 'Female',
+    city: 'पुणे',
+    district: 'पुणे',
+    profession: 'शिक्षिका',
+    membershipDate: '2021-09-15',
+    isVerified: true,
+    isActive: true,
+    age: 34
+  },
+  {
+    id: '23',
+    fullName: 'अजय पाटील',
+    dateOfBirth: '1975-03-28',
+    gender: 'Male',
+    city: 'नागपूर',
+    district: 'नागपूर',
+    profession: 'डॉक्टर',
+    membershipDate: '2019-04-10',
+    isVerified: true,
+    isActive: true,
+    age: 49
+  },
+  {
+    id: '24',
+    fullName: 'मीना शिंदे',
+    dateOfBirth: '1988-07-22',
+    gender: 'Female',
+    city: 'नाशिक',
+    district: 'नाशिक',
+    profession: 'अभियंत्रिका',
+    membershipDate: '2022-01-30',
+    isVerified: true,
+    isActive: true,
+    age: 36
+  },
+  {
+    id: '25',
+    fullName: 'दीपक वर्मा',
+    dateOfBirth: '1985-11-15',
+    gender: 'Male',
+    city: 'औरंगाबाद',
+    district: 'औरंगाबाद',
+    profession: 'वकील',
+    membershipDate: '2020-12-05',
+    isVerified: true,
+    isActive: true,
+    age: 39
+  },
+  {
+    id: '26',
+    fullName: 'प्रिया जोशी',
+    dateOfBirth: '1992-04-18',
+    gender: 'Female',
+    city: 'ठाणे',
+    district: 'ठाणे',
+    profession: 'नर्स',
+    membershipDate: '2023-03-12',
+    isVerified: true,
+    isActive: true,
+    age: 32
+  },
+  {
+    id: '27',
+    fullName: 'संजय राठोड',
+    dateOfBirth: '1978-09-25',
+    gender: 'Male',
+    city: 'अहमदनगर',
+    district: 'अहमदनगर',
+    profession: 'शिक्षक',
+    membershipDate: '2018-08-20',
+    isVerified: true,
+    isActive: true,
+    age: 46
+  },
+  {
+    id: '28',
+    fullName: 'अनिता गायकवाड',
+    dateOfBirth: '1987-01-10',
+    gender: 'Female',
+    city: 'कोल्हापूर',
+    district: 'कोल्हापूर',
+    profession: 'गृहिणी',
+    membershipDate: '2021-05-18',
+    isVerified: true,
+    isActive: true,
+    age: 37
+  },
+  {
+    id: '29',
+    fullName: 'रवी कदम',
+    dateOfBirth: '1980-06-30',
+    gender: 'Male',
+    city: 'सोलापूर',
+    district: 'सोलापूर',
+    profession: 'अभियंता',
+    membershipDate: '2019-11-25',
+    isVerified: true,
+    isActive: true,
+    age: 44
+  },
+  {
+    id: '30',
+    fullName: 'स्मिता तेंडुलकर',
+    dateOfBirth: '1995-02-14',
+    gender: 'Female',
+    city: 'अमरावती',
+    district: 'अमरावती',
+    profession: 'विद्यार्थी',
+    membershipDate: '2023-07-08',
+    isVerified: false,
+    isActive: true,
+    age: 29
+  },
+  {
+    id: '31',
+    fullName: 'महेश पाटील',
+    dateOfBirth: '1972-12-05',
+    gender: 'Male',
+    city: 'मुंबई',
+    district: 'मुंबई शहर',
+    profession: 'सरकारी सेवा',
+    membershipDate: '2017-03-15',
+    isVerified: true,
+    isActive: true,
+    age: 52
+  },
+  {
+    id: '32',
+    fullName: 'रेखा सिंह',
+    dateOfBirth: '1989-08-20',
+    gender: 'Female',
+    city: 'पुणे',
+    district: 'पुणे',
+    profession: 'डॉक्टर',
+    membershipDate: '2022-04-22',
+    isVerified: true,
+    isActive: true,
+    age: 35
+  },
+  {
+    id: '33',
+    fullName: 'विकास शिंदे',
+    dateOfBirth: '1983-10-12',
+    gender: 'Male',
+    city: 'नागपूर',
+    district: 'नागपूर',
+    profession: 'व्यापारी',
+    membershipDate: '2020-09-30',
+    isVerified: true,
+    isActive: true,
+    age: 41
+  },
+  {
+    id: '34',
+    fullName: 'गीता देशमुख',
+    dateOfBirth: '1991-05-08',
+    gender: 'Female',
+    city: 'नाशिक',
+    district: 'नाशिक',
+    profession: 'शिक्षिका',
+    membershipDate: '2023-01-15',
+    isVerified: true,
+    isActive: true,
+    age: 33
+  },
+  {
+    id: '35',
+    fullName: 'अरुण जाधव',
+    dateOfBirth: '1976-07-25',
+    gender: 'Male',
+    city: 'औरंगाबाद',
+    district: 'औरंगाबाद',
+    profession: 'शिक्षक',
+    membershipDate: '2018-12-10',
+    isVerified: true,
+    isActive: true,
+    age: 48
   }
 ];
 
@@ -1037,6 +1233,46 @@ export default function Analytics() {
                     </CardContent>
                   </Card>
 
+                  {/* City Growth Trends */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <TrendingUp className="w-5 h-5" />
+                        {language === 'mr' ? 'शहर वाढ ट्रेंड' : 'City Growth Trends'}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ResponsiveContainer width="100%" height={300}>
+                        <LineChart data={[
+                          { city: 'मुंबई', 2020: 1200, 2021: 1450, 2022: 1680, 2023: 1920, 2024: 2150 },
+                          { city: 'पुणे', 2020: 980, 2021: 1120, 2022: 1280, 2023: 1450, 2024: 1620 },
+                          { city: 'नागपूर', 2020: 850, 2021: 920, 2022: 1050, 2023: 1180, 2024: 1320 },
+                          { city: 'नाशिक', 2020: 720, 2021: 820, 2022: 950, 2023: 1080, 2024: 1220 },
+                          { city: 'औरंगाबाद', 2020: 680, 2021: 750, 2022: 880, 2023: 1020, 2024: 1180 },
+                          { city: 'ठाणे', 2020: 620, 2021: 720, 2022: 850, 2023: 980, 2024: 1120 },
+                          { city: 'अहमदनगर', 2020: 580, 2021: 650, 2022: 780, 2023: 920, 2024: 1080 },
+                          { city: 'कोल्हापूर', 2020: 520, 2021: 580, 2022: 680, 2023: 820, 2024: 980 },
+                          { city: 'सोलापूर', 2020: 480, 2021: 540, 2022: 620, 2023: 720, 2024: 850 },
+                          { city: 'अमरावती', 2020: 420, 2021: 480, 2022: 550, 2023: 650, 2024: 780 }
+                        ]}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="city" />
+                          <YAxis />
+                          <Tooltip 
+                            formatter={(value, name) => [value, language === 'mr' ? 'सदस्य' : 'Members']}
+                            labelFormatter={(label) => `${language === 'mr' ? 'शहर' : 'City'}: ${label}`}
+                          />
+                          <Legend />
+                          <Line type="monotone" dataKey="2020" stroke="#FF8042" strokeWidth={2} dot={{ fill: '#FF8042', strokeWidth: 2, r: 4 }} />
+                          <Line type="monotone" dataKey="2021" stroke="#00C49F" strokeWidth={2} dot={{ fill: '#00C49F', strokeWidth: 2, r: 4 }} />
+                          <Line type="monotone" dataKey="2022" stroke="#0088FE" strokeWidth={2} dot={{ fill: '#0088FE', strokeWidth: 2, r: 4 }} />
+                          <Line type="monotone" dataKey="2023" stroke="#8884D8" strokeWidth={2} dot={{ fill: '#8884D8', strokeWidth: 2, r: 4 }} />
+                          <Line type="monotone" dataKey="2024" stroke="#82CA9D" strokeWidth={2} dot={{ fill: '#82CA9D', strokeWidth: 2, r: 4 }} />
+                        </LineChart>
+                      </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+
                   {/* Profession Distribution */}
                   <Card>
                     <CardHeader>
@@ -1090,6 +1326,133 @@ export default function Analytics() {
                         <Area type="monotone" dataKey="members" stackId="1" stroke="#FF8042" fill="#FF8042" fillOpacity={0.6} />
                         <Line type="monotone" dataKey="cumulative" stroke="#0088FE" strokeWidth={3} dot={{ fill: '#0088FE', strokeWidth: 2, r: 4 }} />
                       </AreaChart>
+                    </ResponsiveContainer>
+                  </CardContent>
+                </Card>
+
+                {/* City Performance Dashboard */}
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* City Activity Heatmap */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Activity className="w-5 h-5" />
+                        {language === 'mr' ? 'शहर क्रियाकलाप हीटमॅप' : 'City Activity Heatmap'}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ResponsiveContainer width="100%" height={300}>
+                        <BarChart data={[
+                          { city: 'मुंबई', members: 2150, events: 45, notices: 28, feedback: 156, activity: 95 },
+                          { city: 'पुणे', members: 1620, events: 38, notices: 22, feedback: 134, activity: 88 },
+                          { city: 'नागपूर', members: 1320, events: 32, notices: 18, feedback: 112, activity: 82 },
+                          { city: 'नाशिक', members: 1220, events: 28, notices: 16, feedback: 98, activity: 78 },
+                          { city: 'औरंगाबाद', members: 1180, events: 25, notices: 14, feedback: 87, activity: 75 },
+                          { city: 'ठाणे', members: 1120, events: 22, notices: 12, feedback: 76, activity: 72 },
+                          { city: 'अहमदनगर', members: 1080, events: 20, notices: 10, feedback: 68, activity: 68 },
+                          { city: 'कोल्हापूर', members: 980, events: 18, notices: 8, feedback: 58, activity: 65 },
+                          { city: 'सोलापूर', members: 850, events: 15, notices: 6, feedback: 48, activity: 62 },
+                          { city: 'अमरावती', members: 780, events: 12, notices: 5, feedback: 42, activity: 58 }
+                        ]}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="city" />
+                          <YAxis />
+                          <Tooltip 
+                            formatter={(value, name) => [
+                              value, 
+                              name === 'members' ? (language === 'mr' ? 'सदस्य' : 'Members') :
+                              name === 'events' ? (language === 'mr' ? 'कार्यक्रम' : 'Events') :
+                              name === 'notices' ? (language === 'mr' ? 'सूचना' : 'Notices') :
+                              name === 'feedback' ? (language === 'mr' ? 'फीडबैक' : 'Feedback') :
+                              (language === 'mr' ? 'क्रियाकलाप %' : 'Activity %')
+                            ]
+                          }
+                          />
+                          <Legend />
+                          <Bar dataKey="members" fill="#FF8042" name={language === 'mr' ? 'सदस्य' : 'Members'} />
+                          <Bar dataKey="events" fill="#00C49F" name={language === 'mr' ? 'कार्यक्रम' : 'Events'} />
+                          <Bar dataKey="notices" fill="#0088FE" name={language === 'mr' ? 'सूचना' : 'Notices'} />
+                          <Bar dataKey="feedback" fill="#8884D8" name={language === 'mr' ? 'फीडबैक' : 'Feedback'} />
+                        </BarChart>
+                      </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+
+                  {/* City Efficiency Comparison */}
+                  <Card>
+                    <CardHeader>
+                      <CardTitle className="flex items-center gap-2">
+                        <Target className="w-5 h-5" />
+                        {language === 'mr' ? 'शहर कार्यक्षमता तुलना' : 'City Efficiency Comparison'}
+                      </CardTitle>
+                    </CardHeader>
+                    <CardContent>
+                      <ResponsiveContainer width="100%" height={300}>
+                        <ComposedChart data={[
+                          { city: 'मुंबई', memberGrowth: 12.5, eventSuccess: 95, noticeRead: 88, feedbackResolve: 92, efficiency: 94 },
+                          { city: 'पुणे', memberGrowth: 11.8, eventSuccess: 92, noticeRead: 85, feedbackResolve: 89, efficiency: 91 },
+                          { city: 'नागपूर', memberGrowth: 10.2, eventSuccess: 88, noticeRead: 82, feedbackResolve: 85, efficiency: 87 },
+                          { city: 'नाशिक', memberGrowth: 9.8, eventSuccess: 85, noticeRead: 78, feedbackResolve: 82, efficiency: 84 },
+                          { city: 'औरंगाबाद', memberGrowth: 9.2, eventSuccess: 82, noticeRead: 75, feedbackResolve: 78, efficiency: 81 },
+                          { city: 'ठाणे', memberGrowth: 8.8, eventSuccess: 80, noticeRead: 72, feedbackResolve: 75, efficiency: 78 },
+                          { city: 'अहमदनगर', memberGrowth: 8.2, eventSuccess: 78, noticeRead: 70, feedbackResolve: 72, efficiency: 75 },
+                          { city: 'कोल्हापूर', memberGrowth: 7.8, eventSuccess: 75, noticeRead: 68, feedbackResolve: 70, efficiency: 73 },
+                          { city: 'सोलापूर', memberGrowth: 7.2, eventSuccess: 72, noticeRead: 65, feedbackResolve: 68, efficiency: 71 },
+                          { city: 'अमरावती', memberGrowth: 6.8, eventSuccess: 70, noticeRead: 62, feedbackResolve: 65, efficiency: 68 }
+                        ]}>
+                          <CartesianGrid strokeDasharray="3 3" />
+                          <XAxis dataKey="city" />
+                          <YAxis />
+                          <Tooltip 
+                            formatter={(value, name) => [
+                              value, 
+                              name === 'memberGrowth' ? (language === 'mr' ? 'सदस्य वाढ %' : 'Member Growth %') :
+                              name === 'eventSuccess' ? (language === 'mr' ? 'कार्यक्रम यश %' : 'Event Success %') :
+                              name === 'noticeRead' ? (language === 'mr' ? 'सूचना वाचन %' : 'Notice Read %') :
+                              name === 'feedbackResolve' ? (language === 'mr' ? 'फीडबैक सोडवणे %' : 'Feedback Resolve %') :
+                              (language === 'mr' ? 'एकूण कार्यक्षमता %' : 'Overall Efficiency %')
+                            ]
+                          }
+                          />
+                          <Legend />
+                          <Bar dataKey="memberGrowth" fill="#FF8042" name={language === 'mr' ? 'सदस्य वाढ' : 'Member Growth'} />
+                          <Line type="monotone" dataKey="efficiency" stroke="#82CA9D" strokeWidth={3} name={language === 'mr' ? 'कार्यक्षमता' : 'Efficiency'} />
+                        </ComposedChart>
+                      </ResponsiveContainer>
+                    </CardContent>
+                  </Card>
+                </div>
+
+                {/* Regional City Distribution */}
+                <Card>
+                  <CardHeader>
+                    <CardTitle className="flex items-center gap-2">
+                      <MapPin className="w-5 h-5" />
+                      {language === 'mr' ? 'प्रादेशिक शहर वितरण' : 'Regional City Distribution'}
+                    </CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <ResponsiveContainer width="100%" height={400}>
+                      <PieChart>
+                        <Pie
+                          data={[
+                            { name: 'मुंबई विभाग', value: 4850, fill: '#FF8042' },
+                            { name: 'पुणे विभाग', value: 4200, fill: '#00C49F' },
+                            { name: 'नागपूर विभाग', value: 3800, fill: '#0088FE' },
+                            { name: 'नाशिक विभाग', value: 3400, fill: '#8884D8' },
+                            { name: 'औरंगाबाद विभाग', value: 3100, fill: '#82CA9D' },
+                            { name: 'अमरावती विभाग', value: 2800, fill: '#FFBB28' }
+                          ]}
+                          cx="50%"
+                          cy="50%"
+                          outerRadius={120}
+                          dataKey="value"
+                          label={({ name, value }) => `${name}: ${value} ${language === 'mr' ? 'सदस्य' : 'members'}`}
+                        >
+                        </Pie>
+                        <Tooltip formatter={(value) => [value, language === 'mr' ? 'सदस्य' : 'Members']} />
+                        <Legend />
+                      </PieChart>
                     </ResponsiveContainer>
                   </CardContent>
                 </Card>
