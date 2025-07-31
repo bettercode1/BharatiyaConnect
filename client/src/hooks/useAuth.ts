@@ -16,6 +16,10 @@ export const useAuth = () => {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
 
   useEffect(() => {
+    // Force disable mock user by default to show login page
+    localStorage.removeItem('showMockUser');
+    console.log('useAuth - Mock user disabled, localStorage cleared');
+    
     const unsubscribe = auth.onAuthStateChanged((firebaseUser: any) => {
       if (firebaseUser) {
         // Convert Firebase user to our User interface
@@ -32,8 +36,11 @@ export const useAuth = () => {
       } else {
         // For development, check if we should show mock user or no user
         const shouldShowMockUser = localStorage.getItem('showMockUser') === 'true';
+        console.log('useAuth - No Firebase user, shouldShowMockUser:', shouldShowMockUser);
         
+        // Default to showing login page (no mock user)
         if (shouldShowMockUser) {
+          console.log('useAuth - Setting mock user');
           const mockUser: User = {
             id: 'mock-user-1',
             email: 'pravin.patil@bjp.org',
@@ -45,6 +52,7 @@ export const useAuth = () => {
           setUser(mockUser);
           setIsAuthenticated(true);
         } else {
+          console.log('useAuth - Setting user to null (not authenticated)');
           setUser(null);
           setIsAuthenticated(false);
         }
@@ -102,6 +110,12 @@ export const useAuth = () => {
     setIsAuthenticated(false);
   };
 
+  // Force disable mock user and reload page
+  const forceDisableMockUser = () => {
+    localStorage.removeItem('showMockUser');
+    window.location.reload();
+  };
+
   return {
     user,
     loading,
@@ -111,5 +125,6 @@ export const useAuth = () => {
     logout,
     enableMockUser,
     disableMockUser,
+    forceDisableMockUser,
   };
 };

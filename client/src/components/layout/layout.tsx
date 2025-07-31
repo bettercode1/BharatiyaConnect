@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Link, useLocation } from "wouter";
 import { Button } from "@/components/ui/button";
-import { Home, Menu, X } from "lucide-react";
+import { Home, Menu, X, ArrowUp } from "lucide-react";
 import Header from "./header";
 import Sidebar from "./sidebar";
 import Footer from "./footer";
@@ -12,45 +12,57 @@ interface LayoutProps {
   children: React.ReactNode;
 }
 
-// Enhanced Dynamic Saffron Floating Home Button Component
-const FloatingHomeButton = () => {
-  const [location, navigate] = useLocation();
+// Enhanced Dynamic Saffron Floating Scroll to Top Button Component
+const FloatingScrollToTopButton = () => {
+  const [location] = useLocation();
   const { language } = useLanguage();
   const [isHovered, setIsHovered] = useState(false);
   const [isClicked, setIsClicked] = useState(false);
 
-  const handleHomeClick = () => {
+  const getPageTitle = () => {
+    switch (location) {
+      case '/hero':
+        return language === 'mr' ? 'डॅशबोर्ड' : 'Dashboard';
+      case '/members':
+        return language === 'mr' ? 'सदस्य व्यवस्थापन' : 'Member Management';
+      case '/events':
+        return language === 'mr' ? 'कार्यक्रम व्यवस्थापन' : 'Event Management';
+      case '/notices':
+        return language === 'mr' ? 'सूचना व्यवस्थापन' : 'Notice Management';
+      case '/leadership':
+        return language === 'mr' ? 'नेतृत्व गॅलरी' : 'Leadership Gallery';
+      case '/analytics':
+        return language === 'mr' ? 'विश्लेषण' : 'Analytics';
+      case '/reports':
+        return language === 'mr' ? 'अहवाल' : 'Reports';
+      case '/photos':
+        return language === 'mr' ? 'फोटो गॅलरी' : 'Photo Gallery';
+      case '/feedback':
+        return language === 'mr' ? 'फीडबॅक' : 'Feedback';
+      case '/settings':
+        return language === 'mr' ? 'सेटिंग्ज' : 'Settings';
+      default:
+        return language === 'mr' ? 'वर जा' : 'Go to Top';
+    }
+  };
+
+  const handleScrollToTop = () => {
     setIsClicked(true);
-    navigate('/');
-    // Scroll to top when navigating to home - use instant scroll to avoid DOM conflicts
+    // Smooth scroll to top
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth'
+    });
     setTimeout(() => {
-      window.scrollTo(0, 0);
       setIsClicked(false);
     }, 150);
   };
 
   return (
     <div className="dynamic-saffron-home-btn fixed bottom-6 right-6 z-50">
-      {/* Dynamic Rotating Saffron Outer Ring */}
-      <div className={`absolute inset-0 rounded-full transition-all duration-500 transform
-                      ${isHovered ? 'scale-125 rotate-45' : 'scale-100 rotate-0'}
-                      bg-gradient-conic from-amber-300 via-orange-400 via-yellow-300 via-amber-500 to-amber-300
-                      animate-spin-slow opacity-80`} />
-      
-      {/* Pulsing Saffron Glow Effect */}
-      <div className={`absolute inset-0 rounded-full transition-all duration-700 transform
-                      ${isHovered ? 'scale-150 opacity-60' : 'scale-110 opacity-30'}
-                      bg-gradient-radial from-amber-300/50 via-orange-400/30 to-transparent
-                      animate-pulse-slow`} />
-      
-      {/* Dynamic Saffron Rays */}
-      <div className={`absolute inset-0 rounded-full transition-all duration-500 transform
-                      ${isHovered ? 'scale-140 rotate-90 opacity-80' : 'scale-100 rotate-0 opacity-0'}
-                      bg-gradient-conic from-transparent via-amber-400/20 via-transparent via-orange-300/20 to-transparent
-                      animate-spin-reverse`} />
       
       <Button
-        onClick={handleHomeClick}
+        onClick={handleScrollToTop}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         className={`
@@ -74,8 +86,8 @@ const FloatingHomeButton = () => {
                         ${isHovered ? 'rotate-180 opacity-100' : 'rotate-0 opacity-70'}
                         bg-gradient-conic from-amber-200/60 via-orange-300/40 via-yellow-300/60 to-amber-200/60`} />
         
-        {/* Dynamic Home Icon with Saffron Glow */}
-        <Home className={`dynamic-home-icon w-10 h-10 text-white transition-all duration-500 relative z-10
+        {/* Dynamic Arrow Up Icon with Saffron Glow */}
+        <ArrowUp className={`dynamic-arrow-up-icon w-10 h-10 text-white transition-all duration-500 relative z-10
                          font-bold stroke-[3] filter drop-shadow-lg
                          ${isHovered ? 'scale-125 rotate-12 drop-shadow-2xl text-amber-100' : 'scale-100 rotate-0 text-white'}
                          ${isClicked ? 'scale-90 rotate-6' : ''}`} 
@@ -108,10 +120,10 @@ const FloatingHomeButton = () => {
                         ${isHovered ? 'opacity-100 translate-y-0 scale-100 rotate-2' : 'opacity-0 translate-y-3 scale-95 rotate-0'}
                         pointer-events-none border-2 border-amber-300/40`}>
           <div className="relative flex items-center gap-3">
-            <Home className={`w-5 h-5 text-amber-300 stroke-[2.5] transition-all duration-300
+            <ArrowUp className={`w-5 h-5 text-amber-300 stroke-[2.5] transition-all duration-300
                             ${isHovered ? 'animate-bounce-gentle' : ''}`} strokeWidth={2.5} />
             <span className="font-bold text-base bg-gradient-to-r from-amber-200 to-orange-200 bg-clip-text text-transparent">
-              {language === 'mr' ? 'मुख्यपृष्ठावर जा' : 'Go to Home'}
+              {getPageTitle()}
             </span>
             {/* Enhanced Tooltip Arrow */}
             <div className="absolute top-full right-8 w-0 h-0 border-l-8 border-r-8 border-t-8 
@@ -200,8 +212,8 @@ export default function Layout({ children }: LayoutProps) {
       
       {/* Footer Removed */}
       
-      {/* Enhanced Dynamic Saffron Floating Home Button */}
-      <FloatingHomeButton />
+              {/* Enhanced Dynamic Saffron Floating Scroll to Top Button */}
+        <FloatingScrollToTopButton />
     </div>
   );
 }

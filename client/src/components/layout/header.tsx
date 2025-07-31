@@ -134,7 +134,7 @@ export default function Header({ onMenuClick }: HeaderProps) {
               </DropdownMenuTrigger>
                 <DropdownMenuContent align="end" className="w-48 z-50 bg-white border border-orange-200 shadow-lg rounded-xl p-2">
                   <DropdownMenuItem className="text-orange-700 hover:text-orange-800 hover:bg-orange-50 rounded-lg mx-1 my-1 p-3">
-                    <Link href="/profile" className="flex items-center space-x-2 w-full">
+                    <Link href="/settings" className="flex items-center space-x-2 w-full">
                       <User className="h-4 w-4" />
                       <span>{language === 'mr' ? 'प्रोफाइल' : 'Profile'}</span>
                     </Link>

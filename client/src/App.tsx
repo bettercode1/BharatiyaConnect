@@ -43,6 +43,39 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
   return <>{children}</>;
 }
 
+// Root Route Component - Shows login for unauthenticated users, Hero for authenticated users
+function RootRoute() {
+  const { isAuthenticated, loading } = useAuth();
+  
+  console.log('RootRoute - isAuthenticated:', isAuthenticated, 'loading:', loading);
+  
+  // Show loading state while checking authentication
+  if (loading) {
+    return (
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="w-8 h-8 border-4 border-orange-500 border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
+      </div>
+    );
+  }
+  
+  // If not authenticated, show login page
+  if (!isAuthenticated) {
+    console.log('RootRoute - Showing Login page');
+    return <Login />;
+  }
+  
+  // If authenticated, show Hero page with layout
+  console.log('RootRoute - Showing Hero page');
+  return (
+    <Layout>
+      <Hero />
+    </Layout>
+  );
+}
+
 function App() {
   return (
     <QueryClientProvider client={queryClient}>
@@ -58,8 +91,11 @@ function App() {
                 <ForgotPassword />
               </Route>
               
-              {/* Main App Routes - With Layout - Protected */}
+              {/* Root path - Always show login page for now */}
               <Route path="/">
+                <Login />
+              </Route>
+              <Route path="/hero">
                 <ProtectedRoute>
                   <Layout>
                     <Hero />

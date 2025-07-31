@@ -41,33 +41,13 @@ const Login: React.FC = () => {
     // Enable mock user immediately
     enableMockUser();
     
-    // Use a more reliable approach with multiple checks
-    const checkAndNavigate = () => {
-      const mockUserEnabled = localStorage.getItem('showMockUser') === 'true';
-      console.log('Mock user enabled:', mockUserEnabled); // Debug log
-      
-      if (mockUserEnabled) {
-        setIsLoading(false);
-        console.log('Navigating to hero page'); // Debug log
-        setLocation('/');
-        console.log('Navigation completed'); // Debug log
-      } else {
-        // Retry after a short delay
-        setTimeout(checkAndNavigate, 100);
-      }
-    };
-    
-    // Start checking after a short delay
-    setTimeout(checkAndNavigate, 500);
-    
-    // Fallback timeout to ensure navigation happens
+    // Navigate to hero page after a short delay
     setTimeout(() => {
-      if (isLoading) {
-        console.log('Fallback navigation triggered'); // Debug log
-        setIsLoading(false);
-        setLocation('/');
-      }
-    }, 3000);
+      setIsLoading(false);
+      console.log('Navigating to hero page'); // Debug log
+      setLocation('/hero');
+      console.log('Navigation completed'); // Debug log
+    }, 1000);
   };
 
   const getLoginTypeInfo = () => {

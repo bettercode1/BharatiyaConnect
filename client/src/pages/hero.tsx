@@ -256,32 +256,32 @@ const Hero: React.FC = () => {
           <img 
             src={raigadFort} 
             alt="Raigad Fort" 
-            className="absolute inset-0 w-full h-full object-cover opacity-70"
+            className="absolute inset-0 w-full h-full object-cover opacity-70 animate-pulse-slow"
           />
-          {/* Darker overlay for better text visibility */}
-          <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/40 to-black/50"></div>
-          {/* Saffron overlay for BJP theme */}
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-600/30 via-amber-600/20 to-yellow-600/30"></div>
-          {/* BJP Symbol - Positioned in top-right corner */}
+          {/* Saffron overlay for better text visibility */}
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-600/50 via-amber-600/40 to-yellow-600/50 animate-pulse-gentle"></div>
+          {/* Additional saffron overlay for BJP theme */}
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-500/30 via-amber-500/20 to-yellow-500/30 animate-pulse-slower"></div>
+          {/* BJP Symbol - Positioned in upper center */}
           <img 
             src={bjpSymbol} 
             alt="BJP Symbol" 
-            className="absolute top-4 right-4 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 opacity-90"
+            className="absolute top-8 left-1/2 transform -translate-x-1/2 w-16 h-16 sm:w-20 sm:h-20 md:w-24 md:h-24 lg:w-28 lg:h-28 opacity-90 z-10"
           />
         </div>
         
-        {/* Additional dark overlay for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-black/20 to-black/30"></div>
+        {/* Additional saffron overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-orange-500/30 via-amber-500/20 to-yellow-500/30"></div>
         
         {/* Content */}
-        <div className="relative z-10 flex flex-col justify-center h-full pt-8 sm:pt-12 md:pt-16 lg:pt-20">
-          <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-2 sm:mb-3 drop-shadow-2xl shadow-black ${fontDisplayClass}`}>
+        <div className="relative z-10 flex flex-col justify-center h-full pt-4 sm:pt-6 md:pt-8 lg:pt-10">
+          <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-2 sm:mb-3 drop-shadow-2xl shadow-black animate-fade-in-up hover:animate-bounce-gentle hover:animate-text-glow transition-all duration-500 hover:scale-105 ${fontDisplayClass}`}>
             {language === 'mr' ? 'स्वागत आहे' : 'Welcome Back'}
             </h1>
-          <p className={`text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-white font-bold drop-shadow-2xl shadow-black mb-3 ${fontClass}`}>
+          <p className={`text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-white font-bold drop-shadow-2xl shadow-black mb-3 animate-fade-in-up animation-delay-200 hover:animate-pulse-gentle hover:animate-text-shimmer transition-all duration-500 hover:scale-105 ${fontClass}`}>
             {language === 'mr' ? 'प्रवीण पाटील' : 'Pravin Patil'}
           </p>
-          <p className={`text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white font-extrabold drop-shadow-2xl shadow-black ${fontClass}`}>
+          <p className={`text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white font-extrabold drop-shadow-2xl shadow-black animate-fade-in-up animation-delay-400 hover:animate-pulse-slow hover:animate-text-glow transition-all duration-500 hover:scale-105 ${fontClass}`}>
             {new Date().toLocaleDateString(language === 'mr' ? 'hi-IN' : 'en-IN', {
               day: 'numeric',
               month: 'long',
@@ -297,7 +297,7 @@ const Hero: React.FC = () => {
         {/* Special Day Cards */}
         <div className="absolute top-4 right-4 space-y-3 z-20">
         {/* Today's Special Day */}
-          <Card className="w-64 bg-white rounded-2xl border-2 border-orange-200 shadow-lg">
+          <Card className="w-64 bg-white rounded-2xl border-2 border-orange-200 shadow-lg animate-slide-in-right hover:animate-bounce-gentle transition-all duration-300 hover:scale-105">
             <CardContent className="p-4">
               <h3 className={`font-bold text-amber-900 mb-2 text-sm ${fontDisplayClass}`}>
                 {language === 'mr' ? 'आजचा विशेष दिवस' : 'Today\'s Special Day'}
@@ -314,7 +314,7 @@ const Hero: React.FC = () => {
           </Card>
         
         {/* Upcoming Special Days */}
-          <Card className="w-64 bg-white rounded-2xl border-2 border-orange-200 shadow-lg">
+          <Card className="w-64 bg-white rounded-2xl border-2 border-orange-200 shadow-lg animate-slide-in-right animation-delay-300 hover:animate-bounce-gentle transition-all duration-300 hover:scale-105">
             <CardContent className="p-4">
               <h3 className={`font-bold text-amber-900 mb-3 text-sm ${fontDisplayClass}`}>
             {language === 'mr' ? 'आगामी विशेष दिवस' : 'Upcoming Special Days'}

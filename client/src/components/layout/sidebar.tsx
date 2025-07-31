@@ -28,8 +28,8 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
   const [location] = useLocation();
 
   const isActive = (path: string) => {
-    if (path === "/") {
-      return location === "/";
+    if (path === "/hero") {
+      return location === "/hero" || location === "/";
     }
     return location === path;
   };
@@ -46,9 +46,9 @@ export default function Sidebar({ onNavigate }: SidebarProps) {
             </h3>
             <div className="space-y-1">
               {/* Dashboard */}
-              <Link href="/">
+              <Link href="/hero">
                 <div className={`flex items-center justify-between w-full px-3 sm:px-4 py-2 sm:py-3 rounded-xl transition-all cursor-pointer ${
-                  isActive('/') 
+                  isActive('/hero') 
                     ? "bg-orange-500 text-white shadow-sm" 
                     : "text-gray-700 hover:bg-gray-50"
                 }`} onClick={() => {

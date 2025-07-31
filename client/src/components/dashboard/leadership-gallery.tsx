@@ -44,7 +44,7 @@ export default function LeadershipGallery() {
       id: '1',
       name: 'नरेंद्र मोदी',
       designation: 'पंतप्रधान',
-      profileImage: '',
+      profileImage: '/assets/Politician Image/नरेंद्र मोदी.jpg',
       socialMedia: {
         twitter: 'narendramodi',
         instagram: 'narendramodi'
@@ -52,32 +52,32 @@ export default function LeadershipGallery() {
     },
     {
       id: '2',
+      name: 'अमित शाह',
+      designation: 'केंद्रीय गृहमंत्री',
+      profileImage: '/assets/Politician Image/अमित शाह.jpg',
+      socialMedia: {
+        twitter: 'AmitShah',
+        instagram: 'amitshah'
+      }
+    },
+    {
+      id: '3',
       name: 'देवेंद्र फडणवीस',
       designation: 'उपमुख्यमंत्री',
-      profileImage: '',
+      profileImage: '/assets/Politician Image/देवेंद्र फडणवीस.jpg',
       socialMedia: {
         twitter: 'devendra_fadnavis',
         instagram: 'devendra_fadnavis'
       }
     },
     {
-      id: '3',
+      id: '4',
       name: 'नितिन गडकरी',
       designation: 'केंद्रीय मंत्री',
-      profileImage: '',
+      profileImage: '/assets/Politician Image/नितिन गडकरी.jpg',
       socialMedia: {
         twitter: 'nitin_gadkari',
         instagram: 'nitin_gadkari'
-      }
-    },
-    {
-      id: '4',
-      name: 'पंकजा मुंडे',
-      designation: 'आमदार',
-      profileImage: '',
-      socialMedia: {
-        twitter: 'pankajamunde',
-        instagram: 'pankajamunde'
       }
     }
   ];
