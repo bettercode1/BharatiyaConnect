@@ -256,41 +256,43 @@ const Hero: React.FC = () => {
           <img 
             src={raigadFort} 
             alt="Raigad Fort" 
-            className="absolute inset-0 w-full h-full object-cover opacity-80"
+            className="absolute inset-0 w-full h-full object-cover opacity-70"
           />
-          {/* Stronger Saffron Overlay for Better Orientation */}
-          <div className="absolute inset-0 bg-gradient-to-br from-orange-600/70 via-amber-600/60 to-yellow-600/70"></div>
+          {/* Darker overlay for better text visibility */}
+          <div className="absolute inset-0 bg-gradient-to-br from-black/50 via-black/40 to-black/50"></div>
+          {/* Saffron overlay for BJP theme */}
+          <div className="absolute inset-0 bg-gradient-to-br from-orange-600/30 via-amber-600/20 to-yellow-600/30"></div>
           {/* BJP Symbol - Positioned in top-right corner */}
           <img 
             src={bjpSymbol} 
             alt="BJP Symbol" 
-            className="absolute top-4 right-4 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 opacity-60"
+            className="absolute top-4 right-4 w-12 h-12 sm:w-16 sm:h-16 md:w-20 md:h-20 lg:w-24 lg:h-24 opacity-90"
           />
         </div>
         
-        {/* Stronger overlay gradient for better text readability */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/40 via-white/30 to-white/40"></div>
+        {/* Additional dark overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-r from-black/30 via-black/20 to-black/30"></div>
         
         {/* Content */}
-        <div className="relative z-10 flex flex-col justify-center h-full">
-          <h1 className={`text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl font-bold text-amber-900 mb-1 sm:mb-2 whitespace-nowrap overflow-hidden text-ellipsis drop-shadow-sm ${fontDisplayClass}`}>
+        <div className="relative z-10 flex flex-col justify-center h-full pt-8 sm:pt-12 md:pt-16 lg:pt-20">
+          <h1 className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl xl:text-6xl font-bold text-white mb-2 sm:mb-3 drop-shadow-2xl shadow-black ${fontDisplayClass}`}>
             {language === 'mr' ? 'स्वागत आहे' : 'Welcome Back'}
             </h1>
-          <p className={`text-sm sm:text-base md:text-lg lg:text-xl text-amber-800 font-bold drop-shadow-sm mb-2 ${fontClass}`}>
-            Pravin Patil
+          <p className={`text-lg sm:text-xl md:text-2xl lg:text-3xl xl:text-4xl text-white font-bold drop-shadow-2xl shadow-black mb-3 ${fontClass}`}>
+            {language === 'mr' ? 'प्रवीण पाटील' : 'Pravin Patil'}
           </p>
-          <p className={`text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-amber-700 font-extrabold drop-shadow-sm ${fontClass}`}>
+          <p className={`text-base sm:text-lg md:text-xl lg:text-2xl xl:text-3xl text-white font-extrabold drop-shadow-2xl shadow-black ${fontClass}`}>
             {new Date().toLocaleDateString(language === 'mr' ? 'hi-IN' : 'en-IN', {
               day: 'numeric',
-              month: language === 'mr' ? 'long' : 'long',
+              month: 'long',
               year: 'numeric'
-            })} {language === 'mr' ? 'ला' : 'at'} {new Date().toLocaleTimeString(language === 'mr' ? 'hi-IN' : 'en-IN', {
+            })} {language === 'mr' ? 'ला' : 'ला'} {new Date().toLocaleTimeString(language === 'mr' ? 'hi-IN' : 'en-IN', {
               hour: '2-digit',
               minute: '2-digit',
               hour12: true
             }).replace('am', 'AM').replace('pm', 'PM')}
           </p>
-      </div>
+        </div>
 
         {/* Special Day Cards */}
         <div className="absolute top-4 right-4 space-y-3 z-20">
@@ -299,15 +301,15 @@ const Hero: React.FC = () => {
             <CardContent className="p-4">
               <h3 className={`font-bold text-amber-900 mb-2 text-sm ${fontDisplayClass}`}>
                 {language === 'mr' ? 'आजचा विशेष दिवस' : 'Today\'s Special Day'}
-        </h3>
+              </h3>
               <div className="space-y-1">
                 <p className={`font-bold text-amber-800 text-sm ${fontClass}`}>
-              {language === 'mr' ? 'कारगिल विजय दिवस' : 'Kargil Vijay Diwas'}
-            </p>
+                  {language === 'mr' ? 'कारगिल विजय दिवस' : 'Kargil Vijay Diwas'}
+                </p>
                 <p className={`text-amber-700 text-xs ${fontClass}`}>
                   {language === 'mr' ? 'वीर शहीदांना श्रद्धांजली' : 'Homage to brave martyrs'}
-            </p>
-          </div>
+                </p>
+              </div>
             </CardContent>
           </Card>
         
@@ -332,12 +334,12 @@ const Hero: React.FC = () => {
               <div className="flex items-center justify-between">
                   <div>
                     <p className={`font-bold text-amber-800 text-sm ${fontClass}`}>
-                  {language === 'mr' ? 'महाराष्ट्र दिन' : 'Maharashtra Day'}
+                  {language === 'mr' ? 'जन्माष्टमी' : 'Janmashtami'}
                 </p>
-                    <p className="text-amber-700 text-xs">1 May 2025</p>
+                    <p className="text-amber-700 text-xs">16 August 2025</p>
                   </div>
-                  <Badge className="bg-blue-500 text-white text-xs rounded-xl px-2 py-1">
-              POLITICAL
+                  <Badge className="bg-purple-500 text-white text-xs rounded-xl px-2 py-1">
+              RELIGIOUS
             </Badge>
               </div>
             </div>
@@ -471,8 +473,8 @@ const Hero: React.FC = () => {
               </div>
               <div className="text-2xl font-bold text-white mb-1">1</div>
               <div className="text-xs text-teal-100">New Suggestions</div>
-            </div>
-
+        </div>
+          
             {/* Photos Card */}
             <div className="bg-gradient-to-br from-rose-400 to-rose-500 rounded-xl p-3 border-2 border-rose-300 shadow-lg">
               <div className="flex items-center justify-between mb-2">
@@ -575,7 +577,7 @@ const Hero: React.FC = () => {
                   <p className={`text-xs text-white ${fontClass}`}>
                     {language === 'mr' ? 'सदस्य:' : 'Members:'} <span className="font-bold">2,865</span>
                   </p>
-                </div>
+        </div>
               </div>
             </div>
 
@@ -614,9 +616,131 @@ const Hero: React.FC = () => {
           </div>
         </div>
 
+        {/* National Leadership Section with Politician Images */}
+        <div className="bg-white rounded-2xl p-6 shadow-lg border-2 border-orange-200 mb-6">
+          <div className="text-center mb-6">
+            <div className="flex items-center justify-center gap-3 mb-2">
+              <Crown className="w-6 h-6 text-orange-600" />
+              <h3 className={`text-2xl font-bold text-amber-900 ${fontDisplayClass}`}>
+                {language === 'mr' ? 'राष्ट्रीय नेतृत्व' : 'National Leadership'}
+              </h3>
+            </div>
+            <p className={`text-gray-600 text-sm ${fontClass}`}>
+              {language === 'mr' ? 'भारत सरकार आणि राष्ट्रीय पदाधिकारी' : 'Government of India and National Office Bearers'}
+            </p>
+          </div>
 
+          {/* Politician Cards */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            {/* JP Nadda */}
+            <Card className="bg-white rounded-xl border-2 border-orange-200 shadow-lg hover:shadow-xl transition-all duration-300">
+              <CardContent className="p-4 text-center">
+                <Badge className="bg-orange-500 text-white text-xs rounded-xl px-2 py-1 mb-3">
+                  {language === 'mr' ? 'राष्ट्रीय' : 'National'}
+                </Badge>
+                <div className="w-16 h-16 mx-auto mb-3 rounded-full overflow-hidden border-2 border-orange-200">
+                  <img 
+                    src="/assets/Politician Image/जेपी नड्डा.jpg" 
+                    alt="JP Nadda"
+                    className="w-full h-full object-cover"
+                  />
+                </div>
+                <h4 className={`font-bold text-gray-800 text-sm mb-2 ${fontClass}`}>
+                  {language === 'mr' ? 'जेपी नड्डा' : 'JP Nadda'}
+                </h4>
+                <Badge className="bg-orange-100 text-orange-700 text-xs rounded-lg px-2 py-1 mb-2">
+                  {language === 'mr' ? 'राष्ट्रीय अध्यक्ष' : 'National President'}
+                </Badge>
+                <div className="flex items-center justify-center gap-1 text-xs text-gray-600">
+                  <MapPin className="w-3 h-3 text-orange-500" />
+                  <span className={fontClass}>{language === 'mr' ? 'नई दिल्ली' : 'New Delhi'}</span>
+        </div>
+              </CardContent>
+            </Card>
 
-              <div className="flex items-center justify-between mb-4">
+            {/* Amit Shah */}
+            <Card className="bg-white rounded-xl border-2 border-orange-200 shadow-lg hover:shadow-xl transition-all duration-300">
+              <CardContent className="p-4 text-center">
+                <Badge className="bg-orange-500 text-white text-xs rounded-xl px-2 py-1 mb-3">
+                  {language === 'mr' ? 'राष्ट्रीय' : 'National'}
+                </Badge>
+                <div className="w-16 h-16 mx-auto mb-3 rounded-full overflow-hidden border-2 border-orange-200">
+                  <img 
+                    src="/assets/Politician Image/अमित शाह.jpg" 
+                    alt="Amit Shah"
+                      className="w-full h-full object-cover"
+                    />
+              </div>
+                <h4 className={`font-bold text-gray-800 text-sm mb-2 ${fontClass}`}>
+                  {language === 'mr' ? 'अमित शाह' : 'Amit Shah'}
+                </h4>
+                <Badge className="bg-orange-100 text-orange-700 text-xs rounded-lg px-2 py-1 mb-2">
+                  {language === 'mr' ? 'गृहमंत्री' : 'Home Minister'}
+                </Badge>
+                <div className="flex items-center justify-center gap-1 text-xs text-gray-600">
+                  <MapPin className="w-3 h-3 text-orange-500" />
+                  <span className={fontClass}>{language === 'mr' ? 'नई दिल्ली' : 'New Delhi'}</span>
+                  </div>
+              </CardContent>
+            </Card>
+
+            {/* Rajnath Singh */}
+            <Card className="bg-white rounded-xl border-2 border-orange-200 shadow-lg hover:shadow-xl transition-all duration-300">
+              <CardContent className="p-4 text-center">
+                <Badge className="bg-orange-500 text-white text-xs rounded-xl px-2 py-1 mb-3">
+                  {language === 'mr' ? 'राष्ट्रीय' : 'National'}
+                </Badge>
+                <div className="w-16 h-16 mx-auto mb-3 rounded-full overflow-hidden border-2 border-orange-200">
+                  <img 
+                    src="/assets/Politician Image/राजनाथ सिंह.jpg" 
+                    alt="Rajnath Singh"
+                      className="w-full h-full object-cover"
+                    />
+                  </div>
+                <h4 className={`font-bold text-gray-800 text-sm mb-2 ${fontClass}`}>
+                  {language === 'mr' ? 'राजनाथ सिंह' : 'Rajnath Singh'}
+                </h4>
+                <Badge className="bg-orange-100 text-orange-700 text-xs rounded-lg px-2 py-1 mb-2">
+                  {language === 'mr' ? 'संरक्षणमंत्री' : 'Defense Minister'}
+                </Badge>
+                <div className="flex items-center justify-center gap-1 text-xs text-gray-600">
+                  <MapPin className="w-3 h-3 text-orange-500" />
+                  <span className={fontClass}>{language === 'mr' ? 'नई दिल्ली' : 'New Delhi'}</span>
+                  </div>
+              </CardContent>
+            </Card>
+
+            {/* Nitin Gadkari */}
+            <Card className="bg-white rounded-xl border-2 border-orange-200 shadow-lg hover:shadow-xl transition-all duration-300">
+              <CardContent className="p-4 text-center">
+                <Badge className="bg-orange-500 text-white text-xs rounded-xl px-2 py-1 mb-3">
+                  {language === 'mr' ? 'राष्ट्रीय' : 'National'}
+                </Badge>
+                <div className="w-16 h-16 mx-auto mb-3 rounded-full overflow-hidden border-2 border-orange-200">
+                  <img 
+                    src="/assets/Politician Image/नितीन गडकरी.jpg" 
+                    alt="Nitin Gadkari"
+                      className="w-full h-full object-cover"
+                    />
+                </div>
+                <h4 className={`font-bold text-gray-800 text-sm mb-2 ${fontClass}`}>
+                  {language === 'mr' ? 'नितीन गडकरी' : 'Nitin Gadkari'}
+                </h4>
+                <Badge className="bg-orange-100 text-orange-700 text-xs rounded-lg px-2 py-1 mb-2">
+                  {language === 'mr' ? 'केंद्रीय मंत्री' : 'Union Minister'}
+                </Badge>
+                <div className="flex items-center justify-center gap-1 text-xs text-gray-600">
+                  <MapPin className="w-3 h-3 text-orange-500" />
+                  <span className={fontClass}>{language === 'mr' ? 'नागपूर' : 'Nagpur'}</span>
+                </div>
+              </CardContent>
+            </Card>
+          </div>
+        </div>
+
+        {/* Pradesh Padadhikari */}
+        <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl border-2 border-blue-200 p-6 shadow-lg">
+          <div className="flex items-center justify-between mb-4">
                 <h3 className={`text-xl font-bold text-blue-900 ${fontDisplayClass}`}>
                   {language === 'mr' ? 'प्रदेश पदाधिकारी' : 'Pradesh Padadhikari'}
                   </h3>
@@ -634,12 +758,12 @@ const Hero: React.FC = () => {
                   <p className={`text-blue-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'रव्साहेब पाटील दानवे - जालना' : 'Ravsaheb Patil Danve - Jalna'}
                   </p>
-              </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-blue-200">
                   <p className={`text-blue-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'विनोद तावडे - मुंबई' : 'Vinod Tawde - Mumbai'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-blue-200">
                   <p className={`text-blue-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'अजयकुमार शिंदे' : 'Ajaykumar Shinde'}
@@ -664,7 +788,7 @@ const Hero: React.FC = () => {
                   <p className={`text-blue-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'राजनितीसीन्ह हिद्राव नाईक निवाळकर - माढा' : 'Rajnitisinh Hidrav Naik Nivalkar - Madha'}
                   </p>
-        </div>
+                </div>
               </div>
             </div>
 
@@ -673,7 +797,7 @@ const Hero: React.FC = () => {
               <div className="flex items-center justify-between mb-4">
                 <h3 className={`text-xl font-bold text-green-900 ${fontDisplayClass}`}>
                   {language === 'mr' ? 'राष्ट्रीय पदाधिकारी' : 'Rashtriya Padadhikari'}
-                  </h3>
+                </h3>
                 <div className="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center">
                   <Award className="w-5 h-5 text-white" />
                 </div>
@@ -688,17 +812,17 @@ const Hero: React.FC = () => {
                   <p className={`text-green-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'संजय धोत्रे - अकोला' : 'Sanjay Dhotre - Akola'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-green-200">
                   <p className={`text-green-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'सुनील मेंढे' : 'Sunil Mendhe'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-green-200">
                   <p className={`text-green-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'नरेंद्र गोविया' : 'Narendra Goviya'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-green-200">
                   <p className={`text-green-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'रव्साहेब पाटील दानवे - जालना' : 'Ravsaheb Patil Danve - Jalna'}
@@ -708,7 +832,7 @@ const Hero: React.FC = () => {
                   <p className={`text-green-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'गोपाळ शेट्टी - मुंबई' : 'Gopal Shetty - Mumbai'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-green-200">
                   <p className={`text-green-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'विजयाताई रहाटकर - औरंगाबाद' : 'Vijayatai Rahatkar - Aurangabad'}
@@ -725,17 +849,17 @@ const Hero: React.FC = () => {
                   </p>
                 </div>
               </div>
-                  </div>
+            </div>
 
             {/* Legislature Members */}
             <div className="bg-gradient-to-r from-purple-50 to-purple-100 rounded-xl border-2 border-purple-200 p-6 shadow-lg">
               <div className="flex items-center justify-between mb-4">
                 <h3 className={`text-xl font-bold text-purple-900 ${fontDisplayClass}`}>
                   {language === 'mr' ? 'विधानसभेचे सदस्य' : 'Legislature Members'}
-                  </h3>
+                </h3>
                 <div className="w-8 h-8 bg-purple-500 rounded-full flex items-center justify-center">
                   <Users2 className="w-5 h-5 text-white" />
-                  </div>
+                </div>
               </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                 <div className="bg-white rounded-lg p-3 border border-purple-200">
@@ -806,66 +930,66 @@ const Hero: React.FC = () => {
                   <p className={`text-red-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'ह. मुर्ली धरण' : 'He. Murli Dharan'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-red-200">
                   <p className={`text-red-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'उदयनराजे भोसले' : 'Udaynaraje Bhosle'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-red-200">
                   <p className={`text-red-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'डी. भारती पवार - दिंडोरी' : 'Dr. Bharti Pawar - Dindori'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-red-200">
                   <p className={`text-red-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'मनज कोटक - मुंबई' : 'Manaj Kotak - Mumbai'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-red-200">
                   <p className={`text-red-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'सुजय विखे पाटील - अहमदनगर' : 'Sujay Vikhe Patil - Ahmednagar'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-red-200">
                   <p className={`text-red-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'डी. जयसिंगभर स्वामी - सोलापूर' : 'D. Jaysingbhar Swami - Solapur'}
                   </p>
                 </div>
               </div>
-              </div>
+            </div>
 
             {/* Rajya Sabha Members */}
             <div className="bg-gradient-to-r from-indigo-50 to-indigo-100 rounded-xl border-2 border-indigo-200 p-6 shadow-lg">
               <div className="flex items-center justify-between mb-4">
                 <h3 className={`text-xl font-bold text-indigo-900 ${fontDisplayClass}`}>
                   {language === 'mr' ? 'राज्यसभेचे सदस्य' : 'Rajya Sabha Members'}
-            </h3>
+                </h3>
                 <div className="w-8 h-8 bg-indigo-500 rounded-full flex items-center justify-center">
                   <MessageSquare className="w-5 h-5 text-white" />
-                  </div>
-                  </div>
+                </div>
+              </div>
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-3">
                 <div className="bg-white rounded-lg p-3 border border-indigo-200">
                   <p className={`text-indigo-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'प्रकाश जावडेकर - पुणे' : 'Prakash Javadekar - Pune'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-indigo-200">
                   <p className={`text-indigo-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'एस.टी.टी. राणे - नाशिक' : 'S.T.T. Rane - Nashik'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-indigo-200">
                   <p className={`text-indigo-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'पंकजा गोपीनाथ मुंडे - बीड' : 'Pankaja Gopinath Munde - Beed'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-indigo-200">
                   <p className={`text-indigo-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'जमणान सिंह पाय्या - नाशिक' : 'Jamanan Sinh Payya - Nashik'}
                   </p>
-                  </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-indigo-200">
                   <p className={`text-indigo-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'रा. धीना नाथ माने - नांदेड' : 'Ra. Dhinanath Mane - Nanded'}
@@ -875,27 +999,26 @@ const Hero: React.FC = () => {
                   <p className={`text-indigo-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'राजीव सातव - औरंगाबाद' : 'Rajiv Satav - Aurangabad'}
                   </p>
-              </div>
+                </div>
                 <div className="bg-white rounded-lg p-3 border border-indigo-200">
                   <p className={`text-indigo-700 text-sm ${fontClass}`}>
                     {language === 'mr' ? 'डी. वंदना चव्हाण - मुंबई' : 'Dr. Vandana Chavan - Mumbai'}
                   </p>
-            </div>
-                  </div>
                 </div>
               </div>
+            </div>
 
     {/* Floating Action Button */}
     <div className="fixed bottom-6 right-6 z-50">
-          <button
+      <button
         className="w-14 h-14 bg-gradient-to-r from-orange-400 to-orange-500 hover:from-orange-500 hover:to-orange-600 text-white rounded-full shadow-lg hover:shadow-xl transition-all duration-300 flex items-center justify-center group"
         onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         aria-label="Go to top"
       >
         <Home className="w-6 h-6 group-hover:scale-110 transition-transform duration-200" />
-          </button>
+      </button>
     </div>
-    </div>
+  </div>
   );
 };
 

@@ -344,60 +344,66 @@ export default function Events() {
   }
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 p-6 sm:p-8 lg:p-12">
-      <div className="max-w-7xl mx-auto space-y-8">
-        {/* Header Section */}
-        <div className="text-center mb-8">
-          <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-bold text-amber-900 mb-4 ${fontDisplayClass}`}>
-            {language === 'mr' ? 'कार्यक्रम व्यवस्थापन' : 'Event Management'}
-              </h1>
-          <p className={`text-lg text-amber-700 ${fontClass}`}>
-            
-              </p>
-            </div>
+    <>
+      <div className="min-h-screen bg-gradient-to-br from-orange-50 to-amber-50 p-6 sm:p-8 lg:p-12">
+        <div className="max-w-7xl mx-auto space-y-8">
+          {/* Header Section */}
+          <div className="text-center mb-8">
+            <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-bold text-amber-900 mb-4 ${fontDisplayClass}`}>
+              {language === 'mr' ? 'कार्यक्रम व्यवस्थापन' : 'Event Management'}
+            </h1>
+            <p className={`text-lg text-amber-700 ${fontClass}`}>
+              
+            </p>
+          </div>
 
-        {/* Search and Filters */}
-        <Card className="bg-white shadow-lg rounded-xl border border-orange-200">
-          <CardContent className="p-6">
-            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
-              <div className="relative flex-1 w-full">
-                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-orange-500 w-5 h-5" />
-                <Input
-                  placeholder={language === 'mr' ? 'कार्यक्रम, स्थळ किंवा आयोजक शोधा...' : 'Search events, venue or organizer...'}
-                  value={search}
-                  onChange={(e) => setSearch(e.target.value)}
-                  className="pl-12 py-3 rounded-xl border-orange-200 focus:border-orange-500 focus:ring-orange-500"
-                />
+          {/* Search and Filters */}
+          <Card className="bg-white shadow-lg rounded-xl border border-orange-200">
+            <CardContent className="p-6">
+              {/* Add New Event Button - Above Search Bar */}
+              <div className="flex justify-end mb-4">
+                <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+                  <DialogTrigger asChild>
+                    <Button className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-200">
+                      <Plus className="w-5 h-5 mr-2" />
+                      {language === 'mr' ? 'नवीन कार्यक्रम' : 'New Event'}
+                    </Button>
+                  </DialogTrigger>
+                </Dialog>
               </div>
-              <Select value={status} onValueChange={setStatus}>
-                <SelectTrigger className="w-40 rounded-xl border-orange-200 focus:border-orange-500 focus:ring-orange-500">
-                  <SelectValue placeholder={language === 'mr' ? 'स्थिती' : 'Status'} />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="all">{language === 'mr' ? 'सर्व' : 'All'}</SelectItem>
-                  <SelectItem value="published">{language === 'mr' ? 'प्रकाशित' : 'Published'}</SelectItem>
-                  <SelectItem value="draft">{language === 'mr' ? 'मसुदा' : 'Draft'}</SelectItem>
-                  <SelectItem value="cancelled">{language === 'mr' ? 'रद्द' : 'Cancelled'}</SelectItem>
-                  <SelectItem value="completed">{language === 'mr' ? 'पूर्ण' : 'Completed'}</SelectItem>
-                </SelectContent>
-              </Select>
-              <Button variant="outline" className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50">
-                <Filter className="w-4 h-4 mr-2" />
-                {language === 'mr' ? 'फिल्टर' : 'Filter'}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
 
-        {/* Add New Event Button */}
-        <div className="flex justify-end">
-          <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-              <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-200">
-                  <Plus className="w-5 h-5 mr-2" />
-                {language === 'mr' ? 'नवीन कार्यक्रम' : 'New Event'}
+              {/* Search and Filters */}
+              <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+                <div className="relative flex-1 w-full">
+                  <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-orange-500 w-5 h-5" />
+                  <Input
+                    placeholder={language === 'mr' ? 'कार्यक्रम, स्थळ किंवा आयोजक शोधा...' : 'Search events, venue or organizer...'}
+                    value={search}
+                    onChange={(e) => setSearch(e.target.value)}
+                    className="pl-12 py-3 rounded-xl border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                  />
+                </div>
+                <Select value={status} onValueChange={setStatus}>
+                  <SelectTrigger className="w-40 rounded-xl border-orange-200 focus:border-orange-500 focus:ring-orange-500">
+                    <SelectValue placeholder={language === 'mr' ? 'स्थिती' : 'Status'} />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="all">{language === 'mr' ? 'सर्व' : 'All'}</SelectItem>
+                    <SelectItem value="published">{language === 'mr' ? 'प्रकाशित' : 'Published'}</SelectItem>
+                    <SelectItem value="draft">{language === 'mr' ? 'मसुदा' : 'Draft'}</SelectItem>
+                    <SelectItem value="cancelled">{language === 'mr' ? 'रद्द' : 'Cancelled'}</SelectItem>
+                    <SelectItem value="completed">{language === 'mr' ? 'पूर्ण' : 'Completed'}</SelectItem>
+                  </SelectContent>
+                </Select>
+                <Button variant="outline" className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50">
+                  <Filter className="w-4 h-4 mr-2" />
+                  {language === 'mr' ? 'फिल्टर' : 'Filter'}
                 </Button>
-              </DialogTrigger>
+              </div>
+            </CardContent>
+          </Card>
+
+          <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
             <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-xl border border-orange-200">
             <DialogHeader className="pb-6">
               <DialogTitle className={`text-2xl font-bold text-amber-900 ${fontDisplayClass}`}>
@@ -682,122 +688,124 @@ export default function Events() {
         </Dialog>
         </div>
 
-        {/* Events Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          {filteredEvents.map((event) => (
-            <Card key={event.id} className="bg-white shadow-lg rounded-xl border border-orange-200 overflow-hidden hover:shadow-xl transition-all duration-200 h-auto">
-            <div className="relative">
-              <img 
-                  src={event.image}
-                  alt={event.title}
-                  className="w-full h-32 object-cover"
-                />
-                                  <div className="absolute top-2 right-2">
-                  <Badge className={`${event.badge.color} rounded-xl px-3 py-1`}>
-                    <span className="mr-2">{event.badge.icon}</span>
-                    <span className="hidden sm:inline">{event.badge.text}</span>
-                </Badge>
-              </div>
+        <>
+          {/* Events Grid */}
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {filteredEvents.map((event) => (
+              <Card key={event.id} className="bg-white shadow-lg rounded-xl border border-orange-200 overflow-hidden hover:shadow-xl transition-all duration-200 h-auto">
+              <div className="relative">
+                <img 
+                    src={event.image}
+                    alt={event.title}
+                    className="w-full h-32 object-cover"
+                  />
+                                    <div className="absolute top-2 right-2">
+                <Badge className={`${event.badge.color} rounded-xl px-3 py-1`}>
+                  <span className="mr-2">{event.badge.icon}</span>
+                  <span className="hidden sm:inline">{event.badge.text}</span>
+              </Badge>
             </div>
-              <CardContent className="p-4">
-                <div className="space-y-3">
-                <div className="flex items-start justify-between">
-                    <h3 className={`font-semibold text-amber-900 line-clamp-2 flex-1 pr-2 text-sm ${fontDisplayClass}`}>
-                      {event.title}
-                  </h3>
-                </div>
-
-                  <p className={`text-gray-600 line-clamp-2 text-xs ${fontClass}`}>
-                    {event.description}
-                </p>
-
-                  <div className="space-y-2 text-xs text-gray-600">
-                  <div className="flex items-center">
-                      <Calendar className="w-3 h-3 mr-2 text-orange-500" />
-                      <span className={fontClass}>{formatDate(event.eventDate)}</span>
-                  </div>
-                  <div className="flex items-center">
-                      <Clock className="w-3 h-3 mr-2 text-orange-500" />
-                      <span className={fontClass}>{formatTime(event.eventDate)}</span>
-                  </div>
-                  <div className="flex items-center">
-                      <MapPin className="w-3 h-3 mr-2 text-orange-500" />
-                      <span className={`truncate ${fontClass}`}>{event.venue}</span>
-                  </div>
-                    {event.maxAttendees && (
-                  <div className="flex items-center">
-                        <Users className="w-3 h-3 mr-2 text-orange-500" />
-                        <span className={fontClass}>
-                          {language === 'mr' ? 'कमाल: ' : 'Max: '}{event.maxAttendees} {language === 'mr' ? 'लोक' : 'people'}
-                        </span>
-                  </div>
-                    )}
-                </div>
-
-                  <div className="flex items-center justify-between pt-3 border-t border-gray-100">
-                  <div className="flex items-center space-x-2">
-                      <Badge variant="outline" className={`${getEventTypeColor(event.eventType)} rounded-md text-xs`}>
-                        {getEventTypeIcon(event.eventType)}
-                        <span className="ml-1">{getEventTypeLabel(event.eventType)}</span>
-                </Badge>
+          </div>
+            <CardContent className="p-4">
+              <div className="space-y-3">
+              <div className="flex items-start justify-between">
+                  <h3 className={`font-semibold text-amber-900 line-clamp-2 flex-1 pr-2 text-sm ${fontDisplayClass}`}>
+                    {event.title}
+                </h3>
               </div>
-                    <div className="flex items-center space-x-1">
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-orange-600 hover:text-orange-700 hover:bg-orange-100 rounded-md">
-                        <Eye className="w-3 h-3" />
-                      </Button>
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-100 rounded-md">
-                        <Edit className="w-3 h-3" />
-                      </Button>
-                      <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-red-600 hover:text-red-700 hover:bg-red-100 rounded-md">
-                        <Trash2 className="w-3 h-3" />
-                      </Button>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          ))}
 
-          {filteredEvents.length === 0 && (
-            <div className="col-span-full text-center py-16">
-              <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center shadow-lg">
-                <Calendar className="w-16 h-16 text-orange-500" />
-              </div>
-              <h3 className={`text-2xl font-bold text-gray-900 mb-3 ${fontDisplayClass}`}>
-                {language === 'mr' ? 'कोणतेही कार्यक्रम आढळले नाहीत' : 'No events found'}
-              </h3>
-              <p className={`text-gray-500 text-lg ${fontClass}`}>
-                {language === 'mr' ? 'फिल्टर साफ करा किंवा नवीन शोध टर्म वापरा' : 'Clear filters or try a new search term'}
+                <p className={`text-gray-600 line-clamp-2 text-xs ${fontClass}`}>
+                  {event.description}
               </p>
-            </div>
-          )}
-      </div>
 
-        {/* Pagination */}
-        {(filteredEvents.length > 20) && (
-            <div className="flex justify-center space-x-4">
-              <Button
-                variant="outline"
-                onClick={() => setPage(page - 1)}
-                disabled={page === 1}
-                className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50"
-              >
-                {language === 'mr' ? 'मागील' : 'Previous'}
-              </Button>
-            <span className={`flex items-center px-4 text-sm text-gray-600 ${fontClass}`}>
-                {language === 'mr' ? 'पान' : 'Page'} {page}
-              </span>
-              <Button
-                variant="outline"
-                onClick={() => setPage(page + 1)}
-              disabled={page * 20 >= filteredEvents.length}
-                className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50"
-              >
-                {language === 'mr' ? 'पुढील' : 'Next'}
-              </Button>
+                <div className="space-y-2 text-xs text-gray-600">
+                <div className="flex items-center">
+                    <Calendar className="w-3 h-3 mr-2 text-orange-500" />
+                    <span className={fontClass}>{formatDate(event.eventDate)}</span>
+                </div>
+                <div className="flex items-center">
+                    <Clock className="w-3 h-3 mr-2 text-orange-500" />
+                    <span className={fontClass}>{formatTime(event.eventDate)}</span>
+                </div>
+                <div className="flex items-center">
+                    <MapPin className="w-3 h-3 mr-2 text-orange-500" />
+                    <span className={`truncate ${fontClass}`}>{event.venue}</span>
+                </div>
+                  {event.maxAttendees && (
+                <div className="flex items-center">
+                      <Users className="w-3 h-3 mr-2 text-orange-500" />
+                      <span className={fontClass}>
+                        {language === 'mr' ? 'कमाल: ' : 'Max: '}{event.maxAttendees} {language === 'mr' ? 'लोक' : 'people'}
+                      </span>
+                </div>
+                  )}
+              </div>
+
+                <div className="flex items-center justify-between pt-3 border-t border-gray-100">
+                <div className="flex items-center space-x-2">
+                    <Badge variant="outline" className={`${getEventTypeColor(event.eventType)} rounded-md text-xs`}>
+                      {getEventTypeIcon(event.eventType)}
+                      <span className="ml-1">{getEventTypeLabel(event.eventType)}</span>
+              </Badge>
+            </div>
+                  <div className="flex items-center space-x-1">
+                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-orange-600 hover:text-orange-700 hover:bg-orange-100 rounded-md">
+                      <Eye className="w-3 h-3" />
+                    </Button>
+                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-blue-600 hover:text-blue-700 hover:bg-blue-100 rounded-md">
+                      <Edit className="w-3 h-3" />
+                    </Button>
+                    <Button variant="ghost" size="sm" className="h-6 w-6 p-0 text-red-600 hover:text-red-700 hover:bg-red-100 rounded-md">
+                      <Trash2 className="w-3 h-3" />
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
+        ))}
+
+        {filteredEvents.length === 0 && (
+          <div className="col-span-full text-center py-16">
+            <div className="w-32 h-32 mx-auto mb-6 bg-gradient-to-br from-orange-100 to-orange-200 rounded-full flex items-center justify-center shadow-lg">
+              <Calendar className="w-16 h-16 text-orange-500" />
+            </div>
+            <h3 className={`text-2xl font-bold text-gray-900 mb-3 ${fontDisplayClass}`}>
+              {language === 'mr' ? 'कोणतेही कार्यक्रम आढळले नाहीत' : 'No events found'}
+            </h3>
+            <p className={`text-gray-500 text-lg ${fontClass}`}>
+              {language === 'mr' ? 'फिल्टर साफ करा किंवा नवीन शोध टर्म वापरा' : 'Clear filters or try a new search term'}
+            </p>
           </div>
         )}
       </div>
+
+      {/* Pagination */}
+      {(filteredEvents.length > 20) && (
+          <div className="flex justify-center space-x-4">
+            <Button
+              variant="outline"
+              onClick={() => setPage(page - 1)}
+              disabled={page === 1}
+              className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50"
+            >
+              {language === 'mr' ? 'मागील' : 'Previous'}
+            </Button>
+          <span className={`flex items-center px-4 text-sm text-gray-600 ${fontClass}`}>
+              {language === 'mr' ? 'पान' : 'Page'} {page}
+            </span>
+            <Button
+              variant="outline"
+              onClick={() => setPage(page + 1)}
+            disabled={page * 20 >= filteredEvents.length}
+              className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50"
+            >
+              {language === 'mr' ? 'पुढील' : 'Next'}
+            </Button>
+        </div>
+      )}
+        </>
     </div>
+  </>
   );
 }

@@ -64,6 +64,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
   feedback,
   onSuccess
 }) => {
+  console.log('FeedbackModal rendered with isOpen:', isOpen, 'mode:', mode);
   const { t } = useLanguage();
   const { toast } = useToast();
   const queryClient = useQueryClient();
@@ -307,9 +308,18 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
 
   const isLoading = createFeedbackMutation.isPending || updateFeedbackMutation.isPending || deleteFeedbackMutation.isPending;
 
+  console.log('Rendering FeedbackModal with isOpen:', isOpen);
+  
+  if (!isOpen) {
+    console.log('Modal is not open, returning null');
+    return null;
+  }
+
+  console.log('Modal is open, rendering Dialog');
+
   return (
     <Dialog open={isOpen} onOpenChange={onClose}>
-      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border-4 border-orange-400 rounded-3xl bg-orange-50 shadow-2xl z-[9999] relative">
+      <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto border-4 border-orange-400 rounded-3xl bg-orange-50 shadow-2xl" style={{ zIndex: 9999 }}>
         <DialogHeader className="bg-gradient-to-r from-orange-300 to-amber-300 rounded-t-3xl p-6 border-b-4 border-orange-400 sticky top-0 z-10">
           <DialogTitle className="text-2xl font-bold text-orange-900 flex items-center gap-3">
             {getCategoryIcon(form.watch("category"))}
@@ -338,7 +348,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                   <SelectTrigger className="border-3 border-orange-400 focus:border-orange-600 focus:ring-orange-400 rounded-xl bg-white text-orange-900 font-medium">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-white border-3 border-orange-400 z-[9999]">
+                  <SelectContent className="bg-white border-3 border-orange-400">
                     <SelectItem value="member">
                       <div className="flex items-center gap-2">
                         <User className="h-4 w-4" />
@@ -439,7 +449,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                   <SelectTrigger className="border-3 border-orange-400 focus:border-orange-600 focus:ring-orange-400 rounded-xl bg-white text-orange-900 font-medium">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-white border-3 border-orange-400 z-[9999]">
+                  <SelectContent className="bg-white border-3 border-orange-400">
                     <SelectItem value="suggestion">सुझाव</SelectItem>
                     <SelectItem value="complaint">शिकायत</SelectItem>
                     <SelectItem value="appreciation">प्रशंसा</SelectItem>
@@ -460,7 +470,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                   <SelectTrigger className="border-3 border-orange-400 focus:border-orange-600 focus:ring-orange-400 rounded-xl bg-white text-orange-900 font-medium">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="bg-white border-3 border-orange-400 z-[9999]">
+                  <SelectContent className="bg-white border-3 border-orange-400">
                     <SelectItem value="low">कम</SelectItem>
                     <SelectItem value="medium">मध्यम</SelectItem>
                     <SelectItem value="high">उच्च</SelectItem>
@@ -605,7 +615,7 @@ export const FeedbackModal: React.FC<FeedbackModalProps> = ({
                       <SelectTrigger className="border-3 border-orange-400 focus:border-orange-600 focus:ring-orange-400 rounded-xl bg-white text-orange-900 font-medium">
                         <SelectValue />
                       </SelectTrigger>
-                      <SelectContent className="bg-white border-3 border-orange-400 z-[9999]">
+                      <SelectContent className="bg-white border-3 border-orange-400">
                         <SelectItem value="pending">लंबित</SelectItem>
                         <SelectItem value="in_progress">प्रगति में</SelectItem>
                         <SelectItem value="resolved">समाधान</SelectItem>

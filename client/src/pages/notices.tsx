@@ -367,26 +367,23 @@ export default function Notices() {
           <h1 className={`text-3xl sm:text-4xl lg:text-5xl font-bold text-amber-900 mb-4 ${fontDisplayClass}`}>
             {language === 'mr' ? 'सूचना व्यवस्थापन' : 'Notice Management'}
           </h1>
-          <p className={`text-lg text-amber-700 ${fontClass}`}>
-            {language === 'mr' ? 'एकूण' : 'Total'} {filteredNotices.length} {language === 'mr' ? 'सूचना आहेत' : 'notices'}
-          </p>
         </div>
 
         {/* Search and Filters */}
         <Card className="bg-white shadow-lg rounded-xl border border-orange-200">
-          <CardContent className="p-6">
-            <div className="flex flex-col sm:flex-row items-center space-y-4 sm:space-y-0 sm:space-x-4">
+          <CardContent className="p-4">
+            <div className="flex flex-col sm:flex-row items-center space-y-3 sm:space-y-0 sm:space-x-3">
               <div className="relative flex-1 w-full">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-orange-500 w-5 h-5" />
                 <Input
                   placeholder={language === 'mr' ? 'सूचना शोधा...' : 'Search notices...'}
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
-                  className="pl-12 py-3 rounded-xl border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                  className="pl-12 py-2 rounded-xl border-orange-200 focus:border-orange-500 focus:ring-orange-500"
                 />
               </div>
               <Select value={priority} onValueChange={setPriority}>
-                <SelectTrigger className="w-40 rounded-xl border-orange-200 focus:border-orange-500 focus:ring-orange-500">
+                <SelectTrigger className="w-36 rounded-xl border-orange-200 focus:border-orange-500 focus:ring-orange-500">
                   <SelectValue placeholder={language === 'mr' ? 'प्राधान्य' : 'Priority'} />
                 </SelectTrigger>
                 <SelectContent>
@@ -397,269 +394,265 @@ export default function Notices() {
                   <SelectItem value="low">{language === 'mr' ? 'कमी' : 'Low'}</SelectItem>
                 </SelectContent>
               </Select>
-              <Button variant="outline" className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50">
+              <Button variant="outline" className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50 px-3 py-2">
                 <Filter className="w-4 h-4 mr-2" />
                 {language === 'mr' ? 'फिल्टर' : 'Filter'}
               </Button>
+              <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
+                <DialogTrigger asChild>
+                  <Button className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl px-4 py-2 shadow-lg hover:shadow-xl transition-all duration-200">
+                    <Plus className="w-5 h-5 mr-2" />
+                    {language === 'mr' ? 'नवीन सूचना' : 'New Notice'}
+                  </Button>
+                </DialogTrigger>
+                <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-xl border border-orange-200">
+                  <DialogHeader className="pb-6">
+                    <DialogTitle className={`text-2xl font-bold text-amber-900 ${fontDisplayClass}`}>
+                      {language === 'mr' ? 'नवीन सूचना तयार करा' : 'Create New Notice'}
+                    </DialogTitle>
+                    <p className={`text-gray-600 ${fontClass}`}>
+                      {language === 'mr' ? 'सूचनेची सर्व माहिती भरा आणि तयार करा' : 'Fill all notice details and create'}
+                    </p>
+                  </DialogHeader>
+                  
+                  <Form {...form}>
+                    <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
+                      {/* Notice Information Section */}
+                      <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-6 border border-orange-200">
+                        <h3 className={`text-lg font-bold text-amber-900 mb-4 flex items-center ${fontDisplayClass}`}>
+                          <Bell className="w-5 h-5 mr-2" />
+                          {language === 'mr' ? 'सूचना माहिती' : 'Notice Information'}
+                        </h3>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="title"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className={`text-amber-800 font-semibold ${fontClass}`}>
+                                  {language === 'mr' ? 'सूचनेचे शीर्षक *' : 'Notice Title *'}
+                                </FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    placeholder={language === 'mr' ? 'सूचनेचे शीर्षक टाका' : 'Enter notice title'} 
+                                    {...field} 
+                                    className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={form.control}
+                            name="priority"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className={`text-amber-800 font-semibold ${fontClass}`}>
+                                  {language === 'mr' ? 'प्राधान्य *' : 'Priority *'}
+                                </FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                  <FormControl>
+                                    <SelectTrigger className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500">
+                                      <SelectValue placeholder={language === 'mr' ? 'प्राधान्य निवडा' : 'Select priority'} />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="urgent">{language === 'mr' ? 'तातडीचे' : 'Urgent'}</SelectItem>
+                                    <SelectItem value="high">{language === 'mr' ? 'उच्च' : 'High'}</SelectItem>
+                                    <SelectItem value="medium">{language === 'mr' ? 'मध्यम' : 'Medium'}</SelectItem>
+                                    <SelectItem value="low">{language === 'mr' ? 'कमी' : 'Low'}</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+
+                        <FormField
+                          control={form.control}
+                          name="content"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className={`text-amber-800 font-semibold ${fontClass}`}>
+                                {language === 'mr' ? 'सामग्री *' : 'Content *'}
+                              </FormLabel>
+                              <FormControl>
+                                <Textarea 
+                                  placeholder={language === 'mr' ? 'सूचनेची तपशीलवार माहिती' : 'Notice details'} 
+                                  {...field} 
+                                  className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500"
+                                  rows={4}
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      {/* Category and Audience Section */}
+                      <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
+                        <h3 className={`text-lg font-bold text-blue-900 mb-4 flex items-center ${fontDisplayClass}`}>
+                          <Info className="w-5 h-5 mr-2" />
+                          {language === 'mr' ? 'श्रेणी आणि दर्शक' : 'Category & Audience'}
+                        </h3>
+                        
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="category"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className={`text-blue-800 font-semibold ${fontClass}`}>
+                                  {language === 'mr' ? 'श्रेणी *' : 'Category *'}
+                                </FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    placeholder={language === 'mr' ? 'श्रेणी टाका' : 'Enter category'} 
+                                    {...field} 
+                                    className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={form.control}
+                            name="targetAudience"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className={`text-blue-800 font-semibold ${fontClass}`}>
+                                  {language === 'mr' ? 'लक्ष्य दर्शक *' : 'Target Audience *'}
+                                </FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                  <FormControl>
+                                    <SelectTrigger className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500">
+                                      <SelectValue placeholder={language === 'mr' ? 'दर्शक निवडा' : 'Select audience'} />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    <SelectItem value="all">{language === 'mr' ? 'सर्व' : 'All'}</SelectItem>
+                                    <SelectItem value="leadership">{language === 'mr' ? 'नेतृत्व' : 'Leadership'}</SelectItem>
+                                    <SelectItem value="constituency">{language === 'mr' ? 'मतदारसंघ' : 'Constituency'}</SelectItem>
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+                      </div>
+
+                      {/* Location and Settings Section */}
+                      <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
+                        <h3 className={`text-lg font-bold text-green-900 mb-4 flex items-center ${fontDisplayClass}`}>
+                          <Pin className="w-5 h-5 mr-2" />
+                          {language === 'mr' ? 'स्थान आणि सेटिंग्ज' : 'Location & Settings'}
+                        </h3>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                          <FormField
+                            control={form.control}
+                            name="district"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className={`text-green-800 font-semibold ${fontClass}`}>
+                                  {language === 'mr' ? 'जिल्हा' : 'District'}
+                                </FormLabel>
+                                <Select onValueChange={field.onChange} defaultValue={field.value}>
+                                  <FormControl>
+                                    <SelectTrigger className="rounded-lg border-green-200 focus:border-green-500 focus:ring-green-500">
+                                      <SelectValue placeholder={language === 'mr' ? 'जिल्हा निवडा' : 'Select district'} />
+                                    </SelectTrigger>
+                                  </FormControl>
+                                  <SelectContent>
+                                    {maharashtraDistricts.map((district) => (
+                                      <SelectItem key={district} value={district}>
+                                        {district}
+                                      </SelectItem>
+                                    ))}
+                                  </SelectContent>
+                                </Select>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+
+                          <FormField
+                            control={form.control}
+                            name="expiryDate"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormLabel className={`text-green-800 font-semibold ${fontClass}`}>
+                                  {language === 'mr' ? 'समाप्ती तारीख' : 'Expiry Date'}
+                                </FormLabel>
+                                <FormControl>
+                                  <Input 
+                                    type="date" 
+                                    {...field} 
+                                    className="rounded-lg border-green-200 focus:border-green-500 focus:ring-green-500"
+                                  />
+                                </FormControl>
+                                <FormMessage />
+                              </FormItem>
+                            )}
+                          />
+                        </div>
+
+                        <FormField
+                          control={form.control}
+                          name="constituency"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormLabel className={`text-green-800 font-semibold ${fontClass}`}>
+                                {language === 'mr' ? 'मतदारसंघ' : 'Constituency'}
+                              </FormLabel>
+                              <FormControl>
+                                <Input 
+                                  placeholder={language === 'mr' ? 'मतदारसंघाचे नाव' : 'Constituency name'} 
+                                  {...field} 
+                                  className="rounded-lg border-green-200 focus:border-green-500 focus:ring-green-500"
+                                />
+                              </FormControl>
+                              <FormMessage />
+                            </FormItem>
+                          )}
+                        />
+                      </div>
+
+                      {/* Submit Buttons */}
+                      <div className="flex justify-end space-x-4 pt-6">
+                        <Button
+                          type="button"
+                          variant="outline"
+                          onClick={() => setIsCreateOpen(false)}
+                          className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50"
+                        >
+                          {language === 'mr' ? 'रद्द करा' : 'Cancel'}
+                        </Button>
+                        <Button
+                          type="submit"
+                          disabled={createNoticeMutation.isPending}
+                          className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-200"
+                        >
+                          {createNoticeMutation.isPending 
+                            ? (language === 'mr' ? "तयार करत आहे..." : "Creating...") 
+                            : (language === 'mr' ? "सूचना तयार करा" : "Create Notice")}
+                        </Button>
+                      </div>
+                    </form>
+                  </Form>
+                </DialogContent>
+              </Dialog>
             </div>
           </CardContent>
         </Card>
-
-        {/* Add New Notice Button */}
-        <div className="flex justify-end">
-          <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
-            <DialogTrigger asChild>
-              <Button className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl px-6 py-3 shadow-lg hover:shadow-xl transition-all duration-200">
-                <Plus className="w-5 h-5 mr-2" />
-                {language === 'mr' ? 'नवीन सूचना' : 'New Notice'}
-              </Button>
-            </DialogTrigger>
-            <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto bg-white rounded-xl border border-orange-200">
-              <DialogHeader className="pb-6">
-                <DialogTitle className={`text-2xl font-bold text-amber-900 ${fontDisplayClass}`}>
-                  {language === 'mr' ? 'नवीन सूचना तयार करा' : 'Create New Notice'}
-                </DialogTitle>
-                <p className={`text-gray-600 ${fontClass}`}>
-                  {language === 'mr' ? 'सूचनेची सर्व माहिती भरा आणि तयार करा' : 'Fill all notice details and create'}
-                </p>
-              </DialogHeader>
-              
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-                  {/* Notice Information Section */}
-                  <div className="bg-gradient-to-r from-orange-50 to-amber-50 rounded-xl p-6 border border-orange-200">
-                    <h3 className={`text-lg font-bold text-amber-900 mb-4 flex items-center ${fontDisplayClass}`}>
-                      <Bell className="w-5 h-5 mr-2" />
-                      {language === 'mr' ? 'सूचना माहिती' : 'Notice Information'}
-                    </h3>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="title"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className={`text-amber-800 font-semibold ${fontClass}`}>
-                              {language === 'mr' ? 'सूचनेचे शीर्षक *' : 'Notice Title *'}
-                            </FormLabel>
-                            <FormControl>
-                              <Input 
-                                placeholder={language === 'mr' ? 'सूचनेचे शीर्षक टाका' : 'Enter notice title'} 
-                                {...field} 
-                                className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="priority"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className={`text-amber-800 font-semibold ${fontClass}`}>
-                              {language === 'mr' ? 'प्राधान्य *' : 'Priority *'}
-                            </FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500">
-                                  <SelectValue placeholder={language === 'mr' ? 'प्राधान्य निवडा' : 'Select priority'} />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="urgent">{language === 'mr' ? 'तातडीचे' : 'Urgent'}</SelectItem>
-                                <SelectItem value="high">{language === 'mr' ? 'उच्च' : 'High'}</SelectItem>
-                                <SelectItem value="medium">{language === 'mr' ? 'मध्यम' : 'Medium'}</SelectItem>
-                                <SelectItem value="low">{language === 'mr' ? 'कमी' : 'Low'}</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    <FormField
-                      control={form.control}
-                      name="content"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className={`text-amber-800 font-semibold ${fontClass}`}>
-                            {language === 'mr' ? 'सामग्री *' : 'Content *'}
-                          </FormLabel>
-                          <FormControl>
-                            <Textarea 
-                              placeholder={language === 'mr' ? 'सूचनेची तपशीलवार माहिती' : 'Notice details'} 
-                              {...field} 
-                              className="rounded-lg border-orange-200 focus:border-orange-500 focus:ring-orange-500"
-                              rows={4}
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  {/* Category and Audience Section */}
-                  <div className="bg-gradient-to-r from-blue-50 to-blue-100 rounded-xl p-6 border border-blue-200">
-                    <h3 className={`text-lg font-bold text-blue-900 mb-4 flex items-center ${fontDisplayClass}`}>
-                      <Info className="w-5 h-5 mr-2" />
-                      {language === 'mr' ? 'श्रेणी आणि दर्शक' : 'Category & Audience'}
-                    </h3>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="category"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className={`text-blue-800 font-semibold ${fontClass}`}>
-                              {language === 'mr' ? 'श्रेणी *' : 'Category *'}
-                            </FormLabel>
-                            <FormControl>
-                              <Input 
-                                placeholder={language === 'mr' ? 'श्रेणी टाका' : 'Enter category'} 
-                                {...field} 
-                                className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="targetAudience"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className={`text-blue-800 font-semibold ${fontClass}`}>
-                              {language === 'mr' ? 'लक्ष्य दर्शक *' : 'Target Audience *'}
-                            </FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger className="rounded-lg border-blue-200 focus:border-blue-500 focus:ring-blue-500">
-                                  <SelectValue placeholder={language === 'mr' ? 'दर्शक निवडा' : 'Select audience'} />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                <SelectItem value="all">{language === 'mr' ? 'सर्व' : 'All'}</SelectItem>
-                                <SelectItem value="leadership">{language === 'mr' ? 'नेतृत्व' : 'Leadership'}</SelectItem>
-                                <SelectItem value="constituency">{language === 'mr' ? 'मतदारसंघ' : 'Constituency'}</SelectItem>
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-                  </div>
-
-                  {/* Location and Settings Section */}
-                  <div className="bg-gradient-to-r from-green-50 to-green-100 rounded-xl p-6 border border-green-200">
-                    <h3 className={`text-lg font-bold text-green-900 mb-4 flex items-center ${fontDisplayClass}`}>
-                      <Pin className="w-5 h-5 mr-2" />
-                      {language === 'mr' ? 'स्थान आणि सेटिंग्ज' : 'Location & Settings'}
-                    </h3>
-                    
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                      <FormField
-                        control={form.control}
-                        name="district"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className={`text-green-800 font-semibold ${fontClass}`}>
-                              {language === 'mr' ? 'जिल्हा' : 'District'}
-                            </FormLabel>
-                            <Select onValueChange={field.onChange} defaultValue={field.value}>
-                              <FormControl>
-                                <SelectTrigger className="rounded-lg border-green-200 focus:border-green-500 focus:ring-green-500">
-                                  <SelectValue placeholder={language === 'mr' ? 'जिल्हा निवडा' : 'Select district'} />
-                                </SelectTrigger>
-                              </FormControl>
-                              <SelectContent>
-                                {maharashtraDistricts.map((district) => (
-                                  <SelectItem key={district} value={district}>
-                                    {district}
-                                  </SelectItem>
-                                ))}
-                              </SelectContent>
-                            </Select>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-
-                      <FormField
-                        control={form.control}
-                        name="expiryDate"
-                        render={({ field }) => (
-                          <FormItem>
-                            <FormLabel className={`text-green-800 font-semibold ${fontClass}`}>
-                              {language === 'mr' ? 'समाप्ती तारीख' : 'Expiry Date'}
-                            </FormLabel>
-                            <FormControl>
-                              <Input 
-                                type="date" 
-                                {...field} 
-                                className="rounded-lg border-green-200 focus:border-green-500 focus:ring-green-500"
-                              />
-                            </FormControl>
-                            <FormMessage />
-                          </FormItem>
-                        )}
-                      />
-                    </div>
-
-                    <FormField
-                      control={form.control}
-                      name="constituency"
-                      render={({ field }) => (
-                        <FormItem>
-                          <FormLabel className={`text-green-800 font-semibold ${fontClass}`}>
-                            {language === 'mr' ? 'मतदारसंघ' : 'Constituency'}
-                          </FormLabel>
-                          <FormControl>
-                            <Input 
-                              placeholder={language === 'mr' ? 'मतदारसंघाचे नाव' : 'Constituency name'} 
-                              {...field} 
-                              className="rounded-lg border-green-200 focus:border-green-500 focus:ring-green-500"
-                            />
-                          </FormControl>
-                          <FormMessage />
-                        </FormItem>
-                      )}
-                    />
-                  </div>
-
-                  {/* Submit Buttons */}
-                  <div className="flex justify-end space-x-4 pt-6">
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => setIsCreateOpen(false)}
-                      className="rounded-xl border-orange-200 hover:border-orange-300 hover:bg-orange-50"
-                    >
-                      {language === 'mr' ? 'रद्द करा' : 'Cancel'}
-                    </Button>
-                    <Button
-                      type="submit"
-                      disabled={createNoticeMutation.isPending}
-                      className="bg-gradient-to-r from-orange-500 to-amber-600 hover:from-orange-600 hover:to-amber-700 text-white rounded-xl px-8 py-3 shadow-lg hover:shadow-xl transition-all duration-200"
-                    >
-                      {createNoticeMutation.isPending 
-                        ? (language === 'mr' ? "तयार करत आहे..." : "Creating...") 
-                        : (language === 'mr' ? "सूचना तयार करा" : "Create Notice")}
-                    </Button>
-                  </div>
-                </form>
-              </Form>
-            </DialogContent>
-          </Dialog>
-        </div>
 
         {/* Notices Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -713,7 +706,7 @@ export default function Notices() {
                       </div>
                     )}
                   </div>
-
+                  
                   <div className="flex items-center justify-between pt-3 border-t border-gray-100">
                     <div className="flex items-center space-x-2">
                       <Badge variant="outline" className="rounded-md text-xs">
@@ -784,4 +777,4 @@ export default function Notices() {
       </div>
     </div>
   );
-}
+} 

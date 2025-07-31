@@ -14,14 +14,14 @@ export const AVAILABLE_LANGUAGES: LanguageInfo[] = [
     name: 'Marathi',
     nativeName: 'मराठी',
     flag: '🇮🇳',
-    description: 'Marathi - मराठी'
+    description: 'मराठी'
   },
   {
     code: 'en',
     name: 'English',
     nativeName: 'English',
     flag: '🇺🇸',
-    description: 'English - English'
+    description: 'English'
   }
 ];
 
@@ -225,7 +225,7 @@ export interface Translations {
 export const translations: Record<Language, Translations> = {
   mr: {
     dashboard: {
-      title: "भारतीय जनता पार्टी - महाराष्ट्र",
+      title: "भाजप-महाराष्ट्र",
       subtitle: "कार्यकर्ता व्यवस्थापन आणि संघटना डॅशबोर्ड",
       totalMembers: "एकूण सदस्य",
       verifiedMembers: "सत्यापित",

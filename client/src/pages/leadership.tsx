@@ -108,9 +108,8 @@ const politicalLeadershipData = [
   { id: 'rashtriya-5', name: 'नितीन गडकरी', designation: 'केंद्रीय मंत्री', category: 'rashtriya', region: 'नागपूर', type: 'राष्ट्रीय नेतृत्व', profileImage: '/assets/Politician Image/नितीन गडकरी.jpg', priority: 0 },
 
   // लोकसभा सदस्य
-  { id: 'loksabha-1', name: 'देवेंद्र फडणवीस', designation: 'खासदार', category: 'loksabha', region: 'नागपूर', type: 'लोकसभा सदस्य', profileImage: '/assets/Politician Image/देवेंद्र फडणवीस.jpg', priority: 5 },
+  { id: 'loksabha-1', name: 'देवेंद्र फडणवीस', designation: 'मुख्यमंत्री', category: 'loksabha', region: 'नागपूर', type: 'लोकसभा सदस्य', profileImage: '/assets/Politician Image/देवेंद्र फडणवीस.jpg', priority: 5 },
   { id: 'loksabha-2', name: 'पीयूष गोयल', designation: 'खासदार', category: 'loksabha', region: 'मुंबई उत्तर', type: 'लोकसभा सदस्य', profileImage: '/assets/Politician Image/पीयूष गोयल.jpg', priority: 5 },
-  { id: 'loksabha-3', name: 'गुल पनाग', designation: 'खासदार', category: 'loksabha', region: 'चंदीगड', type: 'लोकसभा सदस्य', profileImage: '/assets/Politician Image/गुल पनाग.jpg', priority: 5 },
   { id: 'loksabha-4', name: 'प्रकाश जावडेकर', designation: 'खासदार', category: 'loksabha', region: 'राज्यसभा', type: 'लोकसभा सदस्य', profileImage: '/assets/Politician Image/प्रकाश जावडेकर.jpg', priority: 5 },
 
   // राज्यसभा सदस्य
@@ -119,8 +118,6 @@ const politicalLeadershipData = [
   { id: 'rajyasabha-3', name: 'विकास महात्मे', designation: 'राज्यसभा सदस्य', category: 'rajyasabha', region: 'महाराष्ट्र', type: 'राज्यसभा सदस्य', profileImage: '', priority: 6 },
 
   // विधानमंडळ सदस्य
-  { id: 'legislature-1', name: 'एकनाथ शिंदे', designation: 'मुख्यमंत्री', category: 'legislature', region: 'ठाणे', type: 'विधानमंडळ सदस्य', profileImage: '/assets/Politician Image/एकनाथ शिंदे.jpg', priority: 7 },
-  { id: 'legislature-2', name: 'अजित पवार', designation: 'उपमुख्यमंत्री', category: 'legislature', region: 'बारामती', type: 'विधानमंडळ सदस्य', profileImage: '/assets/Politician Image/अजित पवार.jpg', priority: 8 },
   { id: 'legislature-3', name: 'चंद्रकांत पाटील', designation: 'राज्य गृहमंत्री', category: 'legislature', region: 'कोल्हापूर', type: 'विधानमंडळ सदस्य', profileImage: '/assets/Politician Image/चंद्रकांत पाटील.jpg', priority: 9 },
 ];
 
@@ -307,8 +304,8 @@ export default function Leadership() {
         'राज्य गृहमंत्री': 2,
         
         // Parliamentary Level (Priority 5-6)
-        'खासदार': 0,
-        'राज्यसभा सदस्य': 1
+        'खासदार': 1,
+        'राज्यसभा सदस्य': 2
       };
       
       const orderA = designationOrder[a.designation as string] || 999;
@@ -335,9 +332,8 @@ export default function Leadership() {
         'बीड': 12,
         'महाराष्ट्र': 13,
         'मुंबई उत्तर': 14,
-        'चंदीगड': 15,
-        'राज्यसभा': 16,
-        'कल्याण-डोंबिवली': 17
+        'राज्यसभा': 15,
+        'कल्याण-डोंबिवली': 16
       };
       
       const regionA = regionOrder[a.region as string] || 999;

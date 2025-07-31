@@ -21,23 +21,32 @@ app.use((req, res, next) => {
   next();
 });
 
-// Mock API routes for development
-app.get("/api/health", (req, res) => {
-  res.json({ status: "ok", message: "BJP Connect API is running" });
-});
-
-app.get("/api/dashboard/stats", (req, res) => {
-  res.json({
-    totalMembers: 24567,
-    verifiedMembers: 22000,
-    activeEvents: 15,
-    upcomingEvents: 8,
-    totalNotices: 45,
-    urgentNotices: 3,
-    totalConstituencies: 288,
-    totalDistricts: 36
+  // Mock API routes for development
+  app.get("/api/health", (req, res) => {
+    res.json({ status: "ok", message: "BJP Connect API is running" });
   });
-});
+
+  app.get("/api/dashboard/stats", (req, res) => {
+    res.json({
+      totalMembers: 24567,
+      verifiedMembers: 22000,
+      activeEvents: 15,
+      upcomingEvents: 8,
+      totalNotices: 45,
+      urgentNotices: 3,
+      totalConstituencies: 288,
+      totalDistricts: 36
+    });
+  });
+
+  // Handle client-side routing - serve index.html for all non-API routes
+  app.get("*", (req, res, next) => {
+    if (req.path.startsWith("/api")) {
+      return next();
+    }
+    // Let Vite handle the routing in development
+    next();
+  });
 
 (async () => {
   // Error handling middleware

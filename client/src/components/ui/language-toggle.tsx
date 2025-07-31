@@ -39,14 +39,14 @@ export const LanguageToggle: React.FC = () => {
       name: 'मराठी',
       nativeName: 'मराठी',
       flag: '🇮🇳',
-      description: 'Marathi - मराठी'
+      description: 'मराठी'
     },
     {
       code: 'en',
       name: 'English',
       nativeName: 'English',
       flag: '🇺🇸',
-      description: 'English - English'
+      description: 'English'
     }
   ];
 

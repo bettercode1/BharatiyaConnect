@@ -1210,28 +1210,7 @@ export default function Analytics() {
                     </CardContent>
                   </Card>
 
-                  {/* Top Cities */}
-                  <Card>
-                    <CardHeader>
-                      <CardTitle className="flex items-center gap-2">
-                        <MapPin className="w-5 h-5" />
-                        {language === 'mr' ? 'शहरानुसार वितरण' : 'City-wise Distribution'}
-                      </CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                      <ResponsiveContainer width="100%" height={300}>
-                        <BarChart data={memberAnalytics.cityDistribution} layout="horizontal">
-                          <CartesianGrid strokeDasharray="3 3" />
-                          <XAxis type="number" />
-                          <YAxis dataKey="name" type="category" width={80} />
-                          <Tooltip 
-                            formatter={(value) => [value, language === 'mr' ? 'सदस्य' : 'Members']}
-                          />
-                          <Bar dataKey="value" fill="#00C49F" radius={[0, 4, 4, 0]} />
-                        </BarChart>
-                      </ResponsiveContainer>
-                    </CardContent>
-                  </Card>
+
 
                   {/* City Growth Trends */}
                   <Card>
